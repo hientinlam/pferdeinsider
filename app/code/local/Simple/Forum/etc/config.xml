@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Simple_Forum>
+            <version>1.1.5.3</version>
+        </Simple_Forum>
+    </modules>
+    <frontend>
+    	<translate>
+		    <modules>
+		        <Simple_Forum>
+		            <files>
+		                <default>Simple_Forum.csv</default>
+		            </files>
+		        </Simple_Forum>
+		    </modules>
+		</translate>
+        <routers>
+            <forum>
+            	<use>standard</use>
+                <args>
+                    <module>Simple_Forum</module>
+                    <frontName>forum</frontName>
+                </args>
+            </forum>
+        </routers>
+        <layout>
+            <updates>
+                <forum>
+                    <file>forum.xml</file>
+                </forum>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <forum_admin>
+            	<use>admin</use>
+                <args>
+                    <module>Simple_Forum</module>
+                    <frontName>forum_admin</frontName>
+                </args>
+            </forum_admin>
+        </routers>
+    </admin>
+    <adminhtml>
+    	<translate>
+		    <modules>
+		        <Simple_Forum>
+		            <files>
+		                <default>Simple_Forum.csv</default>
+		            </files>
+		        </Simple_Forum>
+		    </modules>
+		</translate>
+        <menu>
+            <forum_admin module="forum">
+            <title>Forum</title>
+            <sort_order>77</sort_order>
+                <children>
+                	<forum_admin module="forum">
+                        <title>Forum Manager</title>
+                        <sort_order>1</sort_order>
+                        <action>forum_admin/adminhtml_forum</action>
+                    </forum_admin>
+                    <forum_admin_new module="forum">
+                        <title>Add Forum</title>
+                        <sort_order>2</sort_order>
+                        <action>forum_admin/adminhtml_forum/new</action>
+                    </forum_admin_new>
+                    <forum_admin_topic module="forum">
+                        <title>Topic Manager</title>
+                        <sort_order>3</sort_order>
+                        <action>forum_admin/adminhtml_topic</action>
+                    </forum_admin_topic>
+                    <forum_admin_topic_new module="forum">
+                        <title>Add Topic</title>
+                        <sort_order>4</sort_order>
+                        <action>forum_admin/adminhtml_topic/new</action>
+                    </forum_admin_topic_new>
+                    <forum_admin_post module="forum">
+                        <title>Manage Posts</title>
+                        <sort_order>5</sort_order>
+                        <action>forum_admin/adminhtml_post</action>
+                    </forum_admin_post>
+                    <forum_admin_post_new module="forum">
+                        <title>Add Post</title>
+                        <sort_order>6</sort_order>
+                        <action>forum_admin/adminhtml_post/new</action>
+                    </forum_admin_post_new>
+                    <forum_admin_moderators module="forum">
+                    	<title>Manage Moderators</title>
+                    	<sort_order>7</sort_order>
+                    	<action>forum_admin/adminhtml_moderators</action>
+                    </forum_admin_moderators>
+					<forum_configuration module="forum">
+                        <title>Configuration</title>
+                        <sort_order>8</sort_order>
+                        <action>adminhtml/system_config/edit/section/forum</action>
+                    </forum_configuration>
+                </children>
+            </forum_admin>
+        </menu>
+        <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <forum>
+                                        <title>Simple Forum Allowed</title>
+                                    </forum>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    	</acl>
+        <layout>
+            <updates>
+                <forum>
+                    <file>forum.xml</file>
+                </forum>
+            </updates>
+        </layout>
+    </adminhtml>
+    <global>
+        <models>
+            <forum>
+                <class>Simple_Forum_Model</class>
+                <resourceModel>forum_mysql4</resourceModel>
+            </forum>
+            <forum_mysql4>
+                <class>Simple_Forum_Model_Mysql4</class>
+                <entities>
+                    <topic>
+                        <table>forum_topic</table>
+                    </topic>
+                    <forum>
+                        <table>forum_topic</table>
+                    </forum>
+                    <post>
+                        <table>forum_post</table>
+                    </post>
+					<entity>
+                        <table>forum_entity</table>
+                    </entity>
+					<visitor>
+                        <table>forum_visitors</table>
+                    </visitor>
+					<user>
+                        <table>forum_users</table>
+                    </user>
+                    <moderator>
+                    	<table>forum_moderator</table>
+                    </moderator>
+                    <notify>
+                    	<table>forum_notification</table>
+                    </notify>
+                </entities>
+            </forum_mysql4>
+        </models>
+        <resources>
+            <forum_setup>
+                <setup>
+                    <module>Simple_Forum</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </forum_setup>
+            <forum_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </forum_write>
+            <forum_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </forum_read>
+        </resources>
+        <blocks>
+            <forum>
+                <class>Simple_Forum_Block</class>
+            </forum>
+        </blocks>
+        <helpers>
+            <forum>
+                <class>Simple_Forum_Helper</class>
+            </forum>
+        </helpers>
+        <template>
+            <email>
+                <forum_forumnotification_email_template_customer translate="label" module="forum">
+                    <label>New Post Notify</label>
+                    <file>simple_forum/newpost_customer_notify.html</file>
+                    <type>html</type>
+                </forum_forumnotification_email_template_customer>
+                <forum_forumnotification_email_template_moderator translate="label" module="forum">
+                    <label>New Post or Topic</label>
+                    <file>simple_forum/newdata_moder_notify.html</file>
+                    <type>text</type>
+                </forum_forumnotification_email_template_moderator>
+            </email>
+        </template>
+		<events>
+            <controller_action_predispatch>
+                <observers>
+                    <simple_forum_sitemap_update>
+                        <type>singleton</type>
+                        <class>forum/sitemap</class>
+                        <method>___initialize</method>
+                    </simple_forum_sitemap_update>				
+                </observers>
+            </controller_action_predispatch>
+		</events>
+    </global>
+    <default>
+    	<sitemap>
+			<forum>
+				<changefreq>weekly</changefreq>
+				<priority>0.5</priority>
+			</forum>
+		</sitemap>
+		<forum>
+			<sitemap>
+				<allowcreation>0</allowcreation>
+				<sitemapfilename>forumsitemap.xml</sitemapfilename>
+				<path_to_sitemapfilename>sitemaps</path_to_sitemapfilename>
+				<periodcreation>86400</periodcreation>
+			</sitemap>
+			<designsettings>
+				<layout>page/1column.phtml</layout>
+			</designsettings>
+		</forum>
+    </default>
+</config>

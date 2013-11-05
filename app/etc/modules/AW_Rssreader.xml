@@ -1,0 +1,9 @@
+<config>
+    <modules>
+        <AW_Rssreader>
+            <active>false</active>
+            <codePool>local</codePool>
+            <version>1.2.0</version>
+        </AW_Rssreader>
+    </modules>
+</config>

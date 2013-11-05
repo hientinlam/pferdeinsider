@@ -1,0 +1,139 @@
+<?xml version="1.0" ?>
+
+	<layout version="0.1.0">
+
+		<register_index_index>
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+       	 	</reference>
+			<reference name="content">
+            	<block type="register/register" name="register" template="custom/register.phtml"/>
+        	</reference>
+		</register_index_index>
+                
+                <register_index_member>
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+       	 	</reference>
+			<reference name="content">
+            	<block type="register/register" name="register" template="custom/memberuser.phtml"/>
+        	</reference>
+		</register_index_member>
+                
+                
+                
+                 <register_index_personalinfo>
+                     <reference name="root">
+				<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+                        </reference>
+                       <reference name="left">
+                            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
+
+                                <action method="addLink" translate="label" module="customer">
+                                    <name>brst_createproduct</name>
+                                    <path>createproduct/index/index</path>
+                                    <label>Produkt erstellen</label>
+                                </action>
+                                <action method="addLink" translate="label" module="customer"><name>brstcreateproduct</name><path>createproduct/index/showproduct</path><label>Meine Produkte</label></action>
+                             <action method="addLink" translate="label" module="customer"><name>expertcalculation</name><path>allmembers/index/expertcalculation/</path><label>Meine Einnahmen</label></action> 
+          
+                                <action method="addLink" translate="label" module="customer">
+                                    <name>allmembers</name>
+                                    <path>allmembers/index/earnings/</path>
+                                    <label>Einnahmen über Webseite</label>
+                                </action> 
+                    <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action> 
+             <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
+                                <!--<action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+                              -->  
+                                <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
+                                <action method="addLink" translate="label" module="sales"><name>Zahlungsvereinbarungen</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
+                                <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
+                                <action method="addLink" translate="label" module="sales"><name>review</name><path>review/customer/</path><label>Meine Produktbewertungen</label></action>
+                                <action method="addLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>Meine Schlagworte</label></action>
+                                <action method="addLink" translate="label" module="oauth"> <name>OAuth Customer Tokens</name> <path>oauth/customer_token</path><label>My Applications</label></action>
+                                <action method="addLink" translate="label" module="wishlist"><name>wishlist</name><path>wishlist/</path><label>Meine Wunschliste</label></action>
+                                <action method="addLink" translate="label" module="newsletter"><name>manage</name><path>newsletter/manage/</path><label>Newsletter Einstellungen</label></action>
+                                <action method="addLink" translate="label" module="downloadable"><name>customer</name><path>/downloadable/customer/products/</path><label>Meine Download Produkte</label></action>
+                                <action method="addLink" translate="label" module="forum"><name>forums</name><path>forum/mytopics/</path><label>Meine Foren Themen</label></action>
+                                <action method="addLink" translate="label" module="forum"><name>forum</name><path>forum/myposts/</path><label>Meine Foren Themen</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>customer.profile.messages</name><path>userprofile/messages/all/</path><label>Nachrichtens</label></action>
+                              </block>
+                          
+                            <remove name="tags_popular"/>
+                        </reference>
+			
+			<reference name="content">
+                            <block type="register/register" name="register" template="custom/showdata.phtml"/>
+                        </reference>
+		</register_index_personalinfo>
+                
+                
+                 <register_index_playvideo>
+			<reference name="root">
+				<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+       	 	</reference>
+                 <reference name="root">
+				<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+                        </reference>
+                       <reference name="left">
+                            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>account_editInfo</name><path>register/index/personalinfo/</path><label>Persönliche Informationen</label></action>
+                                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
+                               
+                          </block>
+
+                            <block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
+                            <remove name="tags_popular"/>
+                        </reference>
+			<reference name="content">
+            	<block type="register/register" name="register" template="custom/playvideo.phtml"/>
+        	</reference>
+		</register_index_playvideo>
+       
+     <!--            
+            <customer_account translate="label">
+        <label>Customer My Account (All Pages)</label> -->
+        <!--remove name="catalog.compare.sidebar"/>
+        <remove name="sale.reorder.sidebar"/-->
+        <!-- Mage_Customer -->
+     <!--   <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+
+        <reference name="content">
+            <block type="page/html_wrapper" name="my.account.wrapper" translate="label">
+                <label>My Account Wrapper</label>
+                <action method="setElementClass"><value>my-account</value></action>
+            </block>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_editInfo</name><path>register/index/personalinfo/</path><label>Personal Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
+            </block>
+            
+            <block type="checkout/cart_sidebar" name="cart_sidebar" template="checkout/cart/sidebar.phtml">
+                <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
+            </block>
+            <block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
+            <remove name="tags_popular"/>
+
+        </reference>
+    </customer_account>
+    -->
+                
+
+	</layout>

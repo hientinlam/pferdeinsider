@@ -1,0 +1,122 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product media data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ */
+?>
+<?php
+    $_product = $this->getProduct();
+    $_helper = $this->helper('catalog/output');
+?>
+<?php 
+    $Id= $_product->getId();
+    $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+    $products = Mage::getModel('catalog/product')->load($Id);
+    $type=$products['type_id'];
+    $material=$products['product_material'];
+    $ustreamvideo=$products['ustream_video'];
+    foreach ($_myprodsamples as $_sample):
+        $video= $_sample['sample_url'];
+        $video1=$_sample['link_url'];
+    endforeach;
+    
+    $vdata=explode("v=",$video);
+    $productimageurl=$products->getImageUrl();
+   
+    if($vdata['1']!=NULL && $type=='downloadable' && $material==7 ):
+        ?>
+<div class="videosclick" onclick="thevid=document.getElementById('thevideo'); thevid.style.display='block';document.getElementById('viewplayer').src = document.getElementById('viewplayer').src.replace('autoplay=0','autoplay=1'); this.style.display='none'">
+   <?php 
+ 
+   if($productimageurl !=NULL)
+    {?>
+        <img src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>" height="355" width="600" style="cursor:pointer" />
+   <?php }
+    else
+    {?>
+           
+    <img src="http://img.youtube.com/vi/<?php echo $vdata['1']?>/hqdefault.jpg" height="355" width="600" style="cursor:pointer" />
+  <?php  }
+   ?>
+    
+   
+    <a href="javascript:void(0)" ></a>
+</div>
+<div id="thevideo" style="display:none">
+ 
+<?php
+        echo  '<iframe id="viewplayer" title="YouTube video player" class="youtube-player" type="text/html" height="355" width="600" src="https://www.youtube.com/embed/'.$vdata['1'].'?autoplay=0" frameborder="0" allowFullScreen></iframe>';
+?> </div>
+        <?php
+        elseif($material==8):
+    ?>
+         <script type="text/javascript" src="<?php echo $this->getSkinUrl('jwplayer/jwplayer.js'); ?>"></script>
+         <script type="text/javascript" src="<?php echo $this->getSkinUrl('jwplayer/jwplayer.html5.js'); ?>"></script>
+         <?php 
+            $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+            foreach ($_myprodsamples as $_sample): $video= $_sample['link_url']; endforeach;
+            ?>
+            <div id="myElement">Loading the player...</div>
+
+            <script type="text/javascript">
+                jwplayer("myElement").setup({
+                    'width': '600',
+                   'height': '355',
+                
+                flashplayer : '<?php echo $this->getSkinUrl('jwplayer/jwplayer.flash.swf'); ?>',
+                file: "<?php echo $video1 ?>"
+              });
+            </script>
+
+    <?php  
+    else :?>
+            <?php if ($_product->getImage() != 'no_selection' && $_product->getImage()): ?>
+            <p class="product-image product-image-zoom">
+                <?php
+                    $_img = '<img id="image" height="350" width="600" src="'.$this->helper('catalog/image')->init($_product, 'image').'" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
+                    echo $_helper->productAttribute($_product, $_img, 'image');
+                ?>
+            </p>
+       
+            <script type="text/javascript">
+            //<![CDATA[
+                Event.observe(window, 'load', function() {
+                    product_zoom = new Product.Zoom('image', 'track', 'handle', 'zoom_in', 'zoom_out', 'track_hint');
+                });
+            //]]>
+            </script>
+            <?php else: ?>
+            <p class="product-image">
+                <?php
+                    $_img = '<img height="350" width="600" src="'.$this->helper('catalog/image')->init($_product, 'image').'" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
+                    echo $_helper->productAttribute($_product, $_img, 'image');
+                ?>
+            </p>
+            <?php endif;  endif; ?>
+       

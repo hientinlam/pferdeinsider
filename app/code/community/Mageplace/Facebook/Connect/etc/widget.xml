@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplace Facebook Connect
+ *
+ * @category    Mageplace_Facebook
+ * @package     Mageplace_Facebook_Connect
+ * @copyright   Copyright (c) 2011 Mageplace. (http://www.mageplace.com)
+ * @license     http://www.mageplace.com/disclaimer.html
+ */
+-->
+<widgets>
+	<facebookconnect_button type="facebookconnect/widget_facebookconnect" translate="name" module="facebookconnect">
+		<name>Facebook Connect Button</name>
+		<parameters>
+			<title translate="label value">
+				<label>Title</label>
+				<visible>1</visible>
+				<required>0</required>
+				<type>text</type>
+				<value>Sign in with Facebook</value> 
+			</title>
+			<template translate="label">
+				<label>Frontend Template</label>
+				<visible>1</visible>
+				<required>1</required>
+				<type>text</type>
+				<value>facebookconnect/widget/facebookconnect.phtml</value> 
+			</template>
+		</parameters>
+	</facebookconnect_button>
+</widgets>

@@ -1,0 +1,383 @@
+<?php 
+class Brst_Createproduct_IndexController extends Mage_Core_Controller_Front_Action
+{
+    protected function _getSession()
+    {       
+        return Mage::getSingleton('customer/session');
+    }
+    public function indexAction()
+    {
+        $session = $this->_getSession();
+         if ($session->isLoggedIn()){
+             $this->loadLayout(array('default'));
+             $this->renderLayout();
+        }
+        else
+        {
+            $this->_redirect('customer/account/index');
+            return;
+        }
+          
+    }
+   
+    
+     public function createAction()
+      {
+          $session = $this->_getSession();
+        
+            if ($session->isLoggedIn()) {
+                 
+           $productdata1=$this->getRequest()->getPost();
+           //echo "<pre>";print_r($productdata1);die('helo');
+           $api = new Mage_Catalog_Model_Product_Api();
+           $attribute_api = new Mage_Catalog_Model_Product_Attribute_Set_Api();
+           $attribute_sets = $attribute_api->items();
+
+           $productData = array();
+           try  
+           {
+                $productData['website_ids'] = array(1);
+                $productData['video_category'] = $productdata1['productcategory'];
+                $productData['status'] = 1;
+
+                //$productData['producttype'] = 'video';
+                $productData['member_list'] = $productdata1['productexpertname'];
+                $productData['live_streaming'] =$productdata1['livestreaming'];
+                $productData['social_streaming'] =$productdata1['socialstreaming'];
+                $productData['name'] = $productdata1['productname'] ;
+                $productData['description'] = $productdata1['description'];
+                $productData['short_description'] = $productdata1['shortdescription'];
+                $productData['sku'] = $productdata1['productname'];
+                $productData['price'] = $productdata1['productprice'];
+                $productData['special_price'] =$productdata1['specialprice'];
+                $productData['qty'] = 10000;
+              //  $productData['productcategory'] = $productdata1['productcategory'];
+                $productData['downloadableoption'] =$productdata1['downloadableoption'];
+                $productData['product_material'] = $productdata1['productmaterial'];
+                $productData['special_product'] =$productdata1['specialproduct'];
+                $productData['sampleurl'] =$productdata1['sampleurl'];
+                $productData['linkurl'] = $productdata1['linkurl'];
+                $productData['tax_class_id'] =2;
+            
+                $new_product_id = $api->create('downloadable',$attribute_sets[0]['set_id'],'ND3',$productData);
+                if($productdata1['specialproduct']=='48')
+                {
+                    $dailydeal=Mage::getModel('dailydeal/dailydeal');
+                    $dailydeal->setProductId($new_product_id);
+                    $dailydeal->setCurProduct($productdata1['productname']);
+                    $dailydeal->setProductSku($productdata1['productname']);
+                    $dailydeal->setDiscount($productdata1['discountamount']);
+                    $dailydeal->setDiscountType($productdata1['discounttype']);
+                    $dailydeal->setStartDateTime($productdata1['activefrom']);
+                    $dailydeal->setEndDateTime($productdata1['activeto']);
+                    $dailydeal->setDailydealPrice($productdata1['dealprice']);
+                    $dailydeal->setDealQty($productdata1['dealqty']);
+                    $dailydeal->setStatus(1);
+                    $dailydeal->setFeatured(1);
+                    $dailydeal->save();
+                }
+                
+                if($productdata1['producttype']=='ustream')
+                    {
+                        $eventstatus='1';
+                        $eventmodel  = Mage::getModel('events/events');
+                        $eventmodel->setEventTitle($productdata1['productname']);
+                        $eventmodel->setEventVenu($productdata1['venue']);
+                        $eventmodel->setEventStartDate($productdata1['startdate']);
+                        $eventmodel->setEventEndDate($productdata1['enddate']);
+                        $eventmodel->setEventContent($productdata1['shortdescription']);
+                        $eventmodel->setEventUrlPrefix($productdata1['urlprefix']);
+                        $eventmodel->setEventStatus($eventstatus);
+                        $eventmodel->setCreatedTime(now());
+			$eventmodel->setUpdateTime(now());
+                        $eventmodel->save();
+                        $eventid=$eventmodel->getEventId();
+                        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+                        $query="insert into events_product(eventid,product_id) values($eventid,$new_product_id)";
+                        $result=$connection->query($query);
+                        $connection1 = Mage::getSingleton('core/resource')->getConnection('core_write');
+                        $query1="insert into events_store(event_id,store_id) values($eventid,'0')";
+                        $result1=$connection1->query($query1);
+                    }
+                    //  UPLOAD IMAGE    
+                    
+                    if($_FILES['file']['name']!= NULL)
+                    {
+                        $absolute_path = Mage::getBaseDir('media') . DS .('import');
+                        $relative_path = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                        $files =$_FILES['file']['name'];
+                        $var = rand(0,99);
+                        $files = $var.'_'.$files;
+                        $path = Mage::getBaseDir('media') . DS."import/".$files;
+                          // Starting upload
+                        $uploader = new Varien_File_Uploader('file');
+                          //Here 4 extention would work
+                        $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
+                        $uploader->setAllowRenameFiles(false);
+                        $uploader->setFilesDispersion(false);
+                        $uploader->save($absolute_path,$files);
+                        $product = Mage::getModel('catalog/product')->load($new_product_id);
+                        $file_url = $files;
+                        $product->addImageToMediaGallery($path,array('image'),false,false);
+                        $product->addImageToMediaGallery($path,array('small_image'),false,false);
+                        $product->addImageToMediaGallery($path,array('thumbnail'),false,false); 
+                        Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+                        $product->save();
+                    }
+                   
+                    $stockItem = Mage::getModel('cataloginventory/stock_item');
+                    $stockItem->loadByProduct( $new_product_id );
+
+                    $stockItem->setData('use_config_manage_stock', 1);
+                    $stockItem->setData('qty', 10000);
+                    $stockItem->setData('min_qty', 0);
+                    $stockItem->setData('use_config_min_qty', 1);
+                    $stockItem->setData('min_sale_qty', 0);
+                    $stockItem->setData('use_config_max_sale_qty', 1);
+                    $stockItem->setData('max_sale_qty', 0);
+                    $stockItem->setData('use_config_max_sale_qty', 1);
+                    $stockItem->setData('is_qty_decimal', 0);
+                    $stockItem->setData('backorders', 0);
+                    $stockItem->setData('notify_stock_qty', 0);
+                    $stockItem->setData('is_in_stock', 1);
+                    $stockItem->setData('tax_class_id', 0);
+
+                    $stockItem->save();
+
+                    $linkModel = Mage::getModel('downloadable/link')->setData(array(
+                                    'product_id' => $new_product_id,
+                                    'sort_order' => 0,
+                                    'number_of_downloads' => 0, // Unlimited downloads
+                                    'is_shareable' => 2, // Not shareable
+                                    'link_url' =>$productdata1['linkurl'],
+                                    'link_type' => 'url',
+                                    'link_file' => '',
+                                    'sample_url' => $productdata1['sampleurl'],
+                                    'sample_file' => '',
+                                    'sample_type' => 'url',
+                                    'use_default_title' => false,
+                                    'title' => 'downloadable link',
+                                    'default_price' => 0,
+                                    'price' => 0,
+                                    'store_id' => 0,
+                                    'website_id' => 1,
+                            ));
+
+                     $linkModel->setLinkFile($linkFileName)->save();
+                       Mage::getSingleton('core/session')->addsuccess('The Product has been Created');
+                       $this->_redirect('createproduct/index/index');
+                     }
+                 catch (Exception $e) {
+                        echo "Exception : ".$e->getMessage();
+                        exit;
+            }
+            }
+             else
+            {
+                $this->_redirect('customer/account/index');
+                return;
+            }
+  
+      }
+    public function showproductAction()
+    {
+        $session = $this->_getSession();
+         if ($session->isLoggedIn()){
+             $this->loadLayout(array('default'));
+             $this->renderLayout();
+        }
+        else
+        {
+            $this->_redirect('customer/account/index');
+            return;
+        }
+          
+    }
+     public function editAction()
+    {
+         $session = $this->_getSession();
+         if ($session->isLoggedIn()){
+             $this->loadLayout(array('default'));
+             $this->renderLayout();
+        }
+        else
+        {
+            $this->_redirect('customer/account/index');
+            return;
+        }
+          
+    }
+     public function updateAction()
+      {
+          
+            $filePath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+            $updatedata=$this->getRequest()->getPost();
+            $product= array();
+            $productmodel = Mage::getModel('catalog/product')->load($updatedata['prodId']);  
+            try {
+                if($updatedata['prodId'] != NULL )
+                {  
+                    $productmodel->setWebsiteIds(array(Mage::app()->getStore($storeId)->getWebsiteId()));
+                    $productmodel->setAttributeSetId(4);
+                    $productmodel->setCategoryIds(array($updatedata['productcategory']));
+                    $productmodel->setTypeId('downloadable');
+                    $productmodel->setSku($updatedata['productname']);
+                    $productmodel->setPrice($updatedata['productprice']);
+                    $productmodel->setSpecialPrice($updatedata['specialprice']);
+                    $productmodel->setSpecialProduct($updatedata['specialproduct']);
+                    $productmodel->setDownlodableOption($updatedata['downloadableoption']);
+                    $productmodel->setProductMaterial($updatedata['productmaterial']);
+                    $productmodel->setMemberList($updatedata['productexpertname']);
+                    $productmodel->setStatus(1);
+                    $productmodel->setVisibility(4);
+                    $productmodel->setTaxClassId(2);
+                    $productmodel->setStockData(array('is_in_stock'=>0, 'qty' => 1));
+                    $productmodel->setDescription($updatedata['description']);
+                    $productmodel->setShortDescription($updatedata['shortdescription']); //added, meta description to 'short description' field, you can change this value
+                    $productmodel->setName($updatedata['productname']);
+                    $productmodel->setLinksTitle("Download");
+                    
+                    $productmodel->save();
+                  
+                    if($updatedata['specialproduct']=='48' && $updatedata['dealid'] != Null)
+                    {
+                        $dailydeal=Mage::getModel('dailydeal/dailydeal')->load($updatedata['dealid']);
+                        $dailydeal->setProductId($updatedata['productids']);
+                        $dailydeal->setCurProduct($updatedata['productname']);
+                        $dailydeal->setProductSku($updatedata['productname']);
+                        $dailydeal->setDiscount($updatedata['discountamount']);
+                        $dailydeal->setDiscountType($updatedata['discounttype']);
+                        $dailydeal->setStartDateTime($updatedata['activefrom']);
+                        $dailydeal->setEndDateTime($updatedata['activeto']);
+                        $dailydeal->setDailydealPrice($updatedata['dealprice']);
+                        $dailydeal->setDealQty($updatedata['dealqty']);
+                        $dailydeal->setStatus(1);
+                        $dailydeal->setFeatured(1);
+                        $dailydeal->save();
+                    }
+                     else if($updatedata['specialproduct']=='48' && $updatedata['dealid'] == Null) 
+                    {
+                        $dailydeal=Mage::getModel('dailydeal/dailydeal');
+                        $dailydeal->setProductId($updatedata['productids']);
+                        $dailydeal->setCurProduct($updatedata['productname']);
+                        $dailydeal->setProductSku($updatedata['productname']);
+                        $dailydeal->setDiscount($updatedata['discountamount']);
+                        $dailydeal->setDiscountType($updatedata['discounttype']);
+                        $dailydeal->setStartDateTime($updatedata['activefrom']);
+                        $dailydeal->setEndDateTime($updatedata['activeto']);
+                        $dailydeal->setDailydealPrice($updatedata['dealprice']);
+                        $dailydeal->setDealQty($updatedata['dealqty']);
+                        $dailydeal->setStatus(1);
+                        $dailydeal->setFeatured(1);
+                        $dailydeal->save();
+                    }
+                  /*  if($productdata['producttype']=='ustream')
+                    {
+                        $eventstatus='1';
+                        $eventmodel  = Mage::getModel('events/events');
+                        $eventmodel->setEventTitle($productdata['productname']);
+                        $eventmodel->setEventVenu($productdata['venue']);
+                        $eventmodel->setEventStartDate($productdata['startdate']);
+                        $eventmodel->setEventEndDate($productdata['enddate']);
+                        $eventmodel->setEventContent($productdata['content']);
+                        $eventmodel->setEventUrlPrefix($productdata['urlprefix']);
+                        $eventmodel->setEventStatus($eventstatus);
+                        $eventmodel->setCreatedTime(now());
+			$eventmodel->setUpdateTime(now());
+                        $eventmodel->save();
+                        $eventid=$eventmodel->getEventId();
+                        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+                        $query="insert into events_product(eventid,product_id) values($eventid,$newProductId)";
+                        $result=$connection->query($query);
+                        $connection1 = Mage::getSingleton('core/resource')->getConnection('core_write');
+                        $query1="insert into events_store(event_id,store_id) values($eventid,'0')";
+                        $result1=$connection1->query($query1);
+                         
+                        
+                    }*/
+                    //  UPLOAD IMAGE    
+                    
+                    if($_FILES['file']['name']!= NULL)
+                    {
+                        $absolute_path = Mage::getBaseDir('media') . DS .('import');
+                        $relative_path = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                        $files =$_FILES['file']['name'];
+                        $var = rand(0,99);
+                        $files = $var.'_'.$files;
+                        $path = Mage::getBaseDir('media') . DS."import/".$files;
+                          // Starting upload
+                        $uploader = new Varien_File_Uploader('file');
+                          //Here 4 extention would work
+                        $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
+                        $uploader->setAllowRenameFiles(false);
+                        $uploader->setFilesDispersion(false);
+                        $uploader->save($absolute_path,$files);
+                        $prod = Mage::getModel('catalog/product')->load($updatedata['prodId']);
+                        $file_url = $files;
+                        $prod->addImageToMediaGallery($path,array('image'),false,false);
+                        $prod->addImageToMediaGallery($path,array('small_image'),false,false);
+                        $prod->addImageToMediaGallery($path,array('thumbnail'),false,false); 
+                        Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+                        $prod->save();
+                    }
+                   
+                
+                    
+                    $stockItem = Mage::getModel('cataloginventory/stock_item');
+                    $stockItem->loadByProduct( $updatedata['prodId'] );
+
+                    $stockItem->setData('use_config_manage_stock', 1);
+                    $stockItem->setData('qty', $updatedata['qty']);
+                    $stockItem->setData('min_qty', 0);
+                    $stockItem->setData('use_config_min_qty', 1);
+                    $stockItem->setData('min_sale_qty', 0);
+                    $stockItem->setData('use_config_max_sale_qty', 1);
+                    $stockItem->setData('max_sale_qty', 0);
+                    $stockItem->setData('use_config_max_sale_qty', 1);
+                    $stockItem->setData('is_qty_decimal', 0);
+                    $stockItem->setData('backorders', 0);
+                    $stockItem->setData('notify_stock_qty', 0);
+                    $stockItem->setData('is_in_stock', 1);
+                    $stockItem->setData('tax_class_id', 0);
+
+                    $stockItem->save();
+
+
+                    if($productdata['producttype']!='ustream')
+                    {
+                        $linkModel = Mage::getModel('downloadable/link')->load($updatedata['prodId']);
+                     $linkModel->setData(array(
+                                    'product_id' => $updatedata['prodId'],
+                                    'sort_order' => 0,
+                                    'number_of_downloads' => 0, // Unlimited downloads
+                                    'is_shareable' => 2, // Not shareable
+                                    'link_url' => $updatedata['linkurl'],
+                                    'link_type' => 'url',
+                                    'link_file' => '',
+                                    'sample_url' => $updatedata['sampleurl'],
+                                    'sample_file' => '',
+                                    'sample_type' => 'url',
+                                    'use_default_title' => false,
+                                    'title' => 'downloadable link',
+                                    'default_price' => 0,
+                                    'price' => 0,
+                                    'store_id' => 0,
+                                    'website_id' => 1,
+                            ));
+
+                     $linkModel->setLinkFile($linkFileName)->save();
+                    }
+                }
+               
+               Mage::getSingleton('core/session')->addsuccess('The Product has been Updated');
+               $this->_redirect('createproduct/index/edit');
+                
+            } catch (Exception $e) {
+                echo "Exception : ".$e->getMessage();
+                exit;
+            }
+         
+    }
+
+}
+?>

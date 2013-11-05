@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<config>
+	<global>
+            <modules>
+                    <brst_comment>
+                            <version>0.1.0</version>
+                    </brst_comment>
+            </modules>
+
+            <blocks>
+                <comment>
+                    <rewrite>
+                     <comment>Brst_Comment_Block_Comment</comment>
+                    </rewrite>
+                </comment>
+             </blocks>
+             
+          
+       
+    
+        <models>
+                    <comment>
+                         <class>Brst_Comment_Model</class>
+                         <resourceModel>comment_mysql4</resourceModel>
+                     </comment>
+                    <comment_mysql4>
+                         <class>Brst_Comment_Model_Mysql4</class>
+                         <entities>
+                             <comment>
+                               <table>brst_customer_comment</table>
+                             </comment>
+                          </entities>
+                    </comment_mysql4>
+                    </models>
+                        <!-- allow the plugin to read and write -->
+                    <resources>
+                            <!-- connection to write -->
+                            <comment_write>
+                                <connection>
+                                    <use>core_write</use>
+                                </connection>
+                            </comment_write>
+
+                           <comment_read>
+                              <connection>
+                                 <use>core_read</use>
+                              </connection>
+                           </comment_read>
+                    </resources>      
+        
+	
+        </global>
+	   <frontend>
+                <routers>
+                        <comment>
+                                <use>standard</use>
+                                <args>
+                                      <module>Brst_Comment</module>
+                                      <frontName>comment</frontName>
+                                </args>
+                        </comment>
+                   
+                </routers>
+		<layout>
+			<updates>
+				<comment>
+		   		      <file>comment.xml</file>
+				</comment>
+			</updates>
+       		</layout>
+        </frontend>
+</config>
+

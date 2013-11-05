@@ -1,0 +1,260 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+
+
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="viewproduct">
+<div class="product-view">
+    <div class="product-essential">
+        <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+            <div class="no-display">
+                <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                <input type="hidden" name="related_product" id="related-products-field" value="" />
+            </div>
+            <div style="float:left;">
+                <div class="identify">
+                    <div class="product-name">
+                     <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                    </div>
+                    <span> 
+                        <?php if ($_product->getShortDescription()):?>
+                        <div class="short-description">
+                        <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
+                        </div>
+                        <?php endif;?>
+                    </span>
+                    <div class="more">
+                        <a href="#"> More...</a>
+                    </div>
+                    <div class="instructor">
+                         Instructor: <span>Lindsay Adler </span>
+                    </div>
+                    <div class="instructor_length">
+                         Length: 2 Day Workshop
+                    </div>
+                </div>
+            <div class="buy_now_portion" style="width:325px;">
+                <div class="buy_now_part">
+                    <?php echo $this->getPriceHtml($_product, true)  ?>
+                    <div class="old_rate">
+                      <strike> <?php echo $_product->getSpecialPrice(); ?> </strike>
+                    </div>
+                    <div class="buy_now_black">
+                        <div class="buy_now_title">
+                        <?php if($_product->isSaleable()): ?>
+                        <?php  echo $this->getChildHtml('addtocart');?>
+                         <?php else: ?>
+                        <p class="availability out-of-stock" style="margin-top:4px !important;"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="buy_now_part2">
+                 </div>
+            </div>
+        </div>
+        <div class="product-shop">
+            <div class="product-img-box">
+                <?php echo $this->getChildHtml('media') ?>
+            </div>
+            <?php  $current_url = Mage::helper('core/url')->getCurrentUrl(); ?> 
+            <div style="float: left;">
+                <div style="float: left; width:180px;"><iframe id="tweet-button" class="twitter-share-button" allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?url=<?php echo $current_url ?>"  data-via="your_screen_name" data-lang="en" data-related="anywhereTheJavascriptAPI" data-count="horizontal" style="width:110px; height:20px;padding-right:20px;float:right;"></iframe> </div>
+                <div style="float: right; width: 300px;"><iframe id='ifrm' src="http://www.facebook.com/plugins/like.php?href=<?php echo $current_url ?>" layout="button_count" show_faces="false" scrolling="no" frameborder="0" style="border:none; width:450px; height:80px"></iframe></div>
+            </div> 
+        </div>
+         <div class="recent_bg">
+                  <div class="aa">
+                   <div class="tabContainer" >
+                        <ul class="digiTabs" id="sidebarTabs">
+                          <li  id="tab1" class="selected"  onclick="tabs(this);">KURSINHALT</li>
+                          <li id="tab2" onclick="tabs(this);">BEWERTUNGEN</li>
+                          <li id="tab3"  onclick="tabs(this);">KOMMENTARE</li>
+                           <li id="tab4"  onclick="tabs(this);">SPEZIAL ANGEBOTE</li>
+                        </ul>
+                        
+                   </div>
+                  </div>
+         </div>
+               <div id="tabContent" class="content_part">
+                course content
+            
+             </div>
+               <div id="tab1Content" style="display:none;">hello here demo</div>
+                         <div id="tab2Content" style="display:none;">
+                              <?php 
+                             echo $this->getChildHtml('product_review') ;
+                            // echo $layout = Mage::getSingleton('core/layout');
+//echo $layout->getBlock('content')->getChild('product.info')->getChild('info_tabs')->getChild('review_form')->toHtml();
+                         //   echo $this->getReviewsSummaryHtml($_product, false, true)?>
+                             
+                         </div>
+                         <div id="tab3Content" style="display:none;"> comments </div>
+                         <div id="tab4Content" style="display:none;"> special offer  </div>
+                      </div>
+                
+             <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+            <?php //echo $this->getChildHtml('alert_urls') ?>
+            <?php // echo $this->getChildHtml('product_type_data') ?>
+            <?php //echo $this->getTierPriceHtml() ?>
+            <?php //echo $this->getChildHtml('extrahint') ?>
+
+        
+                <?php  
+      /*  $login = Mage::getSingleton( 'customer/session' )->isLoggedIn(); 
+       
+          $customer = Mage::getSingleton('customer/session')->getCustomer();
+          $customerId=$customer->getId();
+          $affiliate =  Mage::getModel('awaffiliate/affiliate')->getCollection()->getData();
+          foreach($affiliate as $inactive)
+          {
+            if($customerId==$inactive['customer_id'])
+            {
+              $affid=$inactive['id'];
+              $status=$inactive['status'];
+               break;
+            }
+          }*/
+  ?>
+  <?php // $current_url = Mage::helper('core/url')->getCurrentUrl(); ?>
+   <!-- <div id="user-form-loader" style="display:none;  float: right; margin-left: 100px; margin-top: -65px;"><img style="height: 65px;"src="<?php echo $this->getSkinUrl()?>images/loadingr.gif" /></div>
+         <div style="float: right;height: 30px;width: 100px;">
+             <input type="hidden" value="<?php echo Mage::getBaseUrl();?>" id="defaulturl"/>
+             <input type="hidden" value="<?php echo $affid;?>" id="affiliateId"/>
+             <input type="hidden" value="<?php echo $current_url;?>" id="current_url"/>
+             <input type="hidden" value="2" id="campaignId"/>
+             <button id="short-url" type="button" class="button" name="short-url" style="float:right;margin-bottom:10px;" title="<?php echo $this->__("Short Url"); ?>" onClick="submitcode()">
+                <span><span style="float:right;"><?php echo $this->__("Generate Link"); ?></span></span>
+             </button>  
+         </div> 
+     <textarea id="showdiv" style="width:290px;"></textarea>-->
+    <?php //} ?>
+  
+     
+                   
+           
+
+            <?php // echo $this->getChildHtml('other');?>
+
+            <?php //if ($_product->isSaleable() && $this->hasOptions()):?>
+                <?php //echo $this->getChildChildHtml('container1', '', true, true) ?>
+            <?php// endif;?>
+
+        
+
+        
+        <div class="clearer"></div>
+        <?php //if ($_product->isSaleable() && $this->hasOptions()):?>
+            <?php //echo $this->getChildChildHtml('container2', '', true, true) ?>
+        <?php //endif;?>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                // Remove custom datetime validators
+                for (var methodName in Validation.methods) {
+                    if (methodName.match(/^validate-datetime-.*/i)) {
+                        delete Validation.methods[methodName];
+                    }
+                }
+
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+    </div>
+
+  <!--  <div class="product-collateral">
+<?php foreach ($this->getChildGroup('detailed_info', 'getChildHtml') as $alias => $html):?>
+        <div class="box-collateral <?php echo "box-{$alias}"?>">
+            <?php if ($title = $this->getChildData($alias, 'title')):?>
+            <h2><?php echo $this->escapeHtml($title); ?></h2>
+            <?php endif;?>
+            <?php echo $html; ?>
+        </div>
+<?php endforeach;?>
+        <?php echo $this->getChildHtml('upsell_products') ?>
+        <?php echo $this->getChildHtml('product_additional_data') ?>
+    </div> -->
+ 
+</div>
+</div>
+<script>
+ jQuery(document).ready(function () 
+ {
+     submitcode()
+ });
+</script> 

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<layout>
+    <!-- Here, we reference the XML node path of our route -->
+    <adminhtml_amount_index>
+        <reference name="content">
+            <!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
+            <block type="brst_experts/adminhtml_amount" name="brst_experts_amount" />
+        </reference>
+    </adminhtml_amount_index>
+    <adminhtml_amount_ratio>
+        <reference name="content">
+            <!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
+            <block type="brst_experts/adminhtml_amount" name="brst_experts_amount" />
+        </reference>
+    </adminhtml_amount_ratio>
+</layout>

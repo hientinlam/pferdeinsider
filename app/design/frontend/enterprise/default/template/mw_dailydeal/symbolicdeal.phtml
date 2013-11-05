@@ -1,0 +1,332 @@
+
+<link rel="stylesheet" type="text/css" media="all" href="<?php echo $this->getSkinUrl('mw_dailydeal/symbolic/css/symgeneral.css');?>"/>
+
+<?php 
+	$_coreHelper = $this->helper('core');
+	$_taxHelper  = $this->helper('tax');
+	$_helper = $this->helper('catalog/output');
+$_dealCollection = $this->getDeals(); 
+	$_collectionSize = count($_dealCollection);//var_dump($_collectionSize);//die();
+			$timechange = (int)Mage::getStoreConfig('dailydeal/general/timechange'); 
+	
+	if ($_collectionSize > 0){
+		foreach ($_dealCollection as $_deal){//Zend_Debug::dump($_deal->getStartDateTime());continue;//chuyen sang phan tu tiep theo trong vong lap
+			$dealqty = $_deal->getDealQty();
+			$soldqty = $_deal->getSoldQty();
+			$gmtcore = Mage::getSingleton('core/date')->getGmtOffset();//var_dump($gmtcore*1000);die;
+			
+			$beforetime = Mage::getModel('core/date')->timestamp(time())-strtotime($_deal->getStartDateTime());//echo $beforetime;
+			$aftertime = strtotime($_deal->getEndDateTime())- Mage::getModel('core/date')->timestamp(time());//echo $aftertime;
+			if ($dealqty > $soldqty && ($aftertime > 0) && ($beforetime >= 0)){
+			$_product = Mage::getModel('catalog/product')->load($_deal->getProductId());	
+?>
+
+<br/>
+
+<div class="deal">
+				<div class="deal-title">
+					<h1 class="deal-name" title="<?php echo $_product->getName()?>"><?php echo $_product->getName()?></h1>
+				</div>
+				<div class="deal-info">
+				
+				<div class="deal-info-top">
+					<div class="leftcol">
+<?php 
+	$_regularPrice = $_taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax);
+	$_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice());
+	$save = $_regularPrice-$_finalPrice;
+	$discount = ($save/$_regularPrice)*100;
+	
+?>
+
+<div class="content-symbolicdeal">
+
+	<div class="price_tag">
+	<div class="price_tag_inner">
+	<div class="amount"><?php echo $_coreHelper->currency($_finalPrice,true,false) ?></div>	
+		
+		<div class="btn_buy">
+	<p><button type="button" title="<?php echo $this->__('Buy !') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span>
+	<span><?php echo $this->__('Buy !') ?></span></span></button></p>								</div>
+								
+
+	</div>
+	</div>
+    <div class="deal_discount" class="clearfix">
+		  <dl>
+			<dt>Old price</dt>
+			<dd><?php echo $_coreHelper->currency($_regularPrice,true,false) ?></dd>
+		  </dl>
+		  <dl class="discount">
+			<dt>Discount</dt>
+			<dd><?php echo round($discount,2).'%'?></dd>
+		  </dl>
+		  <dl class="save">
+			<dt>You Save</dt>
+			<dd><?php echo $_coreHelper->currency($save,true,false)?></dd>
+		  </dl>
+		  <div class="clear"></div>
+	</div>
+
+	<div id="gift_a_deal">
+	<div style="padding-left: 0px;font-size: 11px;">
+	<?php if (($dealqty-$soldqty) > 10){?>
+	There are <span style="color: #c76200; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> items</span> available.
+	<?php } elseif (($dealqty-$soldqty) <= 10 && ($dealqty-$soldqty) > 1) {?>
+	Hurry, there are only <span style="color: #c76200; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> items</span> left!
+	<?php }elseif (($dealqty-$soldqty) == 1){?>
+	Hurry, there is only <span style="color: #c76200; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> item</span> left!
+	<?php }?>	
+	</div>
+	</div>	
+						
+										
+	<div class="remaining_time">
+		<p class="timer_text">Time left to Buy</p>
+					<!-- Countdown Javascript -->
+			<div id="counter" class="symbolic">
+				<ul class="countdown">	
+					<li class="first"><div class="countdown_num" id="cd_hour-<?php echo $_deal->getDailydealId()?>"></div><div id="hour-sym">Hours</div></li>
+					<li><div class="countdown_num" id="cd_min-<?php echo  $_deal->getDailydealId()?>"></div><div id="minute-sym">Minutes</div></li>
+					<li class="last"><div class="countdown_num" id="cd_sec-<?php echo  $_deal->getDailydealId()?>"></div><div id="second-sym">Seconds</div></li>
+				</ul>
+				<div class="clear"><span>&nbsp;</span></div>
+			</div>
+				<div id="expired" style="display:none;">
+					The deadline has passed.
+				</div>
+
+		<script type="text/javascript">
+			function countDown(y,m,d,h,i,cdhour,cdmin,cdsec) { 
+				/*
+					Countdown Timer©, 2012, Bui Trung Chinh
+					Based on the "Count down until any date script" - By JavaScript Kit (www.javascriptkit.com)			
+					Email: btchinh2906@gmail.com
+					URL: https://www.facebook.com/chuoixanh
+					Licence : Open Source MIT Licence	
+				*/
+				
+				//alert(y);alert(m);alert(d);alert(h);alert(i);
+				//alert(cdhour);alert(cdmin);alert(cdsec);
+				they = y;
+				them = m;
+				thed = d;
+				theh = h;
+				thei = i;	
+				// Offset from GMT
+			    var now = new Date();
+			    var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+			    var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+			    var gmt_offset = date1 - date2 ; //alert(gmt_offset);
+				var today=new Date();//alert(Date.parse(today));
+				var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+				//alert(realtime);
+				futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+				dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+				if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+				//alert('fdsgd');	
+				dday=Math.floor( dd / 86400000       ); //alert(dday); 
+				dhour=Math.floor(dd /  3600000 %   24 ) + dday*24; //alert(dhour);
+				dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+				dsec=Math.floor( dd /     1000 %   60 ); //alert(dsec);
+				var dhour_string;
+				var dhour_span ='';
+				dhour_string = dhour.toString();
+				if (dhour_string < 10) dhour_string = "0"+dhour_string;
+				for(var i=0; i<dhour_string.length; i++) {
+						dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+				}
+				
+				var dmin_string;
+				var dmin_span ='';
+				dmin_string = dmin.toString();
+				if (dmin_string < 10) dmin_string = "0"+dmin_string;
+				for(var i=0; i<dmin_string.length; i++) {
+						dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+				}
+				
+				var dsec_string;
+				var dsec_span ='';
+				dsec_string = dsec.toString();
+				if (dsec_string < 10) dsec_string = "0"+dsec_string;
+				for (var i=0; i<dsec_string.length; i++) {
+						dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+				}
+					
+				if (document.getElementById) { 
+				document.getElementById(cdhour).innerHTML = dhour_span;
+				document.getElementById(cdmin).innerHTML = dmin_span;
+				document.getElementById(cdsec).innerHTML = dsec_span; 
+				}
+			//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+			  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+				} else { 
+					dday=Math.floor( dd / 86400000       ); //alert(dday); 
+					dhour=Math.floor(dd /  3600000 %   24 ); //alert(dhour);
+					dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+					var dday_string;
+					var dday_span ='';
+					dday_string = dday.toString();
+					if (dday_string < 10) dday_string = "0"+dday_string;
+					for(var i=0; i<dday_string.length; i++) {
+							dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+					}		
+					var dhour_string;
+					var dhour_span ='';
+					dhour_string = dhour.toString();
+					if (dhour_string < 10) dhour_string = "0"+dhour_string;
+					for(var i=0; i<dhour_string.length; i++) {
+							dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+					}
+					
+					var dmin_string;
+					var dmin_span ='';
+					dmin_string = dmin.toString();
+					if (dmin_string < 10) dmin_string = "0"+dmin_string;
+					for(var i=0; i<dmin_string.length; i++) {
+							dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+					}
+					
+			
+					//salert(document.getElementById(hoursym).innerHTML);	
+					if (document.getElementById) { 
+					document.getElementById(cdhour).innerHTML = dday_span;;
+					document.getElementById('hour-sym').innerHTML = 'Days';
+					document.getElementById(cdmin).innerHTML = dhour_span;
+					document.getElementById('minute-sym').innerHTML = 'Hours';
+					document.getElementById(cdsec).innerHTML = dmin_span;
+					document.getElementById('second-sym').innerHTML = 'Minutes'; 
+					}
+					//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+					  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+					//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+				}
+			}
+			
+			function addLoadEvent(func) {
+			  var oldonload = window.onload;
+			  if (typeof window.onload != 'function') {
+			    window.onload = func;
+			  } else {
+			    window.onload = function() {
+			      if (oldonload) {
+			        oldonload();
+			      }
+			      func();
+			    }
+			  }
+			}
+			
+			addLoadEvent(function() {
+				 countDown(<?php echo date('Y',strtotime($_deal->getEndDateTime()));?>, 
+							<?php echo date('m',strtotime($_deal->getEndDateTime()));?>, 
+							<?php echo date('d',strtotime($_deal->getEndDateTime()));?>,
+						  	<?php echo date('H',strtotime($_deal->getEndDateTime()));?>,
+							<?php echo date('i',strtotime($_deal->getEndDateTime()));?>,
+							  "cd_hour-<?php echo $_deal->getDailydealId()?>",
+							  "cd_min-<?php echo  $_deal->getDailydealId()?>",
+							  "cd_sec-<?php echo  $_deal->getDailydealId()?>");
+			});
+		</script>     
+	</div>						
+	
+</div>	
+	
+	
+<div class="share">
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style ">
+
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td><a class="addthis_button_facebook_like" fb:like:layout="button_count"></a></td>
+	<td><a class="addthis_button_tweet"></a></td>
+</tr>
+<tr>
+	<td><a class="addthis_button_pinterest_pinit"></a></td>
+	<td><a class="addthis_counter addthis_pill_style"></a></td>
+</tr>
+</table>
+
+</div>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-5018d6a958afb330"></script>
+<!-- AddThis Button END -->
+</div>
+
+
+</div>
+
+
+		<div class="rightcol">						
+			<div class="media">	
+			<img id="image" src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>" alt="<?php $this->htmlEscape($this->getImageLabel())?>" title="<?php $this->htmlEscape($this->getImageLabel())?>" width="420" height="267"/>
+			</div>						
+			<div class="info">	
+				<?php if ($_product->getShortDescription()):?>
+			                <div class="short-description">
+			                    <h2><?php echo $this->__('Quick Overview') ?></h2>
+			                    <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
+			                </div>
+			            <?php endif;?>				
+			</div>
+		
+		</div>
+		
+		
+		</div>
+		
+		<div class="clear"></div>				
+	<div class="mw_deal-tabs" >
+		<ul class="mw_1-product-tabs mw_info-tabs" >
+			<li class="description-content">
+				<div class="product_tabs_description_contents"> 
+					<?php $_description = $_product->getDescription(); ?>
+					<?php if ($_description): ?>
+						<h2><?php echo $this->__('Description') ?></h2>
+						<div class="std">
+							<?php echo $this->helper('catalog/output')->productAttribute($_product, $_description, 'description') ?>
+						</div>
+					<?php endif; ?>				
+			   </div>	
+			</li>
+			
+			<li id="Reviews-content">		      
+			    <div class="product_tabs_description_contents"> 				
+						<h2><?php echo $this->__('Review') ?></h2>
+						<div class="std">
+<?php $_items = $this->getReviewsCollection($_deal->getProductId())->getItems();?>
+    <?php if (count($_items)){?>
+        <dl>
+        <?php foreach ($_items as $_review):?>
+            <dt>
+                <a href="<?php echo $this->getReviewUrl($_review->getId()) ?>"><?php echo $this->htmlEscape($_review->getTitle()) ?></a> <?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?>
+            </dt>
+            <dd>
+            
+                            <td>
+                                <div class="rating-box">
+                                    <div class="rating" style="width:<?php echo $this->__getPercentRate($_review); ?>%;"></div>
+                                </div>
+                            </td>
+
+                <?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
+                <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small>
+            </dd>
+        <?php endforeach; ?>
+        </dl>							
+<?php }?>
+						
+			            </div>	
+				
+			</li>			
+		</ul>
+       <div style="clear:both;height:0;"></div>
+	</div>
+
+				
+				</div>
+			</div>
+		<?php break;?>
+	<?php }/*if (($aftertime > 0) && ($beforetime >= 0)){*/?>
+	<?php }/*foreach ($_dealCollection as $_deal){*/?>
+	<?php }/*if ($_collectionSize > 0){*/?>

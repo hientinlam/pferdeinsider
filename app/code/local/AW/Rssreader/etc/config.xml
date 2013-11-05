@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<AW_Rssreader>
+			<version>1.2.2</version><platform>ce</platform>
+		</AW_Rssreader>
+	</modules>
+	<global>
+
+		<blocks>
+			<rssreader>
+				<class>AW_Rssreader_Block</class>
+			</rssreader>
+		</blocks>
+
+		<helpers>
+			<rssreader>
+				<class>AW_Rssreader_Helper</class>
+			</rssreader>
+		</helpers>
+
+		<resources>
+			<rssreader_setup>
+				<setup>
+					<module>AW_Rssreader</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</rssreader_setup>
+			<rssreader_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</rssreader_write>
+			<rssreader_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</rssreader_read>
+		</resources>
+	</global>
+
+	<frontend>
+		<routers>
+			<rssreader>
+				<use>standard</use>
+				<args>
+					<module>AW_Rssreader</module>
+					<frontName>rssreader</frontName>
+				</args>
+			</rssreader>
+		</routers>
+
+		<layout>
+			<updates>
+				<rssreader>
+					<file>rssreader.xml</file>
+				</rssreader>
+			</updates>
+		</layout>
+
+		<translate>
+			<modules>
+			<AW_Rssreader>
+				<files>
+					<default>AW_Rssreader.csv</default>
+				</files>
+			</AW_Rssreader>
+			</modules>
+		</translate>
+
+	</frontend>
+
+
+	<adminhtml>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<rssreader>
+											<title>aheadWorks - RSS Reader</title>
+										</rssreader>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+		<translate>
+			<modules>
+				<AW_Rssreader>
+					<files>
+						<default>AW_RSSReader.csv</default>
+					</files>
+				</AW_Rssreader>
+			</modules>
+		</translate>
+	</adminhtml>
+
+	<default>
+		<rssreader>
+			<general>
+				<articles_number>5</articles_number>
+				<show_summary>1</show_summary>
+				<summary_max_chars>0</summary_max_chars>
+				<summary_max_words>0</summary_max_words>
+				<show_date>1</show_date>
+				<date_format>d-m-Y H:i:s</date_format>
+				<enable_links>1</enable_links>
+				<enable_images>1</enable_images>
+			</general>
+			<cache>
+				<enable_cache>0</enable_cache>
+				<cache_lifetime>86400</cache_lifetime>
+			</cache>
+		</rssreader>
+	</default>
+
+</config>

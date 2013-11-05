@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Brst_Approve>
+            <version>1.0.0</version>
+        </Brst_Approve>
+    </modules>
+     
+    <global>
+        <helpers>
+            <brst_approve>
+                <!-- This is where we define our helper directory -->
+                <class>Brst_Approve_Helper</class>
+            </brst_approve>
+        </helpers>
+                    
+        <blocks>
+            <brst_approve>
+                <!-- Set a block definition and lookup directory -->
+                <class>Brst_Approve_Block</class>
+            </brst_approve>
+        </blocks>
+         
+        <models>
+            <brst_approve>
+                <!-- This is where we define our model directory -->
+                <class>Brst_Approve_Model</class>
+                <!-- Define a resource to create a custom table -->
+                <resourceModel>brst_approve_mysql4</resourceModel>
+            </brst_approve>
+             
+            <!-- Here's our resource model we'll use to create a database table -->
+            <brst_approve_mysql4>
+                <class>Brst_Approve_Model_Mysql4</class>
+                <entities>
+                    <!-- Let's define our table, we'll call it with the baz name, but the real table is foo_bar_baz -->
+                    <!-- After we define our entity, we can call it with our model by calling foo_bar/baz -->
+                    <affialiaterequest>
+                        <table>brst_approve_affialiaterequest</table>
+                    </affialiaterequest>
+                </entities>
+            </brst_approve_mysql4>
+        </models>
+         
+        <!-- And finally we define our resource setup script -->
+        <resources>
+            <brst_approve_setup>
+                <setup>
+                    <module>Brst_Approve</module>
+                </setup>
+            </brst_approve_setup>
+        </resources>
+    </global>
+     
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <!-- This is how we load our Adminhtml controllers -->
+                    <modules>
+                        <Brst_Approve before="Mage_Adminhtml">Brst_Approve_Adminhtml</Brst_Approve>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+     
+    <adminhtml>
+        <layout>
+            <updates>
+                <brst_approve>
+                    <!--
+                    We again keep a nice naming convention and make our module upgrade proof by placing it in a separate folder
+                    - Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
+                    -->
+                    <file>brst/approve.xml</file>
+                </brst_approve>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

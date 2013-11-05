@@ -1,0 +1,112 @@
+
+<?php
+if ($this->helper('customer')->isLoggedIn()) {
+    header('Location:http://www.citiquestdeals.com/dev/index.php/customer/account/');
+} else {
+
+/*if(isset($_POST))
+{
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+} */
+ ?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  jQuery(".radio").click(function() {     
+    checked1 = jQuery(this).val();
+    if(checked1 =="paypalemail"){ 
+      jQuery("input#paypalemail").addClass('required-entry');
+      jQuery("input#paypalemail").addClass('validate-email');
+    }else{
+     jQuery("input#paypalemail").removeClass('required-entry');
+     jQuery("input#paypalemail").removeClass('validation-failed');
+     jQuery("div#advice-required-entry-paypalemail").hide();
+    }
+  });
+});
+</script>   
+<div class="account-create">
+    
+    <form id="merchant-form-validate" method="post" action="http://localhost/magento-1.7.0.2/magento/index.php/bar/index/save">
+        <div class="fieldset">
+            
+            <h2 class="legend"> Personal Information</h2>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname">
+                             <label class="required" for="firstname"><em>*</em>First Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry validate-alpha" title="First Name" value="" name="firstname" id="firstname">
+                                 </div>
+                        </div>
+                    <div class="field name-lastname">
+                        <label class="required" for="lastname"><em>*</em>Last Name</label>
+                        <div class="input-box">
+                            <input type="text" class="input-text required-entry validate-alpha" title="Last Name" value="" name="lastname" id="lastname">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                <li>
+                  <div class="customer-name">
+                    <div class="field name-firstname">
+                       <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                        <div class="input-box">
+                           <input type="text" name="email" id="email_address" value="" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
+                        </div>
+                    </div>
+                    
+                </div>
+                </li>
+                 <li>
+                     <div id="" class="field">
+                    <label for="region_id" class="required"><em>*</em>State/Province</label>
+                    <div id="" class="input-box">
+                        <input type="text" value="" name="state" title="state" id="" class="input-text required-entry">          
+                    </div>
+                </div>
+                 <div class="field">
+                    <label for="city" class="required"><em>*</em>City</label>
+                    <div class="input-box">
+                        <input type="text" name="city" value="" title="City" class="input-text required-entry" id="">
+                    </div>
+            </li>
+            <li class="fields">
+                
+               
+               <div class="field">
+                      <label for="telephone" class="required">Telephone</label>
+                        <div class="input-box">
+                            <input type="text" name="phone" value="" title="Telephone" class="input-text" id="phone">
+                        </div>
+                    </div>
+            </li>
+               
+	</ul>
+    </div>
+ 
+    <div class="buttons-set">
+            
+            <button style="padding-left: 20px;padding-right:20px;"class="button" title="Submit" type="submit" onclick=""><span><span>Submit</span></span></button>
+        </div>
+
+</div>
+	
+	
+   
+               
+                 
+             
+           
+       
+    </form>
+    <script type="text/javascript">
+    //&lt;![CDATA[
+        var dataForm = new VarienForm('merchant-form-validate', true);
+         
+    //]]&gt;
+    </script>
+</div>
+<?php }?>

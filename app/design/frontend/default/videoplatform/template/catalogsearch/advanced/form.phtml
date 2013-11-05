@@ -1,0 +1,329 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Catalog advanced search form
+ *
+ * @see Mage_CatalogSearch_Block_Advanced_Form
+ */
+?>
+
+<?php /* Original Code
+    
+<?php $maxQueryLength= $this->helper('catalogsearch')->getMaxQueryLength();?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<form action="<?php echo $this->getSearchPostUrl() ?>" method="get" id="form-validate">
+    <input type="hidden" value="<?php echo $this->getSearchPostUrl() ?>" id="action"/>
+    <input type="hidden" value="<?php echo Mage::getBaseUrl(); ?>" id="baseurl"/>
+    <div class="fieldset advanced-search">
+      <!--  <h2 class="legend"><?php echo $this->__('Search Settings') ?></h2> -->
+        <ul class="form-list" id="advanced-search-list" style="  background: none repeat scroll 0 0 #F0F0F0;float: left;height: 107px;padding: 15px 20px 20px;width: 96%;">
+            <?php foreach ($this->getSearchableAttributes() as $_attribute): ?>
+            <?php $_code = $_attribute->getAttributeCode() ?>
+         
+            <li <?php if($_code=='start_date' || $_code=='end_date'){?> style="width:190px;float:left;"<?php }else {?> style="width:160px;float:left;"<?php } ;?> id="<?php if($_code=='name'|| $_code=='news_to_date' || $_code=='news_from_date' ){ echo $_code; } ?>">
+                <label for="<?php echo $_code ?>"><?php echo $this->getAttributeLabel($_attribute) ?></label>
+             <?php 
+                switch($this->getAttributeInputType($_attribute)):
+                    case 'number': ?>
+                    <div class="input-range">
+                        <input type="text" name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text validate-number" maxlength="<?php echo $maxQueryLength;?>" />
+                        <span class="separator">-</span>
+                        <input type="text" name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" class="input-text validate-number" maxlength="<?php echo $maxQueryLength;?>" />
+                    </div>
+                    <?php break;
+                    case 'price': ?>
+                   
+                   <div class="input-range">
+                              <div class="category-choose" style="width:150px;">
+                        <select class="choose" name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>" >
+                            <option class="optionvalue" value="--SELECT--">--SELECT--</option>
+                            <option class="optionvalue" value="0-50">0-50</option>
+                            <option class="optionvalue" value="51-100">51-100</option>
+                            <option class="optionvalue" value="101-300">101-300</option>
+                            <option class="optionvalue" value="301-500">301-500</option>
+                            <option class="optionvalue" value="500-UP">500-UP</option>
+                        </select>
+                              </div>
+                         </div> 
+                   <!-- <input name="<?php echo $_code ?>[from]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'from')) ?>" id="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text validate-number" type="text" maxlength="<?php echo $maxQueryLength;?>" />
+                       <span class="separator">-</span>
+                        <input name="<?php echo $_code ?>[to]" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute, 'to')) ?>" id="<?php echo $_code ?>_to" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text validate-number" type="text" maxlength="<?php echo $maxQueryLength;?>" />
+                        <small>(<?php echo $this->getCurrency($_attribute); ?>)</small> -->
+             
+                    <?php break;
+                 case 'select': 
+                if(in_array($_attribute->getAttributeCode(), array('member_list','video_category'))): ?>
+                    <div class="input-box" style="width:150px;">
+                        <?php
+                             $options = $_attribute->getSource()->getAllOptions(false); ?>
+                               <select id="<?php echo $_attribute->getAttributeCode(); ?>" name="<?php echo $_attribute->getAttributeCode(); ?>[]" class="choose">
+                                <option class="optionvalue" value="--SELECT--">--Select--</option>
+                           <?php  foreach($options as $_option):?>
+
+                            <option  class="optionvalue"  value="<?php echo $_option['value']; ?>"> <?php echo $_option['label']; ?> </option>
+
+                       <?php
+                             endforeach;
+                        ?>
+                            </select>
+                    </div>
+                
+                <?php endif; ?>
+   
+                    <!--   <div class="input-range">
+                                  <div class="category-choose">
+                            <?php  
+                            $str1 =str_replace('multiple', '', $this->getAttributeSelectElement($_attribute)) ;
+                                    $str2 = str_replace('multiselect', 'choose', $str1);
+                                  echo  $str3 = str_replace('4', '', $str2);
+                                    ?>
+                                  </div>
+                            </div>  -->
+                         
+                    <?php break;
+                    case 'yesno': ?>
+                        <?php echo $this->getAttributeYesNoElement($_attribute) ?>
+                    <?php break;
+                    case 'date': ?>
+                    <div class="input-range">
+                        <?php echo $this->getDateInput($_attribute, 'from') ?>
+                      <!--  <span class="separator">-</span>
+                        <?php echo $this->getDateInput($_attribute, 'to') ?> -->
+                    </div>
+                    <?php break;
+                    default: ?>
+                    <div class="input-box" >
+                        <input type="text" style="width:150px;" name="<?php echo $_code ?>" id="<?php echo $_code ?>" value="<?php echo $this->escapeHtml($this->getAttributeValue($_attribute)) ?>" title="<?php echo $this->escapeHtml($this->getAttributeLabel($_attribute)) ?>"  class="input-text <?php echo $this->getAttributeValidationClass($_attribute) ?>" maxlength="<?php echo $maxQueryLength;?>" />
+                    </div>
+                <?php endswitch; ?>
+            
+            <?php endforeach; ?>
+            </li>
+                  
+            <div class="buttons-set" style="padding-top:35px;margin-right:-15px;">
+        <button style="width:125px;" type="button" title="<?php echo $this->__('Search') ?>" class="advance" onclick="searchproduct()"><span><span><?php echo $this->__('Advance Search') ?></span></span></button>
+    </div>
+      
+        </ul>
+        <script type="text/javascript">decorateList('advanced-search-list')</script>
+    </div>
+    
+</form>
+
+End of Original Code*/ ?>
+
+<?php
+    $_attrMaterial = Mage::getModel('eav/config')->getAttribute('catalog_product', 'product_material');
+    $_attrExpert = Mage::getModel('eav/config')->getAttribute('catalog_product', 'member_list');
+?>
+<div style="clear:both; height:10px;"></div>
+<div id="adv_searchbox">
+  <div class="container">
+      <form id="search_mini_form" action="<?echo $this->getUrl('catalogsearch/advanced/result') ?>" method="get">
+      <div class="main_searchbox">
+      <label>Suche</label>
+      <input type="text" name="keyword" id="input-keyword" placeholder="Bitte geben Sie Ihren Suchbegriff hier ein..." class="searchText" style="width:200px;" />
+      <a href="javascript:void(0);" id="search-by-keyword"><?php echo $this->__('Search by keywords') ?></a>
+      <script type="text/javascript">
+          jQuery(function($) {
+              $('#search-by-keyword').click(function() {
+                  var keywordSearchUrl = '<?php echo $this->getUrl('catalogsearch/result', array('q' => 'KEYWORD_HERE')) ?>';
+                  window.location.href = keywordSearchUrl.replace('KEYWORD_HERE', $('#input-keyword').val());
+              });
+          });
+      </script>
+
+      <input type="submit"  value="Suchen" id="searchBtn" />
+      </div>
+      <!-- Will only show up on "Advance Search" click -->
+      <div id="advSearch_ext">
+      <div style="height:1px; border-bottom: 1px solid #fff; background:#ccc; display:block; margin-bottom: 15px;"></div>
+
+      <div style="float:left;">
+
+      <table cellpadding="0" cellspacing="0">
+          <tr>
+              <td style="padding-right:30px;">
+                  <label>Produktarten</label>
+                  <div style="clear:both; height:10px;"></div>
+                  <?php
+                  $_options = $_attrMaterial->getSource()->getAllOptions(false);
+                  ?>
+                  <select name="product_material" style="width:180px;">
+                      <option value="">Alle Produktarten</option>
+                      <?php foreach ($_options as $_option): ?>
+                          <option value="<?php echo $_option['value'] ?>"><?php echo $_option['label'] ?></option>
+                      <?php endforeach ?>
+                  </select>
+              </td>
+
+              <td>
+                  <label>Kategorie</label>
+                  <div style="clear:both; height:10px;"></div>
+                  <select name="category" id="category_search_field" style="width:295px;">
+                      <option value="">Alle Kategorien</option>
+                      <?php foreach ($this->getStoreCategories() as $_category): ?>
+                          <?php if($_category->getId() != 5) continue; // Only get children of Produkte?>
+                          <?php if ($_category->hasChildren()): ?>
+                              <option class="parent-cat"
+                                      value="<?php echo $_category->getId(); ?>"><?php echo $_category->getName(); ?></option>
+                              <?php foreach ($_category->getChildren() as $subcategory):
+                                  if ($subcategory->getIsActive()) : ?>
+                                      <option
+                                          value="<?php echo $subcategory->getId(); ?>"<?php echo($this->getRequest()->getQuery('category') == $subcategory->getId() ? ' selected="selected"' : "") ?>><?php echo $subcategory->getName(); ?></option>
+                                  <?php endif;
+                              endforeach; ?>
+                          <?php elseif ($_category->getIsActive()): ?>
+                              <option
+                                  value="<?php echo $_category->getId(); ?>"><?php echo $_category->getName(); ?></option>
+                          <?php endif; ?>
+                      <?php endforeach ?>
+                  </select>
+              </td>
+          </tr>
+          <tr>
+              <td colspan="2"><label>Pferdeexperten</label>
+                  <?php
+                    $_options = $_attrExpert->getSource()->getAllOptions(false);
+                  ?>
+                  <select name="member_list" style="margin-bottom:0; width:400px;">
+                      <option value="">Alle Experten</option>
+                      <?php foreach ($_options as $_option): ?>
+                          <option value="<?php echo $_option['value'] ?>"><?php echo $_option['label'] ?></option>
+                      <?php endforeach ?>
+                  </select>
+              </td>
+          </tr>
+      </table>
+      </div>
+
+      <div style="float:left; padding-left:30px;">
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding-right:30px;"><label>Preis</label>
+
+                <div style="clear:both; height:10px;"></div>
+                <select name="price[from]" style="width:120px;">
+                    <option value="" selected="selected">Preis von:</option>
+                    <option value="10">EUR 10</option>
+                    <option value="50">EUR 50</option>
+                    <option value="100">EUR 100</option>
+                    <option value="200">EUR 200</option>
+                </select>
+
+                <div style="clear:both;"></div>
+                <select name="price[to]" style="width:120px;">
+                    <option value="" selected="selected">Preis bis:</option>
+                    <option value="50">EUR 50</option>
+                    <option value="100">EUR 100</option>
+                    <option value="200">EUR 200</option>
+                    <option value="500">EUR 500</option>
+                </select>
+            </td>
+            <td>
+                <label>Datum</label>
+                <div style="clear:both; height:10px;"></div>
+                <div class="input-range">
+                    <input type="text" name="created_at[from]" id="start_date" value="" class="input-text" placeholder="Start Datum"/>
+                    <img src="<?php echo $this->getSkinUrl('images/calendar.gif') ?>" alt="Select Date" class="v-middle" title="Select Date" id="start_date_trig">
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        var calendarSetupObject = {
+                            inputField: "start_date",
+                            ifFormat: "%m/%d/%y",
+                            showsTime: "false",
+                            button: "start_date_trig",
+                            align: "Bl",
+                            singleClick: true
+                        }
+                        Calendar.setup(calendarSetupObject);
+                        //]]>
+                    </script>
+                </div>
+                <div style="clear:both; height:15px;"></div>
+                <div class="input-range">
+                    <input type="text" name="created_at[to]" id="end_date" value="" class="input-text" placeholder="End Datum"/>
+                    <img src="<?php echo $this->getSkinUrl('images/calendar.gif') ?>" alt="Select Date" class="v-middle" title="Select Date" id="end_date_trig">
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        var calendarSetupObject = {
+                            inputField: "end_date",
+                            ifFormat: "%m/%d/%y",
+                            showsTime: "false",
+                            button: "end_date_trig",
+                            align: "Bl",
+                            singleClick: true
+                        }
+                        Calendar.setup(calendarSetupObject);
+                        //]]>
+                    </script>
+                </div>
+            </td>
+        </tr>
+      </table>
+      </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+</div>
+
+<!-- Use only pagination on bottom part -->
+<div class="clear" style="height:20px;"></div>
+<div id="navPage">
+      <ul>
+        <li><a href="">&laquo;</a></li>
+        <li class="currentPage">1</li>
+        <li><a href="">2</a></li>
+        <li><a href="">3</a></li>
+        <li><a href="">4</a></li>
+        <li><a href="">5</a></li>
+        <li><a href="">&raquo;</a></li>
+      </ul>
+    </div>
+<!-- end of bottom pagination -->
+
+<!-- Remove this block once the list of results are added-->
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<div style="padding: 30px 0;">
+[Zeige die Suchergebnisse hier.]
+</div>
+<!-- End -->
+
+<script type="text/javascript">
+//<![CDATA[
+    var dataForm = new VarienForm('form-validate', true);
+//]]>
+</script>
+  </div>
+</div>
+
+

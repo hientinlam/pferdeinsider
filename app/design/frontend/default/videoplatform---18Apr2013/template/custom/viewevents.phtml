@@ -1,0 +1,37 @@
+<?php 
+ $data=$this->getRequest()->getParam('prodid');
+ $productCollection=Mage::getModel('catalog/product')->load($data);
+ $product=$productCollection->getData();
+ 
+
+      $startdate1=explode(" ",$product['start_date']);
+        $startdate=$startdate1[0];
+        $startdata=explode("-",$startdate);
+        $startyear=$startdata[0];
+        $startmonth=$startdata[1];
+        $startday=$startdata[2];
+    $starttimestamp = mktime(0,0,0,date($startmonth),date($startday),date($startyear));
+
+        $enddate1=explode(" ",$product['end_date']);
+        $enddate=$enddate1[0];
+        $enddata=explode("-",$enddate);
+        $endyear=$enddata[0];
+        $endmonth=$enddata[1];
+        $endday=$enddata[2];
+        $endtimestamp = mktime(0,0,0,date($endmonth),date($endday),date($endyear));
+
+        $today_year  =date("Y");
+        $today_month =date("m");
+        $today_day   =date("d");
+      $todaytimestamp = mktime(0,0,0,date($today_month),date($today_day),date($today_year));
+                            
+        if($todaytimestamp >= $starttimestamp && $endtimestamp >= $todaytimestamp)
+        {
+ ?>
+        <div style="float:left;">
+           <?php echo $product['social_streaming']; ?>
+        </div>
+        <div style="float:right;">
+            <?php echo $product['live_streaming']; ?>
+        </div>
+<?php } ?>

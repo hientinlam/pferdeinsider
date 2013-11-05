@@ -1,0 +1,102 @@
+
+/**
+ * BelVG LLC.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ *
+ /***************************************
+ *         MAGENTO EDITION USAGE NOTICE *
+ *****************************************/
+ /* This package designed for Magento COMMUNITY edition
+ * BelVG does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * BelVG does not provide extension support in case of
+ * incorrect edition usage.
+ /***************************************
+ *         DISCLAIMER   *
+ *****************************************/
+ /* Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future.
+ *****************************************************
+ * @category   Belvg
+ * @package    Belvg_Userprofile
+ * @copyright  Copyright (c) 2010 - 2011 BelVG LLC. (http://www.belvg.com)
+ * @license    http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ */
+root { 
+    display: block;
+}
+
+.my-account .welcome-msg {
+    overflow: hidden;
+    margin-right: 0;
+}
+
+    .my-account .welcome-msg .tleft{
+        float :left;
+        width: 485px;
+        color:#333333;
+    }
+    .my-account .welcome-msg .tright{
+        float :right;
+        padding-right:10px;
+       
+    }
+     .my-account .welcome-msg .tright p img{
+        float :right;
+        height:75px !important;
+        width:90px !important;
+       
+    }
+.msg-tabs{
+    background: url("images/horiz_tabs_ul_bg.gif") repeat-x scroll 0 100% #F8F8F8;
+    margin: 0 0 18px;
+    padding: 8px 0 0 5px;
+    overflow: hidden;
+
+}
+
+.msg-tabs li{
+    float: left;
+    margin: 0 4px;    
+}
+
+.msg-list li{
+	padding:15px;
+}
+
+.product-view .box-reviews dd{ }
+
+
+
+.msg-tabs li a{ 
+     background: none repeat scroll 0 0 #E2E2E2;
+    border: 1px solid #CCCCCC;
+    color: #333333 !important;
+    display: block;
+    padding: 2px 10px;
+    text-decoration: none !important;
+}
+
+.msg-tabs li.active a{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+button.btn-msg{    
+    background: none repeat scroll 0 0 #333333;
+    color: white;
+    margin-bottom: 10px;
+    padding: 5px;
+    width:100px;
+}
+
+.msg-list li.unread{
+    background: #f0f0f0;
+    border: 1px solid #f0f0f0;
+}

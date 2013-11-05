@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplace Facebook Connect
+ *
+ * @category    Mageplace_Facebook
+ * @package     Mageplace_Facebook_Connect
+ * @copyright   Copyright (c) 2011 Mageplace. (http://www.mageplace.com)
+ * @license     http://www.mageplace.com/disclaimer.html
+ */
+-->
+<config>
+	<modules>
+		<Mageplace_Facebook_Connect>
+			<active>true</active>
+			<codePool>community</codePool>
+		</Mageplace_Facebook_Connect>
+	</modules>
+</config>

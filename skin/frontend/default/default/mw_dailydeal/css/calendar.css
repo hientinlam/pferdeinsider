@@ -1,0 +1,104 @@
+
+
+
+/* PHP Manual table ------------------------------------------------------- */
+table.doctable, table.informaltable { 
+   border: 0px;
+	width:100%;
+}
+table.doctable td, table.doctable th, table.doctable caption,
+table.informaltable td, table.informaltable th, table.informaltable caption { 
+   padding: 5px;
+}
+table.doctable thead th, table.informaltable thead th { 
+   background-color: #9999CC;
+}
+table.doctable tbody td, table.informaltable tbody td {
+    background-color: #F1F1F1;
+    border: 1px solid #D7D7D7 !important;
+}
+/*
+ * vim: noet
+ */
+/*Mini cart*/
+* { margin: 0; padding: 0;}
+*#cart-sidebar{padding:0 !important; margin-top:15px;}
+#container{width:100%; background:#FFFFFE; font: 12px/1.55 Arial,Helvetica,sans-serif; margin:0;}
+.clear_both{clear:both; height:1px; display:block; overflow:hidden;}
+.left_minicart{float:left; margin-right:10px; width:60px;}
+.left_minicart a{margin:5px; display: block;}
+.right_minicart{width:400px; float:left;}
+.right_minicart a{color: #203548; font-size: 13px; font-weight: bold;}
+.left_minicart img{width:53px; height:41px;}
+.regular-price{font-weight: bold; color: #2F2F2F;}
+.regular-price-related{font-weight:normal;}
+.regular-price-related .price_regular{font-weight:normal !important; text-decoration: line-through;}
+.regular-price .price{color: #2F2F2F; font-weight: bold; }
+.regular-price .price_special{font-weight: bold; color: #C76200; }
+.price-box{float:left !important; margin-right:10px !important;}
+.price_box .price{font-weight: bold;}
+.price_special{color:red;}
+.select_deal span:hover{color:#000; font-weight:bold; cursor: pointer;}
+#cell { background-color: #F0F0F0;}
+
+
+#blockcalendar h1{
+	background:url(../css/images/calendar.gif) no-repeat scroll;
+    color:#fff;
+    font-family:arial;
+    font-size: 12px !important;
+    height: 33px;
+    line-height: 33px;
+    padding-left: 12px;
+    text-align: left !important;
+    text-transform: uppercase;
+    width: auto !important;
+	margin-bottom:0;
+} 
+#blockcalendar{border:none !important;} 
+
+table.doctable{
+    border: 1px solid #D7D7D7;
+}
+
+.select_deal{
+    background: url(../css/images/deal.gif) no-repeat scroll right top !important;
+    border: 1px solid white !important;
+    font-weight: bold;
+}
+.select_deal:hover{background:#61a4d8 !important;color:#fff;border:1px solid #fff !important; }
+
+.ot-container {width:219px !important;
+} 
+.ot-container .header {
+    background:#EBEBEB;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px 5px 0 0;
+    height: 24px;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    text-align: right;
+    width: auto;
+    z-index: 10;
+}
+.opentip .block-deals .block-content{background:#fbfaf6 !important;border:1px solid #bebebe; border-radius: 0px 0px 5px 5px;border-top:none;}
+.opentip .block-deals li {
+    background: none !important;
+    padding: 12px 10px !important;
+	border-bottom:1px dotted #8d979f;
+}
+.opentip .block-deals .mini-products-list .product-image {
+    margin-left: 0 !important;
+    margin-right: 5px !important;
+}
+.opentip .block-deals .block-content .product-name {
+    color: #203548;
+    text-align: left;
+}
+.opentip .block-deals .block-content .product-name a{color: #203548;}
+.opentip .block-deals .price_special {
+    color: #C76200;
+    font-size: 14px;
+    font-weight: bold;
+}

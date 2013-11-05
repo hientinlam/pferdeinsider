@@ -1,0 +1,40 @@
+<div class="head-forum">
+<?php if($this->isModerator()): ?>
+	<div class="simple-forum-moderator-block-top">
+		<?php echo $this->__('Logged as Moderator') ?>
+	</div>
+<?php endif; ?>
+	<div class="page-head-forum">
+		<?php echo $this->getTitle() ?>
+	</div>
+	
+	<?php if($this->getShowTopBanner()): ?>
+		<div class="banner-forum">
+			<?php if($this->getTopBannerIsLink()): ?>
+			<a href="<?php echo $this->getLinkTopBanner() ?>"  <?php if($this->getTopLinkBannerBlank()): ?>target="_blank" <?php endif; ?>>
+			<?php endif; ?>
+				<img src="<?php echo $this->getTopBannerSrc() ?>" border=0>
+			<?php if($this->getTopBannerIsLink()): ?>
+			</a>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+</div>
+<?php if($this->getDisplayRSS()): ?>
+			<div class="simple-forum-rss-link">
+				<table align="right">
+					<tr>
+						<td valign="top" style="padding-top:5px">
+							<a href="<?php echo $this->getRSSUrl() ?>">
+								<img src="<?php echo $this->getSkinUrl('') ?>forum/images/rss.png" border="0"/>
+							</a>
+						</td>
+						<td valign="top" style="padding:3px">
+							<a class="simple-forum-rss-link-a" href="<?php echo $this->getRSSUrl() ?>">
+								RSS
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<?php endif; ?>

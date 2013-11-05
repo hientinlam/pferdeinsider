@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplace Facebook Connect
+ *
+ * @category    Mageplace_Facebook
+ * @package     Mageplace_Facebook_Connect
+ * @copyright   Copyright (c) 2011 Mageplace. (http://www.mageplace.com)
+ * @license     http://www.mageplace.com/disclaimer.html
+ */
+-->
+<layout version="1.0.0">
+	<default>
+		<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>js/mageplace/socialbuttons/facebookconnect.js</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/mageplace/socialbuttons/facebookconnect.css</name></action>
+		</reference>
+		
+		<block type="facebookconnect/customer_facebookconnect" name="facebookconnect_button" template="facebookconnect/customer/facebookconnect.phtml"/>
+		<block type="facebookconnect/custom_facebookconnect" name="custom.facebookconnect" template="facebookconnect/custom/facebookconnect.phtml"/>
+	</default>
+	
+	<facebookconnect_login_index>
+		<reference name="root">
+			<action method="setTemplate"><template>facebookconnect/popup.phtml</template></action>
+		</reference>
+		<reference name="content">
+			<block type="facebookconnect/login" name="facebookconnect.login" template="facebookconnect/login.phtml"/>
+		</reference>
+	</facebookconnect_login_index>
+
+    <customer_account>
+        <!-- Mage_Facebook_Connect -->
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="facebookconnect"><name>facebookconnect</name><path>facebookconnect/manage/</path><label>Facebook Connect</label></action>
+        </reference>
+    </customer_account>
+
+    <facebookconnect_manage_index translate="label">
+        <label>Customer My Account Facebook Wall Post</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="facebookconnect/customer_form_facebookconnect" name="customer_facebookconnect">
+                <block type="page/html_wrapper" name="customer.facebookconnect.form.before" as="facebookconnect_form_before" translate="label">
+                    <label>Facebook Connect Form Before</label>
+                    <action method="setMayBeInvisible"><value>1</value></action>
+                </block>
+            </block>
+        </reference>
+    </facebookconnect_manage_index>
+</layout>

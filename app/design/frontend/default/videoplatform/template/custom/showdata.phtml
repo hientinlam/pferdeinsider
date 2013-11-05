@@ -1,0 +1,189 @@
+
+<?php
+ $customer=Mage::getSingleton('customer/session')->getCustomer();
+?>
+  <form id="merchant-form-validate" class="editinfo" method="post" action="<?php echo $this->getUrl()?>register/index/updateinfo/" />
+        <div class="fieldset">
+            <input type="hidden" value="" name="success_url"/>
+            <input type="hidden" value="" name="error_url"/>
+            <input type="hidden" value="merchant" name="customer_type"/>
+            <div class="edit">
+            <h2>Persönliche Informationen ändern</h2></div>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname">
+                             <label class="required" for="firstname"><em>*</em>Vorname</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry validate-alpha" title="First Name" value="<?php echo $customer->getFirstname() ;?>" name="firstname" id="firstname">
+                                 </div>
+                        </div>
+                    <div class="field name-lastname">
+                        <label class="required" for="lastname"><em>*</em>Nachname</label>
+                        <div class="input-box">
+                            <input type="text" class="input-text required-entry validate-alpha" title="Last Name" value="<?php echo $customer->getLastname() ;?>" name="lastname" id="lastname">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                
+                
+                
+                <li>
+                  <div class="customer-name">
+                    <div class="field name-firstname">
+                       <label for="email_address" class="required"><em>*</em><?php echo $this->__('Emailadresse') ?></label>
+                        <div class="input-box">
+                           <input type="text" name="email" disabled="disabled" id="email_address" value="<?php echo $customer->getEmail() ;?>" title="<?php echo $this->__('Emailadresse') ?>" class="input-text validate-email required-entry" />
+                        </div>
+                    </div>
+                      <?php
+                      $register_model=Mage::getModel('register/register')->getCollection()->getData();
+                      
+                      $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();  
+                        /* $resource = Mage::getSingleton('core/resource');
+                        $connection= $resource->getConnection('core_read');			
+                        $query="select * from tbl_brstcustomer where customer_id = $customer_id";
+                        $result=$connection->query($query);
+                       * 
+                       */
+                      foreach($register_model as $customerinfo)
+                      { 
+                          if($customerinfo['customer_id']==$customer_id) 
+                          {
+                              break;
+                          }
+                      }                       
+                        ?>
+                      
+                    <div class="field">
+                      <label for="Nick name" class="required">Nickname</label>
+                        <div class="input-box">
+                            <input type="hidden" class="" title="" value="<?php echo $customerinfo['customer_id'] ;?>" name="custid" id="lastname"/>
+                             <input type="text" class="input-text" title="Nick Name" value="<?php echo $customerinfo['nickname'] ;?>" name="nickname" id="lastname">
+                        </div>
+                    </div>
+                </div>
+                </li>
+              
+                 <li>
+                   <div class="">
+                       <div class="field">
+                            <label class="required" for="gender">Ich bin</label>
+                            <div class="input-box" style="background: url('../images/drop.png') no-repeat scroll 0 0 transparent; border: 1px solid #999999;clear:both !important;height:30px; overflow: hidden;width: 180px;">
+                                <select style="width:150px; background: none repeat scroll 0 0 transparent;border: medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top: 5px;width: 210px;" name="gender" class="input-texts required-entry validate-select">
+                                    <option>--auswählen--</option>
+                                    <option value="Male"  <?php if($customerinfo['gender']=='Male'){?> selected="selected" <?php } ?>>Male</option>
+                                    <option value="Female" <?php if($customerinfo['gender']=='Female'){?> selected="selected" <?php } ?>>Female</option>
+                               </select>
+                            </div>
+                       </div>
+                    <div class="field">
+                        <label class="required" for="dob">Geburtsdatum</label>
+                       <div class="input-box" style="width:330px;float:left;">
+                             
+                           <?php
+                                $birtdate=explode('/',$customerinfo['birthdate']);
+                                $byear=$birtdate[0];
+                                $bmonth=$birtdate[1];
+                                $bday=$birtdate[2];
+                           //year to start with$birtdate[0];
+                                $startdate = 1960;
+                          //year to end with - this is set to current year. You can change to specific year
+                                $enddate = date("Y");
+                                $years = range ($startdate,$enddate);
+
+                                 $startday = 1;
+                                $endday = 31;
+                                $days = range ($startday,$endday);
+                           ?>
+                           <div class="input-box" style="background: url('../images/drop.png') no-repeat scroll 0 0 transparent; margin-right: 10px; border: 1px solid #999999; float: left;height:30px; overflow: hidden;width:80px;">
+                           
+                           <select style="background: none repeat scroll 0 0 transparent;border: medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top: 5px;width:100px;" name="year" class="input-text required-entry validate-name">
+                                <option>--Year--</option>
+                                <?php
+                                //print years
+                                foreach($years as $year)
+                                {?>
+                                        <option <?php if($year==$byear) { echo "selected='selected'"; } ?> value='<?php echo $year?>'><?php echo $year?></option>
+                                <?php }
+                                ?>
+                             </select>
+                           </div>
+                           <div  class="input-box" style="background: url('../images/drop.png') no-repeat scroll 0 0 transparent;margin-right: 10px; border: 1px solid #999999;height:30px;float: left; overflow: hidden;width:80px;">
+                           
+                             <select style="background: none repeat scroll 0 0 transparent;border: medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top: 5px;width:100px;" name="month" class="input-text required-entry validate-name">
+                                 <option>--Month--</option>
+                                  <option <?php if($bmonth=='1') { echo "selected='selected'"; } ?> value="1" >January</option>
+                                   <option <?php if($bmonth=='2') { echo "selected='selected'"; } ?> value="2">February</option>
+                                    <option <?php if($bmonth=='3') { echo "selected='selected'"; } ?> value="3">March</option>
+                                     <option <?php if($bmonth=='4') { echo "selected='selected'"; } ?> value="4">April</option>
+                                      <option <?php if($bmonth=='5') { echo "selected='selected'"; } ?> value="5">May</option>
+                                       <option <?php if($bmonth=='6') { echo "selected='selected'"; } ?> value="6">June</option>
+                                        <option <?php if($bmonth=='7') { echo "selected='selected'"; } ?> value="7">July</option>
+                                         <option <?php if($bmonth=='8') { echo "selected='selected'"; } ?> value="8">August</option>
+                                          <option <?php if($bmonth=='9') { echo "selected='selected'"; } ?> value="9">September</option>
+                                           <option <?php if($bmonth=='10') { echo "selected='selected'"; } ?> value="10">October</option>
+                                            <option <?php if($bmonth=='11') { echo "selected='selected'"; } ?> value="11">November</option>
+                                             <option <?php if($bmonth=='12') { echo "selected='selected'"; } ?> value="12">December</option>
+                             </select>
+                           </div>
+                           <div  class="input-box" style="background: url('../images/drop.png') no-repeat scroll 0 0 transparent; border: 1px solid #999999;height:30px;float: left; overflow: hidden;width:80px;">
+                           
+                             <select style="background: none repeat scroll 0 0 transparent;border: medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top: 5px;width:100px;" name='day' class="input-text required-entry validate-name">
+                                   <option>--Day--</option>
+                                   <?php
+                                        foreach($days as $day)
+                                        {?>
+                                             <option <?php if($day==$bday) { echo "selected='selected'"; } ?> value='<?php echo $day;?>'><?php echo $day?></option>
+                                         <?php }
+                                   ?>
+                            </select>
+                           </div>
+                       </div> 
+                    </div>
+                </div> 
+                </li>
+                
+                <?php
+                       
+                if($customerinfo['type']=='Professionals')                    
+                      {?>
+                        <li>
+                            <div  style="width:100%;float:left">
+                                <label class="required" for="status">Status</label>
+                            </div>
+                            <input type="text" style="width:529px" class="input-text" title="Status" value="<?php echo $customerinfo['status']?>" id="status" name="status" />
+                        </li>
+                        <li>
+                            <div  style="width:100%;float:left">
+                                <label class="required" for="vision">Vision</label>
+                            </div>
+                            <input type="text" style="width:529px" class="input-text" title="Vision" value="<?php echo $customerinfo['vision']?>" id="vision" name="vision" />
+                        </li>
+                         <li>
+                            <div  style="width:100%;float:left">
+                                <label class="required" for="aboutme">Webseite</label>
+                            </div>
+                             <input type="text" style="width:529px" class="input-text" title="Website" value="<?php echo $customerinfo['website']?>" id="vision" name="website" />
+                       
+                        </li>
+                        
+                        <li>
+                            <div  style="width:100%;float:left">
+                                <label class="required" for="aboutme">über mich</label>
+                            </div>
+                            <textarea name="about-me" style="width: 528px; height: 97px;"><?php echo $customerinfo['aboutme']?></textarea>
+                        </li>
+                        
+                         
+                <?php }?>
+              
+	</ul>
+    </div>
+    <input type="hidden" name="keyid" id="keyid" value="<?php echo $customerinfo['id']?>" />
+   <div class="buttons-set" style="width:540px;" >
+        <button class="button" style="background:#333333;padding:5px;color:#FFFFFF;width:100px;" title="Submit" type="submit" ><span><span>absenden</span></span></button>
+  </div>
+</form>
+

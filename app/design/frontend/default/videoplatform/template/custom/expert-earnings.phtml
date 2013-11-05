@@ -1,0 +1,504 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<script type="text/javascript">
+
+jQuery("#csvxml").submit(function()
+{
+ alert('button clicked');
+}
+);
+
+function setcookie(cName,cValue) 
+{ 
+  document.cookie=cName+"=" + cValue;
+}
+function filteraffiliate(val)
+{
+    if(val!= "--SELECT--")
+        {
+            var url= document.getElementById('urldata').value;
+            document.location.href = url+"allmembers/index/earnings/name/"+val;
+        }
+        else
+            {
+                var url= document.getElementById('urldata').value;
+                document.location.href = url+"allmembers/index/earnings/";
+            }
+}
+function filterdate()
+{
+                var startdate= document.getElementById('startdate').value;
+                var enddate  = document.getElementById('enddate').value;
+                var url= document.getElementById('urldata').value;
+                document.location.href = url+"allmembers/index/earnings?start="+startdate+ "&end="+ enddate;
+       
+}
+function Resetfilter()
+{
+      var url= document.getElementById('urldata').value;
+      document.getElementById('startdate').value='';
+      document.getElementById('enddate').value='';
+      document.location.href = url+"allmembers/index/earnings/";
+      
+}
+</script>
+
+<?php 
+
+
+$fromdate=trim(date("d/m/Y", strtotime($_GET['start'])));
+$todate=trim(date("d/m/Y", strtotime($_GET['end'])));
+$currentPage = (int) $this->getRequest()->getParam('p', 1);
+$cookiedata=explode('=',$_COOKIE["expertpagelength"]);
+
+
+
+if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'allmembers/index/earnings/' || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'allmembers/index/earnings' )
+{
+   setcookie('expertpagelength', '', -3600);
+   unset($_COOKIE["expertpagelength"]);
+
+   $pageSize = (int) $this->getRequest()->getParam('s',9);
+}
+else {
+     if($cookiedata[1]!= NULL || $cookiedata[1]!= '')
+     {
+       $pageSize = (int) $this->getRequest()->getParam('s',$cookiedata[1]);
+     }
+     else
+     {
+       $pageSize = (int) $this->getRequest()->getParam('s',9);
+     }
+}
+
+$customer=Mage::getModel('customer/session')->getCustomer();
+$customeremail=$customer->getEmail();
+$adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
+foreach($adminmodel as $admindata)
+{
+    if($customeremail==$admindata['email'])
+    {
+        $expertname1=explode('-',$admindata['username']);
+       $expertname=$expertname1[0];
+        break;
+    }
+}
+
+if($fromdate != '01/01/1970')
+{
+
+ $start = explode('/', $fromdate);
+ $end   = explode('/', $todate);
+ $startdate= mktime(0, 0, 0, $start[1], $start[0], $start[2]);
+ $enddate= mktime(0, 0, 0, $end[1], $end[0], $end[2]);
+
+  $collection      = Mage::getModel('brst_experts/amount')->getCollection()
+                     -> addFieldToFilter('ordertimestamp' , array("gteq" => $startdate))
+                     -> addFieldToFilter('ordertimestamp' , array("lteq" =>$enddate))
+                     ->addFieldToFilter('affiliate_name', array('like'=>''))
+                     ->addFieldToFilter('expert_name', array('like'=>$expertname))->setPageSize($pageSize)
+                     ->setCurPage($currentPage);
+}
+else{
+    $aff=0;
+    $collection = Mage::getModel('brst_experts/amount')->getCollection()
+            ->addFieldToFilter('expert_name', array('like'=>$expertname))
+            ->addFieldToFilter('affiliate_name', array('like'=>''))
+            ->setPageSize($pageSize)
+            ->setCurPage($currentPage);
+    
+           
+}
+           
+$totCat = $collection->getSize();
+$store_cats = $collection->load();
+$pageTot = ceil( $totCat / $pageSize );
+$pageSize1=array('9','15','30',All);
+
+$firstproduct=1;
+if(($this->getRequest()->getParam('p') > 1 ))
+{
+$from=(($this->getRequest()->getParam('p')-1)*$pageSize)+1;
+}else
+{
+   $from=($firstproduct*$pageSize)+1; 
+}
+if(($this->getRequest()->getParam('p') > 1 ))
+{
+    if(($currentPage < $pageTot))
+    {
+        $to=$this->getRequest()->getParam('p')*$pageSize;
+    }  else {
+        $to=$totCat;
+    }
+}
+ else {
+ $to=$pageSize;
+}
+
+  $droplink=Mage::getBaseUrl().'allmembers/index/earnings?s';
+
+
+if($fromdate != '01/01/1970')
+{
+    $pagelink=Mage::getBaseUrl().'allmembers/index/earnings?start='.$_GET['start'].'&end='.$_GET['end'].'&p'; 
+ //   $droplink=Mage::getBaseUrl().'allmembers/index/earnings?start='.$_GET['start'].'&end='.$_GET['end'].'&p='.$currentPage.'&s';
+    
+}
+else
+{
+   $pagelink=Mage::getBaseUrl().'allmembers/index/earnings/?p';
+ 
+}
+
+$_helper = $this->helper('catalog/output');
+?>
+ <input type="hidden" name="urldata" id="urldata" value="<?php echo Mage::getBaseUrl(); ?>"/>
+ <div style="background:#F0F0F0;padding:10px;float:left;width:731px;">
+    <form action="<?php echo Mage::getBaseUrl().'allmembers/index/earnings/value/1'?>" method="post">
+    
+  <div style="width:740px;padding-bottom:15px;">
+            <label style="float:left;padding-top:7px;padding-right:0px;">Filter nach Datum:</label>
+                  <input type="hidden" value="<?php echo $expertname; ?>" name="expertdata"/>
+                  <div class="field name" style="" id="filteration">
+                        <label class="required" for="startdate"><em> </em>Startdatum</label>
+                       <span> <input type="text"  class="input-text" id="startdate" title="startdate" value="<?php if($fromdate!='01/01/1970'){ echo $_GET['start']; } ?>" name="startdate" size="14" /></span>
+                       <span><img title="Select date" id="start_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                
+                    </div>
+                  
+                   <div class="field name" style="">
+                        <label class="required" for="enddate"><em> </em>Enddatum</label>
+                      <span> <input type="text"  class="input-text" id="enddate" title="enddate" value="<?php if($fromdate!='01/01/1970'){ echo $_GET['end']; } ?>" name="enddate" size="14" /></span>
+                      <span><img title="Select date" id="end_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                 
+         <button style="padding:3px 5px 3px 5px;color:#FFFFFF;cursor:pointer;background:#333333;width:60px;border:none;" id="filter" title="Export" type="button" onclick="filterdate()" class="scalable task"  style=""><span><span><span>Filter</span></span></span></button>   
+         <button  id="reset" style="" id="filter" title="Export" type="button"  onclick="Resetfilter()"class="scalable task"  style=""><span><span><span> Filter zurücksetzen</span></span></span></button>   
+
+           
+                    </div>
+                
+        
+                  <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'startdate',
+                            ifFormat : '%m/%e/%y',
+                            button : 'start_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'enddate',
+                            ifFormat : '%m/%e/%y',
+                            button : 'end_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+            </div>
+   </form>
+
+<form id="csvxml" method="post" style="float:right;" action="<?php echo Mage::getBaseUrl().'allmembers/index/export'?>">
+<div class="export a-right">
+    <input type="hidden" name="affiliatename" id="affiliatename" value="<?php //echo $affiliatename; ?>"/>
+    <input type="hidden" name="datevalue" id="datevalue" value="<?php echo $value; ?>"/>
+      <input type="hidden" name="from" id="from" value="<?php echo $from; ?>"/>
+        <input type="hidden" name="to" id="to" value="<?php echo $to; ?>"/>
+    <input type="hidden" name="collectionsize" id="collectionsize" value="<?php echo count($collection); ?>"/>
+     <img src="http://54.228.195.42/magento/skin/adminhtml/default/default/images/icon_export.gif" alt="" class="v-middle">&nbsp; Exportieren nach:            
+     <select name="earning_export" id="earning_export" style="width:8em;">
+              <option value="csv">CSV</option>
+               <option value="excelxml">Excel XML</option>
+       </select>
+ <button style="padding:3px 5px 3px 5px;color:#FFFFFF;cursor:pointer;background:#333333;width:80px;border:none;" id="button" title="Export" type="submit" class="scalable task"  style=""><span><span><span>Exportieren</span></span></span></button>   
+</div>
+</form>
+   </div>
+<div   style="margin-bottom:10px;margin-top:10px;float:left;width:758px;" class="cattoolbar">
+    <div class="toolbar">
+    <div class="pager">
+         <p class="amount" style="padding-top:5px;padding-right:5px;">
+            <?php if($pageTot > 1): if($currentPage!= 1){?>
+                    <?php echo $this->__('Artikel '. $from.' bis '.$to.' von '.$totCat.' Gesamt ') ?>
+             <?php } else { ?>
+                       <?php echo $this->__('Artikel '. $currentPage.' bis '. $pageSize. ' von '.$totCat.' Gesamt ') ?>
+             <?php } ?>
+            <?php else: ?>
+                <strong><?php echo $this->__('Anzahl Artikel Gesamt '.$totCat) ?></strong>
+            <?php endif; ?>
+        </p>
+         
+        <div class="limiter">
+            <label>Zeige</label>
+             <span style="margin-top: 5px; float: right;">pro Seite</span>
+            <div class="toolbarimg">
+                <select onchange="setcookie('expertpagelength',this.value);setLocation(this.value);">
+                        <?php foreach($pageSize1 as $key=>$limit) { ?>  
+                             <option <?php if($_COOKIE["expertpagelength"]== Mage::getBaseUrl().'allmembers/index/earnings?s='.$limit || $_COOKIE["expertpagelength"]== $droplink.'='.$limit ) { echo 'selected=selected'; }?> value="<?php echo $droplink.'='.$limit  ?>" > <?php echo $limit;?> </option>
+                    <?php } ?>
+               </select>
+            </div>
+        </div>
+        
+        
+    <div class="pages">
+        <strong></strong>
+        <ol>
+             <?php if ($currentPage != '1'): ?>
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+         <?php 
+             $adjacents = "2";
+             $pageTot = ceil( $totCat / $pageSize );
+             $lpm1 = $pageTot - 1;
+         ?>
+          <?php if($pageTot>1) { if ($pageTot < 7 + ($adjacents * 2)){ ?>
+                    <?php for ( $counter=1; $counter<=$pageTot; $counter++ ) : ?>
+                        <?php if ( $counter == $currentPage ) : ?>
+                            <li class="current"><?php echo $counter ?></li>
+                            <?php else : ?>
+                            <li><a href="<?php echo $pagelink.'='.$counter ?>" ><?php echo $counter ?></a></li>
+                            <?php endif; ?>
+                    <?php endfor; ?>
+                    <?php } }
+                    elseif($pageTot > 5 + ($adjacents * 2))
+                        {
+                            if($currentPage <= 1 + ($adjacents * 2))		
+                                {
+    				for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
+    				{
+    					if ($counter == $currentPage): ?>
+    						<li class="current" ><a class='' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php	else : ?>
+    						<li><a href='<?php echo $pagelink.'='.$counter ?>'> <?php echo $counter ?></a></li>				
+    				<?php endif; ?>
+    				<?php $current=$counter+1; ?>
+    			<?php } ?> 
+                                <li class='dot'><a href='<?php echo $pagelink.'='.$counter ?>'>...</a></li>
+    				<li><a href='<?php echo $pagelink.'='.$lpm1 ?>  '><?php echo $lpm1 ?></a></li>
+    				<li><a href='<?php echo $pagelink.'='.$pageTot ?>'><?php echo $pageTot ?></a></li>	
+                                <?php } 
+                                elseif($pageTot - ($adjacents * 2) > $currentPage && $currentPage > ($adjacents * 2)) { ?>
+    			
+    			<?php	for ($counter = $currentPage - $adjacents; $counter <= $currentPage + $adjacents; $counter++)
+    				{
+    					if ($counter == $currentPage) { ?>
+    						<li class="current" ><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php }	else { ?>
+    						<li><a href='?p=<?php echo $counter ?>'><?php echo $counter ?></a></li>					
+    				<?php } $current=$counter+1; } ?>
+    				<li class='dot'><a href='<?php echo $pagelink.'='.$current ?>'>...</a></li>
+    				<li><a href='<?php echo $pagelink.'='.$lpm1 ?>'><?php echo $lpm1 ?></a></li>
+    				<li><a href='<?php echo $pagelink.'='.$pageTot ?>'><?php echo $pageTot ?></a></li>
+    			<?php } 
+                        else { ?>
+    				<li><a href='?p=1'>1</a></li>
+    				<li><a href='?p=2'>2</a></li>
+    				<li class='dot'><a href='<?php echo $pagelink.'='.$current ?>'>...</a></li>
+    				<?php for ($counter = $pageTot - (2 + ($adjacents * 2)); $counter <= $pageTot; $counter++)
+    				{
+    					if ($counter == $currentPage) : ?>
+    						<li class="current"><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    					<?php else: ?>
+    						<li><a href='<?php echo $pagelink.'='.$counter ?>'><?php echo $counter ?></a></li>	
+                                        <?php endif;
+    				}
+    			}
+    		} ?>
+                    
+                     <?php if ($currentPage < $pageTot): ?>
+              
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php echo $pagelink.'='.$currentPage+1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+           
+        </ol>
+
+    </div>
+    </div>
+</div>
+</div>
+
+<?php 
+
+echo '<table  width="750">';
+echo '<th class="myproductth">BestellNr.</th><th class="myproductth">Aktuelle Kosten Produkt</th><th class="myproductth">Einnahmen Experte </th><th class="myproductth">erstellt am:</th>';
+$count=1;
+if($collection->getSize() >0 ) 
+{
+ foreach ($collection as $record):
+ 
+     if($count % 2 == 0)
+     {
+       $myproducttr='myproducttd' ; 
+     }
+     else
+     {
+           $myproducttr='myproductotr' ; 
+     }
+    $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); 
+     echo '<tr class='.$myproducttr.'><td style="padding:5px;">'.$record['order_id'].'</td>';
+
+      echo '<td style="padding:5px;">'.$curencySymbol.number_format($record['gross_price'],2).'</td>';
+      
+       
+         echo '<td style="padding:5px;">'.$record['getyoupaid'].'</td>';
+            echo '<td style="padding:5px;">'.$record['created_at'].'</td></tr>';
+      
+      $count++;
+      
+endforeach;
+}
+ else 
+ {
+   echo '<tr class='.$myproducttr.'><td colspan="7" style="padding:5px;text-align:center">No Result Found</td>';
+}
+echo '</table>';
+
+?>
+
+<div style="margin-top:10px;"  class="cattoolbar">
+     <div class="toolbar">
+    <div class="pager">
+         <p class="amount" style="padding-top:5px;padding-right:5px;">
+            <?php if($pageTot > 1): if($currentPage!= 1){?>
+                    <?php echo $this->__('Artikel '. $from.' bis '.$to.' von '.$totCat.' Gesamt ') ?>
+             <?php } else { ?>
+                       <?php echo $this->__('Artikel '. $currentPage.' bis '. $pageSize. ' von '.$totCat.' Gesamt ') ?>
+             <?php } ?>
+            <?php else: ?>
+                <strong><?php echo $this->__('Anzahl Artikel Gesamt '.$totCat) ?></strong>
+            <?php endif; ?>
+        </p>
+         
+        <div class="limiter">
+            <label>Zeige</label>
+             <span style="margin-top: 5px; float: right;">pro Seite</span>
+            <div class="toolbarimg">
+                <select onchange="setcookie('expertpagelength',this.value);setLocation(this.value);">
+                        <?php foreach($pageSize1 as $key=>$limit) { ?>  
+                             <option <?php if($_COOKIE["expertpagelength"]== Mage::getBaseUrl().'allmembers/index/earnings?s='.$limit || $_COOKIE["expertpagelength"]== $droplink.'='.$limit ) { echo 'selected=selected'; }?> value="<?php echo $droplink.'='.$limit  ?>" > <?php echo $limit;?> </option>
+                    <?php } ?>
+               </select>
+            </div>
+        </div>
+        
+        
+    <div class="pages">
+        <strong></strong>
+        <ol>
+             <?php if ($currentPage != '1'): ?>
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+         <?php 
+             $adjacents = "2";
+             $pageTot = ceil( $totCat / $pageSize );
+             $lpm1 = $pageTot - 1;
+         ?>
+          <?php if($pageTot>1) { if ($pageTot < 7 + ($adjacents * 2)){ ?>
+                    <?php for ( $counter=1; $counter<=$pageTot; $counter++ ) : ?>
+                        <?php if ( $counter == $currentPage ) : ?>
+                            <li class="current"><?php echo $counter ?></li>
+                            <?php else : ?>
+                            <li><a href="<?php echo $pagelink.'='.$counter ?>" ><?php echo $counter ?></a></li>
+                            <?php endif; ?>
+                    <?php endfor; ?>
+                    <?php } }
+                    elseif($pageTot > 5 + ($adjacents * 2))
+                        {
+                            if($currentPage <= 1 + ($adjacents * 2))		
+                                {
+    				for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
+    				{
+    					if ($counter == $currentPage): ?>
+    						<li class="current" ><a class='' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php	else : ?>
+    						<li><a href='<?php echo $pagelink.'='.$counter ?>'> <?php echo $counter ?></a></li>				
+    				<?php endif; ?>
+    				<?php $current=$counter+1; ?>
+    			<?php } ?> 
+                                <li class='dot'><a href='<?php echo $pagelink.'='.$counter ?>'>...</a></li>
+    				<li><a href='<?php echo $pagelink.'='.$lpm1 ?>  '><?php echo $lpm1 ?></a></li>
+    				<li><a href='<?php echo $pagelink.'='.$pageTot ?>'><?php echo $pageTot ?></a></li>	
+                                <?php } 
+                                elseif($pageTot - ($adjacents * 2) > $currentPage && $currentPage > ($adjacents * 2)) { ?>
+    			
+    			<?php	for ($counter = $currentPage - $adjacents; $counter <= $currentPage + $adjacents; $counter++)
+    				{
+    					if ($counter == $currentPage) { ?>
+    						<li class="current" ><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php }	else { ?>
+    						<li><a href='?p=<?php echo $counter ?>'><?php echo $counter ?></a></li>					
+    				<?php } $current=$counter+1; } ?>
+    				<li class='dot'><a href='<?php echo $pagelink.'='.$current ?>'>...</a></li>
+    				<li><a href='<?php echo $pagelink.'='.$lpm1 ?>'><?php echo $lpm1 ?></a></li>
+    				<li><a href='<?php echo $pagelink.'='.$pageTot ?>'><?php echo $pageTot ?></a></li>
+    			<?php } 
+                        else { ?>
+    				<li><a href='?p=1'>1</a></li>
+    				<li><a href='?p=2'>2</a></li>
+    				<li class='dot'><a href='<?php echo $pagelink.'='.$current ?>'>...</a></li>
+    				<?php for ($counter = $pageTot - (2 + ($adjacents * 2)); $counter <= $pageTot; $counter++)
+    				{
+    					if ($counter == $currentPage) : ?>
+    						<li class="current"><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    					<?php else: ?>
+    						<li><a href='<?php echo $pagelink.'='.$counter ?>'><?php echo $counter ?></a></li>	
+                                        <?php endif;
+    				}
+    			}
+    		} ?>
+                    
+                     <?php if ($currentPage < $pageTot): ?>
+              
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php echo $pagelink.'='.$currentPage+1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+           
+        </ol>
+
+    </div>
+    </div>
+</div>
+</div>
+

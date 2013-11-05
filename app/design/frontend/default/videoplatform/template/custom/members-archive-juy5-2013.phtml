@@ -1,0 +1,186 @@
+
+
+
+
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+ <?php $memberCollection = $this->getCollection();
+  // echo "<pre>";print_r($memberCollection->getData());
+ ?>
+
+
+ <?php  $_collectionSize = $memberCollection->count()?>
+ <?php $_columnCount = $this->getColumnCount(); ?>
+ 
+
+<?php $registerdata=Mage::getModel('register/register')->getCollection()->getData();
+      $register_custinfo=array();  
+      foreach($registerdata as $regkey=>$regdata)
+      {
+          if($regdata['type']=='Professionals')
+          {
+            $register_custinfo[$regdata['customer_id']]['aboutme']=$regdata['aboutme'];
+            $register_custinfo[$regdata['customer_id']]['status'] =$regdata['status'];
+          }
+      }
+      
+?>
+
+<?php if(!$memberCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<div class="category-products">
+     <div class="listtoolbar">
+    <?php echo $this->getToolbarHtml() ?>
+     </div>
+    <?php // List mode ?>
+    <?php if($this->getMode()!='grid'): ?>
+    <?php $_iterator = 0; ?>
+    <ol class="products-list" id="products-list">
+    <?php foreach ($memberCollection as $member): ?>
+   
+        <li class="item<?php if( ++$_iterator == sizeof($_productCollection) ): ?> last<?php endif; ?>">
+            <?php $avatar = Mage::getModel('userprofile/avatars')->setStoreData(1)->loadByCustomerId($member->getId());
+         
+                 if($avatar->getValue()!=NULL)
+                 {
+                    $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/'.$member->getId().'/'.$avatar->getValue();
+                 }
+                 else{
+                       $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg';
+                 }?>
+                 <a href="<?php ?>" title="<?php ?>" class="product-image"><img src="<?php echo $ava_src;?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>                         
+        </li>
+    <?php endforeach; ?>
+    </ol>
+    <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+
+    <?php else: ?>
+
+    <?php // Grid Mode ?>
+<?php $_collectionSize = $memberCollection->count(); ?>
+    <?php echo $_columnCount = $this->getColumnCount();
+    
+    $_columnCount=3;?>
+     <div class="allmembers">
+        <ul class="products-grid">
+    <?php $i=0; foreach ($memberCollection as $member): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+   
+        <?php endif ?>
+            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>" style="">
+                <?php $avatar = Mage::getModel('userprofile/avatars')->setStoreData(1)->loadByCustomerId($member->getId());
+                      $user = Mage::getModel('admin/user')->getCollection()->getData();
+                      foreach($user as $userinfo)
+                      {
+                          if($userinfo['email']==$member->getEmail())
+                          {
+                             $memberemailid=$userinfo['email'];
+                              break;
+                          }
+                      }
+                      $userdata=explode('-',$userinfo['username']);
+                       $username=$userdata[0];
+                    $customer = Mage::getModel("customer/customer")->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($memberemailid);
+                 if($avatar->getValue()!=NULL)
+                 {
+                    $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/'.$member->getId().'/'.$avatar->getValue();
+                     
+                 }
+                 else{
+                       $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg';
+                 }?>
+                 <a href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>" title="<?php ?>" class="product-image" onclick=""><img src="<?php echo $ava_src;?>" height="180" width="284" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                 <h2 class="product-name"><a href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>" title="<?php ?>"><?php echo ucwords($customer->getFirstname()." ".$customer->getLastname());?></a></h2>
+                 <div class="horsewoman ">
+                     <?php   if($register_custinfo[$member->getId()]['status']==NULL)
+                                {
+                                   echo  'Horsewoman of the Year, 2010';
+                                }
+                                else
+                                {
+                                    echo $register_custinfo[$member->getId()]['status'];
+                                }
+?>
+                            </div>
+                            <div class="txt" style="height:98px;overflow: hidden">
+                                <?php                                
+                                       if($register_custinfo[$member->getId()]['aboutme']==NULL)
+                                       {
+                                                                           
+                                             echo 'Lorem ipsum dolor sit amet, consectetur ad
+                                            ipiscing elit. Nulla elementum, liberout hen
+                                            drerit pharetra, augue magna fermentum
+                                            felis, eu ultrices eros ante in dolor. Aliquam
+                                            in tortor at enim vulputate laoreet.'; 
+                                       }
+                                       else
+                                       {
+                                         echo $register_custinfo[$member->getId()]['aboutme'];                                         
+                                       }?>
+                            </div>
+                               <div class="more2">
+                                >>   <a href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>"> More About  <?php echo ucwords($customer->getFirstname()." ".$customer->getLastname()); ?></a>
+                              </div>
+                
+
+                   
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+       
+        <?php endif ?>
+        <?php endforeach ?>
+             </ul>
+             </div>
+   
+     <div class="view_experts">   
+           
+               >>  <a href="<?php echo Mage::getBaseUrl().'allmembers/index/index/all/member/?limit=all' ;?>">View All Expert</a> 
+          
+        </div> 
+     </div>
+    
+        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+    <?php endif; ?>
+
+
+<?php endif; ?>
+ <div class="listtoolbar" style="margin-top:20px;float:left;width:960px;">
+    <?php echo $this->getToolbarHtml() ?>
+     </div>
+
+
+
+
+

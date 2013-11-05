@@ -1,0 +1,127 @@
+<?php
+/**
+ * BelVG LLC.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ *
+ /***************************************
+ *         MAGENTO EDITION USAGE NOTICE *
+ *****************************************/
+ /* This package designed for Magento COMMUNITY edition
+ * BelVG does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * BelVG does not provide extension support in case of
+ * incorrect edition usage.
+ /***************************************
+ *         DISCLAIMER   *
+ *****************************************/
+ /* Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future.
+ *****************************************************
+ * @category   Belvg
+ * @package    Belvg_Userprofile
+ * @copyright  Copyright (c) 2010 - 2011 BelVG LLC. (http://www.belvg.com)
+ * @license    http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ */?>
+<div>
+ <?php   $datavalue=$this->getRequest()->getParam('name');
+  $current_url = Mage::helper('core/url')->getCurrentUrl();
+     $data=  Mage::getSingleton('core/session')->getMessage() ?>
+</div>
+
+<?php
+ if($data!=""){
+ ?>
+<ul class="messages">
+    <li class="success-msg">
+        <ul>
+            <li>
+                <span>
+                     <?php echo $data; 
+                        Mage::getSingleton('core/session')->setMessage('');
+                        ?>
+                </span>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+
+<?php } ?>
+<div class="page-title">
+    <h1 style="background: none repeat scroll 0 0 #333333;color: #FFFFFF;font-size: 18px;font-weight: normal;">Neue Nachricht</h1>
+</div> 
+
+<form method="POST" action="<?php echo $this->getUrl('userprofile/messages/newPost/')?>">
+<ul class="form-list">            
+            <li class="fields">
+     <!--<div class="customer-name">
+        <div class="form-search" style="padding:0px !important;">            
+             <label for="search"><?php echo $this->__('Select Member') ?></label></br>
+              <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
+                      
+                <?php $groupId=4; ?>
+                <input type="hidden" name="status" value="0" id="status" />
+        <select name="send_to" id="sent_to" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;" >
+                  <option value="0">--SELECT--</option>
+                    <?php
+                      /*  $customer_id=Mage::getSingleton('customer/session')->getCustomer()->getId();
+                        $collection = Mage::getModel('customer/customer')->getCollection();
+                        $customermodel=Mage::getModel('customer/customer')->getCollection()->getData();
+                    $adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
+                    foreach($adminmodel as $admininfo):
+                        $adminname=explode('-',$admininfo['username']);
+                        $customeremail=$admininfo['email'];
+                        foreach($customermodel as $customerdata):
+                            if($customerdata['email']==$customeremail)
+                            {
+                                $customer = Mage::getModel("customer/customer")->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($customeremail);
+                                ?>
+                                      <option style="color:#000000;" <?php if($admininfo['username']==$member) { echo "selected='selected'"; } ?> value='<?php echo $customer->getId();?>'><?php echo $adminname[0]; ?></option>
+
+
+                                <?php
+                            }
+                        endforeach;
+                    endforeach;*/
+                      ?>
+            </select>
+            </div>
+            </div>--->
+                  <?php $groupId=4; ?>
+                <input type="hidden" name="status" value="0" id="status" />
+    <div class="field name-firstname">
+        <?php
+           foreach($adminmodel as $admininfo):
+                        $adminname=explode('-',$admininfo['username']);
+           if($adminname[0]==$datavalue)
+           {
+                        $customeremail=$admininfo['email'];
+                        break;
+           }
+          endforeach; ?>
+            <input type="hidden" name="send_to" id="sent_to" value="<?php echo $current_url;?>" >
+                
+        <input type="hidden" class="input-text" title="Title" value="1" name="is_frame" id="is_frame">
+        <label  for="firstname">Title</label>
+        <div class="input-box">
+            <input type="text" class="input-text" title="Title" value="" name="title" id="title">
+        </div>
+    </div>
+    <div class="field name-lastname" style="float:none;">
+        <label  for="lastname"><em>*</em>Nachrichten</label>
+        <div class="input-box">
+            <textarea class="input-textarea" title="Message" value="" name="message" id="message"></textarea>
+        </div>
+    </div>
+</div>
+            </li>
+</ul>               
+    <button style="padding:5px 30px;" class="button btn-msg" title="Read" type="submit"><span><span>Post</span></span></button>
+
+</form>

@@ -1,0 +1,464 @@
+<?php
+/*
+	Countdown TimerÂ©, 2012, Bui Trung Chinh
+	Based on the "Count down until any date script" - By JavaScript Kit (www.javascriptkit.com)			
+	Email: btchinh2906@gmail.com
+	URL: https://www.facebook.com/chuoixanh
+	Licence : Open Source MIT Licence	
+*/
+?>
+<?php
+	$timechange = (int)Mage::getStoreConfig('dailydeal/general/timechange'); 
+	$gmtcore = Mage::getSingleton('core/date')->getGmtOffset();
+	$numberactive = (int)Mage::getStoreConfig('dailydeal/general/numberactive') ? (int)Mage::getStoreConfig('dailydeal/general/numberactive') : 3;
+?>
+
+<script>
+function countDown(y,m,d,h,i,cdhour,cdmin,cdsec) {
+	they = y;
+	them = m;
+	thed = d;
+	theh = h;
+	thei = i;	
+	// Offset from GMT
+	var now = new Date();
+	var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+	var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+	var gmt_offset = date1 - date2 ;
+	var today=new Date();
+	var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+	//alert(realtime);
+	futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+	dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+	if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+		
+	dday=Math.floor( dd / 86400000       ); 
+	dhour=Math.floor(dd /  3600000 %   24 ) + dday*24;
+	dmin=Math.floor( dd /    60000 %   60 );
+	dsec=Math.floor( dd /     1000 %   60 );
+	var dhour_string;
+	var dhour_span ='';
+	dhour_string = dhour.toString();
+	if (dhour_string < 10) dhour_string = "0"+dhour_string;
+	for(var i=0; i<dhour_string.length; i++) {
+			dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+	}
+
+	var dmin_string;
+	var dmin_span ='';
+	dmin_string = dmin.toString();
+	if (dmin_string < 10) dmin_string = "0"+dmin_string;
+	for(var i=0; i<dmin_string.length; i++) {
+			dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+	}
+
+	var dsec_string;
+	var dsec_span ='';
+	dsec_string = dsec.toString();
+	if (dsec_string < 10) dsec_string = "0"+dsec_string;
+	for (var i=0; i<dsec_string.length; i++) {
+			dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+	}
+		
+	if (document.getElementById) { 
+		document.getElementById(cdhour).innerHTML = dhour_span;
+		document.getElementById(cdmin).innerHTML = dmin_span;
+		document.getElementById(cdsec).innerHTML = dsec_span; 
+	}
+	//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+	SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+	} else {
+		dday=Math.floor( dd / 86400000       );
+		dhour=Math.floor(dd /  3600000 %   24 );
+		dmin=Math.floor( dd /    60000 %   60 );
+		var dday_string;
+		var dday_span ='';
+		dday_string = dday.toString();
+		if (dday_string < 10) dday_string = "0"+dday_string;
+		for(var i=0; i<dday_string.length; i++) {
+				dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+		}		
+		var dhour_string;
+		var dhour_span ='';
+		dhour_string = dhour.toString();
+		if (dhour_string < 10) dhour_string = "0"+dhour_string;
+		for(var i=0; i<dhour_string.length; i++) {
+				dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+		}
+		
+		var dmin_string;
+		var dmin_span ='';
+		dmin_string = dmin.toString();
+		if (dmin_string < 10) dmin_string = "0"+dmin_string;
+		for(var i=0; i<dmin_string.length; i++) {
+				dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+		}
+		
+
+			
+		if (document.getElementById) { 
+			document.getElementById(cdhour).innerHTML = dday_span;
+			if(document.getElementById('cd_hour')) document.getElementById('cd_hour').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Days'); ?>';
+
+			document.getElementById(cdmin).innerHTML = dhour_span;
+			if(document.getElementById('cd_minute')) document.getElementById('cd_minute').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Hours'); ?>';
+
+			document.getElementById(cdsec).innerHTML = dmin_span;
+			if(document.getElementById('cd_second')) document.getElementById('cd_second').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Minutes');?>';
+		}
+		
+		if (document.getElementById('hour-sym')) document.getElementById('hour-sym').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Days'); ?>';
+			if(document.getElementById('minute-sym')) document.getElementById('minute-sym').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Hours'); ?>';
+			if(document.getElementById('second-sym')) document.getElementById('second-sym').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Minutes');?>'; 
+
+		//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+		  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+		//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+	}
+}
+
+function countDown3(y,m,d,h,i,cdhour,cdmin,cdsec) {
+	they = y;
+	them = m;
+	thed = d;
+	theh = h;
+	thei = i;	
+	// Offset from GMT
+	var now = new Date();
+	var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+	var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+	var gmt_offset = date1 - date2 ; //alert(gmt_offset);
+	var today=new Date();//alert(Date.parse(today));
+	var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+	futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+	dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+		
+	if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+		dday=Math.floor( dd / 86400000       ); 
+		dhour=Math.floor(dd /  3600000 %   24 ) + dday*24;
+		dmin=Math.floor( dd /    60000 %   60 );
+		dsec=Math.floor( dd /     1000 %   60 );
+		var dhour_string;
+		var dhour_span ='';
+		dhour_string = dhour.toString();
+		if (dhour_string < 10) dhour_string = "0"+dhour_string;
+		for(var i=0; i<dhour_string.length; i++) {
+				dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+		}
+		
+		var dmin_string;
+		var dmin_span ='';
+		dmin_string = dmin.toString();
+		if (dmin_string < 10) dmin_string = "0"+dmin_string;
+		for(var i=0; i<dmin_string.length; i++) {
+				dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+		}
+		
+		var dsec_string;
+		var dsec_span ='';
+		dsec_string = dsec.toString();
+		//alert(dsec_string);
+		if (dsec_string < 10) dsec_string = "0"+dsec_string;
+		for(var i=0; i<dsec_string.length; i++) {
+				dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+		}
+			
+		if (document.getElementById) { 
+			document.getElementById(cdhour).innerHTML = dhour_span;
+			document.getElementById(cdmin).innerHTML = dmin_span;
+			document.getElementById(cdsec).innerHTML = dsec_span; 
+		}
+		//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+		  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+		//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+	} else {
+	dday=Math.floor( dd / 86400000       );  
+	dhour=Math.floor(dd /  3600000 %   24 );
+	dmin=Math.floor( dd /    60000 %   60 );
+	var dday_string;
+	var dday_span ='';
+	dday_string = dday.toString();
+	if (dday_string < 10) dday_string = "0"+dday_string;
+	for(var i=0; i<dday_string.length; i++) {
+		dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+	}		
+	var dhour_string;
+	var dhour_span ='';
+	dhour_string = dhour.toString();
+	if (dhour_string < 10) dhour_string = "0"+dhour_string;
+	for(var i=0; i<dhour_string.length; i++) {
+		dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+	}
+	
+	var dmin_string;
+	var dmin_span ='';
+	dmin_string = dmin.toString();
+	if (dmin_string < 10) dmin_string = "0"+dmin_string;
+	for(var i=0; i<dmin_string.length; i++) {
+		dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+	}
+	
+	
+	
+	if (document.getElementById) { 
+		document.getElementById(cdhour).innerHTML = dday_span;
+		if(document.getElementById('hour')) document.getElementById('hour').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Days'); ?>';
+		document.getElementById(cdmin).innerHTML = dhour_span;
+		if(document.getElementById('minute')) document.getElementById('minute').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Hours'); ?>';
+		document.getElementById(cdsec).innerHTML = dmin_span;
+		if(document.getElementById('second')) document.getElementById('second').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Minutes'); ?>'; 
+	}
+	//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+	SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+	//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+	}
+}
+
+
+
+function countDown4(y,m,d,h,i,cdhour,cdmin,cdsec) { 
+
+	they = y;
+	them = m;
+	thed = d;
+	theh = h;
+	thei = i;	
+	// Offset from GMT
+    var now = new Date();
+    var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+    var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+    var gmt_offset = date1 - date2 ; //alert(gmt_offset);
+	var today=new Date();//alert(Date.parse(today));
+	var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+	//alert(realtime);
+	futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+	dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+	if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+	//alert('fdsgd');	
+	dday=Math.floor( dd / 86400000       ); //alert(dday); 
+	dhour=Math.floor(dd /  3600000 %   24 ) + dday*24; //alert(dhour);
+	dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+	dsec=Math.floor( dd /     1000 %   60 ); //alert(dsec);
+	var dhour_string;
+	var dhour_span ='';
+	dhour_string = dhour.toString();
+	if (dhour_string < 10) dhour_string = "0"+dhour_string;
+	for(var i=0; i<dhour_string.length; i++) {
+			dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+	}
+	
+	var dmin_string;
+	var dmin_span ='';
+	dmin_string = dmin.toString();
+	if (dmin_string < 10) dmin_string = "0"+dmin_string;
+	for(var i=0; i<dmin_string.length; i++) {
+			dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+	}
+	
+	var dsec_string;
+	var dsec_span ='';
+	dsec_string = dsec.toString();
+	if (dsec_string < 10) dsec_string = "0"+dsec_string;
+	for (var i=0; i<dsec_string.length; i++) {
+			dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+	}
+		
+	if (document.getElementById) { 
+	document.getElementById(cdhour).innerHTML = dhour_span;
+	document.getElementById(cdmin).innerHTML = dmin_span;
+	document.getElementById(cdsec).innerHTML = dsec_span; 
+	}
+//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+	} else { 
+		dday=Math.floor( dd / 86400000       ); //alert(dday); 
+		dhour=Math.floor(dd /  3600000 %   24 ); //alert(dhour);
+		dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+		var dday_string;
+		var dday_span ='';
+		dday_string = dday.toString();
+		if (dday_string < 10) dday_string = "0"+dday_string;
+		for(var i=0; i<dday_string.length; i++) {
+				dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+		}		
+		var dhour_string;
+		var dhour_span ='';
+		dhour_string = dhour.toString();
+		if (dhour_string < 10) dhour_string = "0"+dhour_string;
+		for(var i=0; i<dhour_string.length; i++) {
+				dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+		}
+		
+		var dmin_string;
+		var dmin_span ='';
+		dmin_string = dmin.toString();
+		if (dmin_string < 10) dmin_string = "0"+dmin_string;
+		for(var i=0; i<dmin_string.length; i++) {
+				dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+		}
+		
+
+		//salert(document.getElementById(hoursym).innerHTML);	
+		if (document.getElementById) { 
+			document.getElementById(cdhour).innerHTML = dday_span;;
+			if(document.getElementById('hour-sym')) document.getElementById('hour-sym').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Days'); ?>';
+			document.getElementById(cdmin).innerHTML = dhour_span;
+			if(document.getElementById('minute-sym')) document.getElementById('minute-sym').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Hours'); ?>';
+			document.getElementById(cdsec).innerHTML = dmin_span;
+			if(document.getElementById('second-sym')) document.getElementById('second-sym').innerHTML = '<?php echo Mage::helper('dailydeal')->__('Minutes'); ?>'; 
+		}
+		//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+		  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+		//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+	}
+}
+
+
+function countDown2(y,m,d,h,i,cdhour,cdmin,cdsec) { 
+	they = y;
+	them = m;
+	thed = d;
+	theh = h;
+	thei = i;	
+	// Offset from GMT
+	var now = new Date();
+	var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+	var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+	var gmt_offset = date1 - date2 ; //alert(gmt_offset);
+	var today=new Date();//alert(Date.parse(today));
+	var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+	//alert(realtime);
+	futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+	dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+	if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+	//alert('fdsgd');	
+	dday=Math.floor( dd / 86400000       ); //alert(dday); 
+	dhour=Math.floor(dd /  3600000 %   24 ) + dday*24; //alert(dhour);
+	dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+	dsec=Math.floor( dd /     1000 %   60 ); //alert(dsec);
+	var dhour_string;
+	var dhour_span ='';
+	dhour_string = dhour.toString();
+	if (dhour_string < 10) dhour_string = "0"+dhour_string;
+	for(var i=0; i<dhour_string.length; i++) {
+			dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+	}
+	
+	var dmin_string;
+	var dmin_span ='';
+	dmin_string = dmin.toString();
+	if (dmin_string < 10) dmin_string = "0"+dmin_string;
+	for(var i=0; i<dmin_string.length; i++) {
+			dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+	}
+	
+	var dsec_string;
+	var dsec_span ='';
+	dsec_string = dsec.toString();
+	if (dsec_string < 10) dsec_string = "0"+dsec_string;
+	for (var i=0; i<dsec_string.length; i++) {
+			dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+	}
+		
+	if (document.getElementById) { 
+	document.getElementById(cdhour).innerHTML = dhour_span;
+	document.getElementById(cdmin).innerHTML = dmin_span;
+	document.getElementById(cdsec).innerHTML = dsec_span; 
+	}
+//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+	} else { 
+		dday=Math.floor( dd / 86400000       ); //alert(dday); 
+		dhour=Math.floor(dd /  3600000 %   24 ); //alert(dhour);
+		dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+		var dday_string;
+		var dday_span ='';
+		dday_string = dday.toString();
+		if (dday_string < 10) dday_string = "0"+dday_string;
+		for(var i=0; i<dday_string.length; i++) {
+				dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+		}		
+		var dhour_string;
+		var dhour_span ='';
+		dhour_string = dhour.toString();
+		if (dhour_string < 10) dhour_string = "0"+dhour_string;
+		for(var i=0; i<dhour_string.length; i++) {
+				dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+		}
+		
+		var dmin_string;
+		var dmin_span ='';
+		dmin_string = dmin.toString();
+		if (dmin_string < 10) dmin_string = "0"+dmin_string;
+		for(var i=0; i<dmin_string.length; i++) {
+				dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+		}
+		
+
+		//salert(document.getElementById(hoursym).innerHTML);	
+		if (document.getElementById) { 
+			document.getElementById(cdhour).innerHTML = dday_span;;
+			if(document.getElementById('hour-sym')) document.getElementById('hour-sym').innerHTML = 'Days';
+			document.getElementById(cdmin).innerHTML = dhour_span;
+			if(document.getElementById('minute-sym')) document.getElementById('minute-sym').innerHTML = 'Hours';
+			document.getElementById(cdsec).innerHTML = dmin_span;
+			if(document.getElementById('second-sym')) document.getElementById('second-sym').innerHTML = 'Minutes'; 
+		}
+		//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+		  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+		//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+	}
+}
+
+
+function listminicart(cellid,tomorrow){
+		
+	var urlpath = '<?php echo $this->getUrl('dailydeal/deal/ajaxdeal').'?currenttime=';?>'+tomorrow;	
+	new Ajax.Request(urlpath,{
+		method: "GET",
+		onSuccess:	function(resp){
+			var response = resp.responseText.evalJSON();
+			strhtml = '<div class="block block-deals" style="border: none;" >'+
+				'<div class="block-content"><ol id="recently-viewed-items" class="mini-products-list">';			
+
+				$i = 0;
+				while (($i < response[0].length) && ($i < <?php echo $numberactive?>) ){
+					strhtml += '<li class="item ';
+					if ($i%2==0){
+					strhtml += 'odd';
+					}
+					strhtml += '" style="padding: 5px 0px 5px 0px;">'+
+								'<a class="product-image" style="margin: 0px 3px 0px 3px; width: 35%;float:left;" href="'+response[0][$i]+'" >'+
+									'<img src="'+response[2][$i]+'" width="66px" height="60px"/>'+
+								'</a>'+
+								'<div class="product-details" style="float:right;width:60%;margin-left:0px;">'+
+									'<p class="product-name" style="margin-top: -5px;">'+
+										'<a  href="'+response[0][$i]+'">'+response[1][$i]+'</a>'+
+									'</p>'+
+									'<div class="price-box" style="margin: 0 0 0 0;">'+
+										'<p class="old-price" style="padding-left: 0px;">'+
+											'<span class="regular-price-related">'+
+												'<span class="price_regular" style="font-size: 12px;">'+response[3][$i]+'</span>'+
+											'</span>'+
+										'</p>'+
+										'<p class="special-price"'+
+											'<span class="price">'+
+												'<span class="price_special">'+response[4][$i]+'</span>'+
+											'</span>'+	
+										'</p>'+
+									'</div>'+									
+								'</div>'+
+							'</li>';
+
+				$i++;
+				}
+				strhtml += '</ol></div></div>';
+				$('cell-'+cellid).addTip(strhtml, {style: 'grouped'});
+				
+			//neu td ko co id thi dung phuong thuc nay
+			//	$('blockcalendar').select('td').each(function(td) { td.addTip('Test', { style: 'grouped' }); });
+			}
+	 });
+}
+
+</script>

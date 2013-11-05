@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <dailydeal_adminhtml_dealitems_index>
+        <reference name="content">
+            <block type="dailydeal/adminhtml_dealitems" name="dealitems" />
+        </reference>
+    </dailydeal_adminhtml_dealitems_index>
+    <dailydeal_adminhtml_dailyschedule_list>
+    	<reference name="content">
+    		<block type="dailydeal/adminhtml_dailyschedule" name="dailyschedule" ></block>
+    	</reference>
+    </dailydeal_adminhtml_dailyschedule_list>
+</layout>

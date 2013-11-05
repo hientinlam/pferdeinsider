@@ -1,0 +1,212 @@
+
+
+<div class="page-title">
+    <h1><?php echo $this->__('Advanced Search') ?></h1>
+</div>
+<div>
+    <?php
+               $id=  $this->getRequest()->getParam('name');
+               $customer= Mage::getSingleton( 'customer/session' )->getCustomer();
+               $user = Mage::getModel('admin/user')->getCollection()->getData();
+               //echo "<pre>";print_r($user);die('ahah');
+               foreach($user as $userinfo)
+                  {
+                      if($userinfo['username']==$id)
+                      {
+                          break;
+                      }
+                  }
+                  
+                $custemail=$userinfo['email'];
+                $customerdata=Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($custemail);
+                $custid=$customerdata['entity_id'];
+                $membersubscriber=Mage::getModel('allmembers/allmembers')->getCollection()->getData();
+                foreach($membersubscriber as $memberinfo){
+                    if($memberinfo['customer_id']== $customer->getId() && $memberinfo['member_id']==$custid )
+                    {
+                        $userid=$memberinfo['customer_id'];
+                        $memberid=$memberinfo['member_id'];
+                        $status=$memberinfo['status'];
+                        $subscribeId=$memberinfo['id'];
+                     
+                        break;
+                    }
+                }
+                $resource = Mage::getSingleton('core/resource');
+                $connection= $resource->getConnection('core_read');			
+                $query="select * from tbl_brstcustomer where customer_id = $custid";
+                $result=$connection->query($query);
+                $custdata = $result->fetch($select); 
+                
+                      
+    ?>
+    <script type="text/javascript">
+    function changeaction()
+    {
+       document.getElementById("merchant-form-validate").action="<?php echo $this->getUrl()."/allmembers/index/unsubscribe"  ?>";
+       document.getElementById("merchant-form-validate").submit();
+    
+    }
+</script>
+     <form id="merchant-form-validate" method="post" action="<?php echo $this->getUrl()?>/allmembers/index/subscribe" />
+      <input type="hidden" name="customerid" value="<?php echo $customer->getId();?>"/>
+     <input type="hidden" name="id" value="<?php echo $subscribeId;?>"/>
+     <input type="hidden" name="customeremail" value="<?php echo $customer->getEmail();?>"/>
+     <input type="hidden" name="memberid" value="<?php echo $custid;?>"/>
+      <div class="fieldset" style="margin:0px;">
+            <h2 class="legend">Member Information</h2>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname" style="width: 190px;">
+                             <label class="required" for="firstname">First Name : </label>
+                                <?php echo $customerdata['firstname'] ;?>
+                         </div>
+                         <div class="field name-lastname" style="float:right;width: 190px;">
+                            <label class="required" for="lastname">Last Name : </label>
+                                     <?php echo $customerdata['lastname'] ;?>
+                         </div>
+                     </div>
+                </li>
+                
+                <li class="fields">
+                    <div class="customer-name">
+                        <div class="field name-firstname" style="width: 190px;">
+                             <label class="required" for="firstname">Email ID :</label>
+                                 <?php echo $custemail ;?>
+                        </div>
+                        <div class="field name-lastname" style="float:right;width: 190px;">
+                            <label class="required" for="lastname">Nick Name : </label>
+                                    <?php echo $custdata['nickname'] ;?>
+                        </div>
+                    </div>
+                </li>
+                
+                 <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname" style="width: 190px;">
+                             <label class="required" for="firstname">Type : </label>
+                                <?php echo $custdata['type'] ;?>
+                         </div>
+                          <div class="field name-lastname" style="float:right;width: 190px;">
+                            <label class="required" for="lastname">Horse Owner : </label>
+                                    <?php echo $custdata['horse_owner'] ;?>
+                          </div>
+                    </div>
+                </li>
+                
+                 <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname" style="width: 190px;">
+                             <label class="required" for="firstname">Gender : </label>
+                                <?php echo $custdata['gender'] ;?>
+                         </div>
+                        <div class="field name-lastname" style="float:right;width: 190px;">
+                            <label class="required" for="lastname">Date Of Birth : </label>
+                                    <?php echo $custdata['birthdate'] ;?>
+                         </div>
+                     </div>
+                </li>
+            </ul>
+      </div>
+    <?php 
+     $login = Mage::getSingleton( 'customer/session' )->isLoggedIn();
+     
+    
+    $login = Mage::getSingleton( 'customer/session' )->isLoggedIn(); if($login && $status==0)  {?>
+      <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
+        <button class="button" title="Submit" type="submit" name="subscribe" ><span><span>Subscribe</span></span></button>
+  </div>
+    <?php }
+    else if($login && $memberid==$custid && $status==1){?>
+        <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
+        <button class="button"  type="button" name="unsubscribe" onclick="changeaction()"><span><span>Unsubscribe</span></span></button>
+  </div>
+ <?php   }
+?>
+</form>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $collection = $this->getCollection();
+//   echo "<pre>";print_r($collection->getData());die('fff');
+?>
+<?php echo $this->getToolbarHtml(); ?>
+<?php if($collection->getSize()): ?>
+
+<?php if($this->getMode()!='grid'): ?>
+	<!-- List Model -->
+    <?php $_iterator = 0; ?>
+    <ol class="products-list" id="products-list">
+    <?php foreach ($collection as $category): 
+    	$category = Mage::getModel('catalog/product')->load($category->getId());
+     
+    ?>
+      
+     <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>" style="padding:12px 10px 0px;">
+                  <?php
+            $Id= $category->getId();
+            $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+            foreach ($_myprodsamples as $_sample){
+                 $video= $_sample['sample_url'];
+            }
+           $vdata=explode("v=",$video);
+           if($vdata['1']!=NULL)
+           {
+            echo    '<iframe title="YouTube video player" class="youtube-player" type="text/html" width="135" height="135" src="https://www.youtube.com/embed/'.$vdata['1'].'" frameborder="0" allowFullScreen></iframe>';
+           }else {?>
+                <a href="<?php echo $category->getProductUrl() ?>" title="<?php echo $this->stripTags($category->getName()); ?>" class="product-image"><img src="<?php echo $category->getImageUrl() ?>" width="135" height="135" alt="<?php echo $this->stripTags($category->getName()) ?>" /></a>
+            <?php } ?>
+                <h2 class="product-name"><a href="<?php echo $category->getProductUrl() ?>" title="<?php echo $category->getUrl() ?>"><?php echo $category->getName() ?></a></h2>
+                <h2 class="product-name"><?php echo $category->getPrice();?></h2>
+                
+            </li>
+    <?php endforeach; ?>
+    </ol>
+    <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+	<?php else: ?>
+
+    <?php // Grid Mode ?>
+
+    <?php $_collectionSize = $collection->count() ?>
+    <?php 
+    	$_columnCount = $this->getColumnCount();
+    	if(!$_columnCount){
+    		$_columnCount = 3;
+    	} 
+    ?>
+    <?php $i=0; foreach ($collection as $category):
+          $category = Mage::getModel('catalog/product')->load($category->getId());
+     //echo "<pre>";print_r($category);die('fff');
+    ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
+            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>" style="padding:12px 10px 0px;">
+                  <?php
+            $Id= $category->getId();
+            $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+            foreach ($_myprodsamples as $_sample){
+                 $video= $_sample['sample_url'];
+            }
+           $vdata=explode("v=",$video);
+           if($vdata['1']!=NULL)
+           {
+            echo    '<iframe title="YouTube video player" class="youtube-player" type="text/html" width="135" height="135" src="https://www.youtube.com/embed/'.$vdata['1'].'" frameborder="0" allowFullScreen></iframe>';
+           }else {?>
+                <a href="<?php echo $category->getProductUrl() ?>" title="<?php echo $this->stripTags($category->getName()); ?>" class="product-image"><img src="<?php echo $category->getImageUrl() ?>" width="135" height="135" alt="<?php echo $this->stripTags($category->getName()) ?>" /></a>
+            <?php } ?>
+                <h2 class="product-name"><a href="<?php echo $category->getProductUrl() ?>" title="<?php echo $category->getUrl() ?>"><?php echo $category->getName() ?></a></h2>
+                <h2 class="product-name"><?php echo $category->getPrice();?></h2>
+                
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif ?>
+        <?php endforeach ?>
+        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+    <?php endif; ?>
+
+<?php echo $this->getToolbarHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('The collection is empty.'); ?></p>
+<?php endif ?>

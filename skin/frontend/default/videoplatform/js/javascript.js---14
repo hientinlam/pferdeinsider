@@ -1,0 +1,507 @@
+/*product page tabs*/
+  function tabs(x)
+  {
+    var lis=document.getElementById("sidebarTabs").childNodes; //gets all the LI from the UL
+ 
+    for(i=0;i<lis.length;i++)
+    {
+      lis[i].className=""; //removes the classname from all the LI
+    }
+    x.className="selected"; //the clicked tab gets the classname selected
+    var res=document.getElementById("tabContent");  //the resource for the main tabContent
+    var tab=x.id;
+    switch(tab) //this switch case replaces the tabContent
+    {
+      case "tab1":
+           res.innerHTML="";
+        res.innerHTML=document.getElementById("tab1Content").innerHTML;
+        break;
+ 
+      case "tab2":
+          res.innerHTML="";
+        res.innerHTML=document.getElementById("tab2Content").innerHTML;
+      
+        break;
+      case "tab3":
+          res.innerHTML="";
+        res.innerHTML=document.getElementById("tab3Content").innerHTML;
+       
+        break;
+         case "tab4":
+             res.innerHTML="";
+        res.innerHTML=document.getElementById("tab4Content").innerHTML;
+        
+        break;
+      default:
+        res.innerHTML=document.getElementById("tab1Content").innerHTML;
+        break;
+ 
+    }
+  }
+  
+  
+    function tabdata(x)
+    {
+   
+    var tab=x.id;
+    
+    switch(tab) //this switch case replaces the tabContent
+    {
+      case "tab1":
+        document.getElementById("tab1Content").style.display='block';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+        document.getElementById("tab4Content").style.display='none';
+        document.getElementById("tab5Content").style.display='none';
+        document.getElementById("tab2").className='';
+        document.getElementById("tab3").className='';
+        document.getElementById("tab4").className='';
+        document.getElementById("tab5").className='';
+        document.getElementById('tab1').className='selected';
+        break;
+ 
+      case "tab2":
+        document.getElementById("tab2Content").style.display='block';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+        document.getElementById("tab4Content").style.display='none';
+        document.getElementById("tab5Content").style.display='none';
+        document.getElementById('tab2').className='selected';
+        document.getElementById('tab3').className='';
+        document.getElementById('tab4').className='';
+        document.getElementById("tab5").className='';
+        document.getElementById("tab1").className= '';
+        break;
+      
+      case "tab3":
+        document.getElementById("tab3Content").style.display='block';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab4Content").style.display='none';
+        document.getElementById("tab5Content").style.display='none';
+        document.getElementById("tab1").className='';
+        document.getElementById("tab2").className='';
+        document.getElementById("tab4").className='';
+        document.getElementById("tab5").className='';
+        document.getElementById('tab3').className='selected';
+        break;
+       
+     case "tab4":
+        document.getElementById("tab4Content").style.display='block';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+        document.getElementById("tab5Content").style.display='none';
+        document.getElementById("tab1").className='';
+        document.getElementById("tab3").className='';
+        document.getElementById("tab2").className='';
+        document.getElementById("tab5").className='';
+        document.getElementById('tab4').className='selected';
+        break;
+        
+    case "tab5":
+        document.getElementById("tab4Content").style.display='none';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+        document.getElementById("tab5Content").style.display='block';
+        document.getElementById("tab1").className='';
+        document.getElementById("tab3").className='';
+        document.getElementById("tab2").className='';
+        document.getElementById("tab5").className='selected';
+        document.getElementById('tab4').className='';
+        break;
+        
+     default:
+        document.getElementById("tab1Content").style.display='block';
+        break;
+ 
+    }
+  }
+  
+  
+  
+    function viewtabdata(x)
+    {
+   
+    var tab=x.id;
+    
+    switch(tab) //this switch case replaces the tabContent
+    {
+      case "tab1":
+        document.getElementById("tab1Content").style.display='block';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+        document.getElementById("tab4Content").style.display='none';
+        
+        document.getElementById("tab2").className='';
+        document.getElementById("tab3").className='';
+        document.getElementById("tab4").className='';
+        
+        document.getElementById('tab1').className='selected';
+        break;
+ 
+      case "tab2":
+        document.getElementById("tab2Content").style.display='block';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+        document.getElementById("tab4Content").style.display='none';
+        
+        document.getElementById('tab2').className='selected';
+        document.getElementById('tab3').className='';
+        document.getElementById('tab4').className='';
+       
+        document.getElementById("tab1").className= '';
+        break;
+      
+      case "tab3":
+        document.getElementById("tab3Content").style.display='block';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab4Content").style.display='none';
+        
+        document.getElementById("tab1").className='';
+        document.getElementById("tab2").className='';
+        document.getElementById("tab4").className='';
+      
+        document.getElementById('tab3').className='selected';
+        break;
+       
+     case "tab4":
+        document.getElementById("tab4Content").style.display='block';
+        document.getElementById("tab1Content").style.display='none';
+        document.getElementById("tab2Content").style.display='none';
+        document.getElementById("tab3Content").style.display='none';
+       
+        document.getElementById("tab1").className='';
+        document.getElementById("tab3").className='';
+        document.getElementById("tab2").className='';
+       
+        document.getElementById('tab4').className='selected';
+        break;
+        
+   
+        
+     default:
+        document.getElementById("tab1Content").style.display='block';
+        break;
+ 
+    }
+    }
+  
+ function tab(y)
+  {
+    var lis=document.getElementById("sidebarTab").childNodes; //gets all the LI from the UL
+ 
+    for(i=0;i<lis.length;i++)
+    {
+      lis[i].className=""; //removes the classname from all the LI
+    }
+    y.className="selected"; //the clicked tab gets the classname selected
+    var res=document.getElementById("tabContents");  //the resource for the main tabContent
+    var tab=y.id;
+    switch(tab) //this switch case replaces the tabContent
+    {
+      case "tab5":
+        res.innerHTML=document.getElementById("tab5Content").innerHTML;
+        break;
+ 
+      case "tab6":
+        res.innerHTML=document.getElementById("tab6Content").innerHTML;
+        break;
+        default:
+        res.innerHTML=document.getElementById("tab5Content").innerHTML;
+        break;
+ 
+    }
+  }
+
+  /*expert page tabs*/
+  
+function tabs4()
+  {
+      document.getElementById('tabContent2').style.display='block';
+      document.getElementById('subscribemember').style.display='none';
+      document.getElementById('training').style.display='none';
+      document.getElementById('tab5').className='selected';
+      document.getElementById('tab7').className='';
+      document.getElementById('tab6').className='';
+  }  
+function tabs5()
+{
+  document.getElementById('training').style.display='block';
+  document.getElementById('tabContent2').style.display='none';
+  document.getElementById('subscribemember').style.display='none';
+  document.getElementById('tab7').className='';
+  document.getElementById('tab5').className='';
+  document.getElementById('tab6').className='selected';
+}  
+function tabs6()
+  {
+      document.getElementById('subscribemember').style.display='block';
+      document.getElementById('tabContent2').style.display='none';
+      document.getElementById('training').style.display='none';
+      document.getElementById('tab7').className='selected';
+      document.getElementById('tab5').className='';
+      document.getElementById('tab6').className='';
+  }
+  
+/*input field*/  
+
+function start_typing3()
+{
+    var val = document.getElementById('typings').value;
+    if (val == 'Contains these words...')
+         {
+             document.getElementById('typings').value="";
+         }
+}
+function typing4(val)
+{
+   if (val=='')
+         {
+             document.getElementById('typings').value='Contains these words...';
+         }
+}
+
+function start_typing()
+{
+    var val = document.getElementById('typings').value;
+    if (val == 'Contains these words...')
+         {
+             document.getElementById('typings').value="";
+         }
+}
+function typing(val)
+{
+   if (val=='')
+         {
+             document.getElementById('typings').value='Contains these words...';
+         }
+}
+
+function showSearch()
+{ 
+    document.getElementById('search_show').style.display='block';
+}
+
+
+
+function showhide()
+{ 
+    document.getElementById('hide_show').style.display='block';
+}
+
+/*email field*/
+
+function showtext()
+{
+var val = document.getElementById('email').value;
+if (val == 'Your Email Here...')
+{
+document.getElementById('email').value="";
+}
+}
+function eml(val)
+{
+if (val=='')
+{
+document.getElementById('email').value='Your Email Here...';
+}
+}
+
+function sessiondiv(x)
+    {
+   
+    var tab=x.id;
+    
+    switch(tab) //this switch case replaces the tabContent
+    {
+      case "01":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';
+        break;
+ 
+      case "02":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='block';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';
+        break;
+      
+      case "03":
+       /* document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';*/
+        document.getElementById("marul").style.display='block';
+      /*  document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';*/
+        break;
+       
+     case "04":
+      /*  document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';*/
+        document.getElementById("aprul").style.display='block';
+       /* document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';*/
+        break;
+        
+    case "05":
+      /*  document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';*/
+        document.getElementById("mayul").style.display='block';
+       /* document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';*/
+        break;
+        
+    case "06":
+       /* document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';*/
+        document.getElementById("juneul").style.display='block';
+       /* document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';*/
+        break;
+        
+    case "07":
+        /*document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';*/
+        document.getElementById("julyul").style.display='block';
+       /* document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';*/
+        break;
+        
+    case "08":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='block';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';
+        break;
+        
+   case "09":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='block';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';
+        break;
+        
+  case "10":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='block';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='none';
+        break;
+        
+  case "11":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='block';
+        document.getElementById("decul").style.display='none';
+        break;
+        
+   case "12":
+        document.getElementById("janul").style.display='none';
+        document.getElementById("febul").style.display='none';
+        document.getElementById("marul").style.display='none';
+        document.getElementById("aprul").style.display='none';
+        document.getElementById("mayul").style.display='none';
+        document.getElementById("juneul").style.display='none';
+        document.getElementById("julyul").style.display='none';
+        document.getElementById("augul").style.display='none';
+        document.getElementById("sepul").style.display='none';
+        document.getElementById("octul").style.display='none';
+        document.getElementById("novul").style.display='none';
+        document.getElementById("decul").style.display='block';
+        break;
+        
+   
+        
+     default:
+        document.getElementById("tab1Content").style.display='block';
+        break;
+ 
+    }
+    }

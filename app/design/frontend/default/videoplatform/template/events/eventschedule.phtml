@@ -1,0 +1,49 @@
+<?php $eventmodel=Mage::getModel('events/events')->getCollection()->getData();
+ foreach($eventmodel as $eventdata):
+    $eventdate1= $eventdata['event_start_date'];
+
+    $eventdata2=explode(' ',$eventdate1);
+    
+    $eventdate=$eventdata2[0];
+    $demo=explode('-',$eventdate);
+    
+    $startyear=$demo[0];
+    $startmonth=$demo[1];
+    $startday=$demo[2]; 
+    $starttimestamp = mktime(0,0,0,date($startmonth),date($startday),date($startyear)) ;
+    
+    
+    $eventenddate1= $eventdata['event_end_date'];
+    $eventenddata2=explode(' ',$eventenddate1);
+    $eventenddate=$eventenddata2[0];
+    $enddate=explode('-',$eventenddate);
+    
+    $today_year  =date("Y");
+    $today_month =date("m");
+    $today_day   =date("d");
+    $todaytimestamp = mktime(0,0,0,date($today_month),date($today_day),date($today_year));
+    
+    $today=date('Y-m-d');
+    $numberofdays=(strtotime($eventdata2[0]) - strtotime($today)) / (60 * 60 * 24);
+    if($starttimestamp > $todaytimestamp):
+        $eventdata['event_title'] ;
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $query="select * from events_product where eventid=".$eventdata['event_id'];
+        $result=$connection->query($query)->fetch();
+       $product=Mage::getModel('catalog/product')->load($result['product_id']);
+       ?>
+<div>
+    <div style="font-size:15px;font-weight:bold;color:#333333;">
+  <?php $newDate = date("d M Y", strtotime($eventdate)); echo $newDate.'  to'?></br>
+  <?php $newDate1 = date("d M Y", strtotime($eventenddate)); echo $newDate1; ?>
+    </div>
+    <div style="font-size:16px;color:#333333;">
+    <?php echo $product->getName(); ?>
+    </div>
+</div>
+<?php 
+ endif;
+ endforeach; ?>
+<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+
+

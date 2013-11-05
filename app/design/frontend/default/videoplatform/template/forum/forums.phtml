@@ -1,0 +1,127 @@
+
+<?php echo $this->getHeadHtml(); ?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php echo $this->getBreadCrumbs(); ?>
+<div style="background:url('<?php echo $this->getSkinUrl() ?>forum/images/topic-lists-from2.png') no-repeat;padding:25px;">
+<div class="forum-top">
+<?php echo $this->getTop(); ?>
+<table width="100%">
+	<tr>
+		<td>
+			<div class="forum-title">
+				<?php echo $this->getTitleContent(); ?>
+			</div>
+		</td>
+		<td>
+			<div class="forum-controls">
+				<?php echo $this->getControls(); ?>
+			</div>
+		</td>
+	</tr>
+</table>
+    <div class="toptoolbar" style="width:930px;">
+    <?php echo $this->getToolbarHtml(); ?>
+    </div>
+</div>
+
+<?php $forums = $this->getAllForums();
+$this->_objectsCollection  =  Mage::getModel('forum/topic')->getCollection();
+?>
+<div class="forumdata">
+    <table witdh="100%" border="0" id="" class="data-table">
+		<!--<thead style="background:#333333;">
+		<tr class="first last">
+			<th class="forum-th" width="40%"><?php echo $this->__('Foren Name') ?></th>			
+			<th class="forum-th" width="10%"><?php echo $this->__('Total Topics') ?></th>			
+			<th class="forum-th" width="10%"><?php echo $this->__('Anzahl Beiträge') ?></th>		
+			<th class="forum-th" width="40%"><?php echo $this->__('Latest Reply') ?></th>
+		<tr>
+		</thead> -->
+	
+	<?php if($forums->getSize()): 
+            $count=0;?>
+		<?php foreach($forums as $forum): ?>
+                <thead style="background:#333333;">
+		<tr class="first last">
+			<th class="forum-th" width="40%"><?php echo $forum->getTitle(); ?></th>			
+			<th class="forum-th" width="10%"><?php echo $this->__('Total Topics') ?></th>			
+			<th class="forum-th" width="10%"><?php echo $this->__('Anzahl Beiträge') ?></th>		
+			<th class="forum-th" width="40%"><?php echo $this->__('Latest Reply') ?></th>
+		<tr>
+		</thead>
+		<tr>	
+			<td width="100%" class="" colspan="4">
+				<table width="100%" cellpadding="2" cellspacing="2" class="forumtbl">
+					<tr>
+                                            <?php if($count%2 ==0 ){ ?>
+						<td width="1%" class="forumtd" style="padding:0px !important;">
+							<img src="<?php echo $this->getSkinUrl() ?>forum/images/topic-lists_grey.png" />
+						</td>
+                                            <?php   } else { ?>
+                                                <td width="1%" class="forumtd" style="padding:0px !important;">
+							<img src="<?php echo $this->getSkinUrl() ?>forum/images/topic-lists-green.png" />
+						</td>
+                                                <?php } ?>
+						<td class="forumtd" style="width:277px;">
+							<a id="simple-forum-link-<?php echo $forum->getId() ?>" href="<?php echo $this->getViewUrl( $forum->getId(), $forum);?>"><?php echo $forum->getTitle(); ?></a><br>
+							<?php if($forum->getDescription() && trim($forum->getDescription()) != '' && Mage::helper('forum/topic')->getDisplayShortDescriptionField()): ?>
+								<script>
+									var ___tBaloon = new doBaloon($('simple-forum-link-<?php echo $forum->getId() ?>'), false, false, '<?php echo addslashes($forum->getDescription()) ?>');
+
+								</script>
+							<?php endif; ?>
+							<?php echo $this->__('erstellt') ?>: <?php echo $this->getFormatedDate($forum->getCreated_time());?><br>
+							<?php echo $this->__('erstellt von') ?>: <?php echo $forum->getUser_name();?>
+						</td>
+                                                <td class="forumtd" style="text-align:center;width:84px;" valign="middle"><?php echo $forum->getTotal_topics(); ?></td>
+                                                <td  class="forumtd" style="text-align:center;width:80px;"><?php echo $forum->getTotal_posts(); ?></td>
+                                                <td class="forumtd">
+                                                        <?php if($forum->getLatest_topic()): ?>
+                                                                <a id="simple-forum-link-<?php echo $forum->getLatest_topic()->getId() ?>" href="<?php echo $this->getViewUrlLatest( $forum->getLatest_postId(), $forum->getLatest_topic());?>"><?php echo $forum->getLatest_topic()->getTitle(); ?></a><br>
+                                                                <?php if($forum->getLatest_topic()->getDescription() != '' && Mage::helper('forum/topic')->getDisplayShortDescriptionField()): ?>
+                                                                        <script>
+                                                                                var ___tBaloon = new doBaloon($('simple-forum-link-<?php echo $forum->getLatest_topic()->getId() ?>'), false, false, '<?php echo addslashes($forum->getLatest_topic()->getDescription()) ?>');
+                                                                        </script>
+                                                                <?php endif; ?>
+                                                                <?php echo $this->__('Posted'); ?> :<?php echo $this->getFormatedDate($forum->getLatest_created_time());?><br>
+                                                                <?php echo $this->__('Posted By'); ?> :<?php echo $forum->getLatest_user_name(); ?>
+                                                        <?php else: ?>
+                                                                <?php echo $this->__('No Topics Posts posted Yet'); ?>
+                                                        <?php endif; ?>
+                                                </td>		
+                                                                </tr>
+                                                        </table>
+                                                </td>				
+			
+		</tr>
+		<?php $count++; endforeach; ?>
+
+	<?php else: ?>
+		<tr>
+		<td colspan="4">
+			<div style="text-align:center" class="forum-no-data-table">
+				<?php echo $this->__('No Data To Display'); ?>
+			</div>
+		</td>
+	</tr>
+	<?php endif;?>
+	</table>
+<?php echo $this->getToolbarHtml(); ?>
+</div>
+	<br>
+<!--	<table width="100%">
+	<tr>
+		<td>
+			<div class="forum-title">
+				<?php echo $this->getTitleContent(); ?>
+			</div>
+		</td>
+		<td>
+			<div class="forum-controls">
+				<?php echo $this->getControls(); ?>
+			</div>
+		</td>
+	</tr>
+</table>-->
+</div>
+    

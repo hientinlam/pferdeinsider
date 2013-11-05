@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+	<layout version="0.1.0">
+
+		<register_index_index>
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+       	 	</reference>
+			<reference name="content">
+            	<block type="register/register" name="register" template="custom/register.phtml"/>
+        	</reference>
+		</register_index_index>
+                
+                <register_index_member>
+			<reference name="root">
+				<action method="setTemplate"><template>page/1column.phtml</template></action>
+       	 	</reference>
+			<reference name="content">
+            	<block type="register/register" name="register" template="custom/memberuser.phtml"/>
+        	</reference>
+		</register_index_member>
+
+	</layout>

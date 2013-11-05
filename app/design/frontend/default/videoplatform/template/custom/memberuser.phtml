@@ -1,0 +1,492 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @var $this Mage_Customer_Block_Form_Register
+ */
+?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+   
+ 
+  jQuery("#member-form-validate").submit(function(){
+	var day = jQuery("#day").val();
+	var month = jQuery("#month").val();
+	var year = jQuery("#year").val();
+	var age = 18;
+	var mydate = new Date();
+	mydate.setFullYear(year, month-1, day);
+	var currdate = new Date();
+	currdate.setFullYear(currdate.getFullYear() - age);
+	if ((currdate - mydate) < 0){
+            jQuery("#agevalidation").show();
+            jQuery("#agevalidation").html("Must be" + age + " years old or Higher to Sign-Up");
+            return false;
+	}
+        else{
+            jQuery("#agevalidation").html("");
+            jQuery("#agevalidation").hide();
+        }
+	
+});
+/*
+jQuery('option').hover(function() {
+    jQuery(this).attr("id");
+    jQuery(this).css("background-color","#9E0B0F");
+});
+jQuery('option').mouseout(function(){
+    jQuery(this).attr("id");
+    jQuery(this).css("background-color","green");
+});
+
+jQuery("select > option").hover(function ()
+    { 
+        jQuery(this).attr("id");
+        jQuery(this).css("background-color","#9E0B0F");
+    });
+    jQuery("select > option").onmouseout(function ()
+    { 
+        jQuery(this).attr("id");
+        jQuery(this).css("background-color","#FFFFFF");
+    });
+ 
+  jQuery("option").hover(function(){
+    jQuery(this).css("color","#FFFFFF");
+    jQuery(this).css("background-color","#9E0B0F");
+});*/
+
+
+/*
+jQuery(document).ready(function(){             
+    // when any option from country list is selected
+    jQuery("#country").change(function(){            
+         
+        // get the selected option value of country
+        var optionValue = jQuery("#country").val();      
+      
+        jQuery.ajax({
+            type: "POST",
+            url: "http://54.228.195.42/magento/state/state.php",
+            data: ({country: optionValue, status: 1}),
+           
+            success: function(response){
+                jQuery("#stateAjax").html(response);
+                jQuery("#stateAjax").show();
+            }
+        });        
+    });*/
+});
+
+  </script>
+  <script type="text/javascript">
+  function optionhover(val)
+  {
+      document.getElementById(val).style.background="#9E0B0F";
+      document.getElementById(val).style.color="#FFFFFF";
+  }
+  function optionout(val)
+  {
+       document.getElementById(val).style.background="#FFFFFF";
+       document.getElementById(val).style.color="#3B3B3B";
+  }
+  
+  function showaboutme(val)
+  {
+      if(val=='Professionals')
+      {
+        document.getElementById('aboutme_outer').style.display="block";      
+      }
+      else
+      {
+        document.getElementById('aboutme_outer').style.display="none";
+        document.getElementById('about_me').value='';
+        document.getElementById('user-vision').value='';
+        document.getElementById('user-status').value='';
+      }
+  }
+  function showstate(val)
+  {
+      if(val=='AT')
+      {
+         document.getElementById('austriastateid').style.display="block"; 
+         document.getElementById('germanystateid').style.display="none";
+         document.getElementById('defaultstate').style.display="none";
+      }
+      else if (val=='DE')
+      {
+         document.getElementById('germanystateid').style.display="block";   
+         document.getElementById('austriastateid').style.display="none";  
+         document.getElementById('defaultstate').style.display="none";
+      }
+      else
+      {
+        document.getElementById('germanystateid').style.display="none";   
+         document.getElementById('austriastateid').style.display="none"; 
+         document.getElementById('defaultstate').style.display="block";
+      }
+  }
+  </script>
+
+<?php
+if ($this->helper('customer')->isLoggedIn()) {
+   
+} else {
+
+/*if(isset($_POST))
+{
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+} */
+ ?>
+  <?php $Data = Mage::getSingleton('customer/session')->getinvalidemail();?>
+
+<div class="account-create">
+    <div class="page-title">
+        <h1>Account erstellen</h1>
+    </div>
+    <?php
+     if($Data!=""){
+ ?>
+
+    <ul class="messages">
+        <li class="error-msg">
+            <ul>
+                <li>
+                    <span>
+                        <?php echo $Data; 
+                        Mage::getSingleton('customer/session')->setinvalidemail(' ');
+                        ?>
+                    </span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+<?php } ?>
+    
+    <form id="member-form-validate" method="post" action="<?php echo $this->getUrl()?>/customer/account/createpost" />
+        <div class="fieldset">
+            <input type="hidden" value="" name="success_url"/>
+            <input type="hidden" value="" name="error_url"/>
+            <input type="hidden" value="is_member" name="is_member"/>
+            <div>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname" style="width:312px !important;">
+                             <label class="required" for="firstname"><em>*</em>Vorname</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry validate-name" title="First Name" value="" name="firstname" id="firstname">
+                                 </div>
+                        </div>
+                    <div class="field name-lastname" style="width:312px !important;">
+                        <label class="required" for="lastname"><em>*</em>Nachname</label>
+                        <div class="input-box">
+                            <input type="text" class="input-text required-entry validate-alpha" title="Last Name" value="" name="lastname" id="lastname">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                <li class="fields">
+                     <div class="field name-firstname" style="width:312px !important;">
+                       <label for="email_address" class="required"><em>*</em><?php echo $this->__('Emailadresse') ?></label>
+                        <div class="input-box">
+                           <input type="text" name="email" id="email_address" value="" title="<?php echo $this->__('Emailadresse') ?>" class="input-text validate-email required-entry" />
+                        </div>
+                    </div>
+                    <div class="field" style="width:312px !important;">
+                      <label for="telephone" class="required">Nickname</label>
+                        <div class="input-box">
+                             <input type="text" class="input-text" title="Nick Name" value="" name="nickname" id="lastname">
+                        </div>
+                    </div>
+                </li>
+                <li class="fields">
+                     <div class="field name-firstname" style="width:312px !important;">
+                       <label for="address" class="required"><em>*</em><?php echo $this->__('Adresse') ?></label>
+                        <div class="input-box">
+                           <input type="text" name="address" id="address" value="" title="<?php echo $this->__('Address') ?>" class="input-text required-entry validate-name" />
+                        </div>
+                    </div>
+                    <div class="field" style="width:312px !important;">
+                      <label for="City" class="required">Stadt</label>
+                        <div class="input-box">
+                             <input type="text" class="input-text required-entry validate-name" title="City" value="" name="city" id="lastname">
+                        </div>
+                    </div>
+                </li>
+                <li class="fields">
+                    
+                 <?php     $collection = Mage::getModel('directory/country')->getCollection(); ?>
+                 
+                  <div class="customer-name">
+                   
+                    
+                     <div class="field name-firstname" style="width:312px !important;">
+                       <label for="country" class="required"><em>*</em><?php echo $this->__('Land') ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                       <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
+                        <select  class="validate-select" name="country"  title="country" id="country" onchange="showstate(this.value)" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;"  >
+                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                          <?php    foreach ($collection as $country):  
+                            if($country->getId()=='DE' || $country->getId()=='AT'):?>
+                            <option onmouseover="optionhover(this.value)"  onmouseout="optionout(this.value)" id="<?php echo $country->getId(); ?>" value="<?php echo $country->getId() ?>"><?php echo $country->getName() ?></option>
+                            <?php endif; endforeach; ?>
+                        </select>
+                        </div>
+                     </div>
+                      <div id="germanystateid" style="display:none;">
+                       <div class="field name-firstname" style="width:312px !important;">
+                       <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?></label>
+                       <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
+                        <select class="validate-select" name="state" title="state" id="stateajax" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;"  >
+                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                          <?php    foreach ($collection as $country):  
+                            if($country->getId()=='DE'):
+                                $regionCollection = Mage::getModel('directory/region_api')->items($country->getId());
+                                foreach ($regionCollection as $region):  ?>
+                            <option value="<?php echo $region['region_id'] ?>"><?php echo $region['name']; ?></option>
+                            <?php endforeach; endif; endforeach; ?>
+                        </select>
+                        </div>
+                     </div>
+                   </div>
+                      <div id="austriastateid" style="display:none;">
+                       <div class="field name-firstname" style="width:312px !important;">
+                       <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?></label>
+                       <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
+                        <select class="validate-select" name="state" title="state" id="stateajax" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;"  >
+                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                          <?php    foreach ($collection as $country):  
+                            if($country->getId()=='AT'):
+                                $regionCollection = Mage::getModel('directory/region_api')->items($country->getId());
+                                foreach ($regionCollection as $region):  ?>
+                            <option value="<?php echo $region['region_id'] ?>"><?php echo $region['name']; ?></option>
+                            <?php endforeach; endif; endforeach; ?>
+                        </select>
+                        </div>
+                     </div>
+                   </div>
+                     <div id="defaultstate" style="">
+                       <div class="field name-firstname" style="width:312px !important;">
+                       <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?></label>
+                       <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
+                        <select class="validate-select" name="state" title="state" id="stateajax" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;"  >
+                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                        </select>
+                        </div>
+                     </div>
+                   </div>
+                      
+                    
+                </div>
+                </li>
+                 <li class="fields">
+                       
+                     <div class="field" style="width:312px !important;">
+                            <label class="required" for="pincode"><em>*</em>Postleitzahl</label>
+                            <div class="input-box">
+                                <input type="text" class="input-text required-entry validate-name" title="zipcode" id="zipcode" name="zipcode">
+                            </div>
+                       </div>
+                 </li>
+                <li class="fields">
+                   <div class="">
+                       <div class="field" style="width:312px !important;">
+                            <label class="required" for="password"><em>*</em>Passwort</label>
+                            <div class="input-box">
+                                <input type="password" class="input-text required-entry validate-password" title="Password" id="password" name="password">
+                            </div>
+                       </div>
+                    <div class="field" style="width:312px !important;">
+                        <label class="required" for="confirmation"><em>*</em>Passwort bestätigen</label>
+                        <div class="input-box">
+                            <input type="password" class="input-text required-entry validate-cpassword" id="confirmation" title="Confirm Password" name="confirmation">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                <li class="fields">
+                   <div class="">
+                       <div class="field" style="width:312px !important;">
+                        <label class="required" for="confirmation">Ich bin Pferdebesitzer</label>
+                       
+                           <input style="margin-left: 10px" type="radio" name="radio1" value="yes"/>Ja <input type="radio" value="no" name="radio1"/>Nein
+                        
+                    </div>
+                    <div class="field" style="width:312px !important;">
+                        <label class="required" for="confirmation">Ich bin</label>                       
+                          <input style="margin-left: 10px" type="radio" class="amateur" name="radio2" onclick="showaboutme(this.value)" value="Amateur"/>Amateur <input type="radio" class="professionals" name="radio2" onclick="showaboutme(this.value)" value="Professionals"/>Pferdeexperte von Beruf                        
+                    </div>
+                </div>
+                </li>
+                 <li class="fields">
+                   <div class="">
+                       <div class="field" style="width:312px !important;">
+                            <label class="required" for="gender">Ich bin</label>
+                              <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/drop25.png")?>') no-repeat scroll 0 0 transparent; border: 1px solid #999999;clear:both !important;height:25px; overflow: hidden;width: 180px;">
+                             <select style="width:150px; background: none repeat scroll 0 0 transparent;border: medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top: 3px;width: 210px;" name="gender" class="validate-select">
+                                    <option value="" selected="selected">--auswählen--</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                               </select>
+                            </div>
+                       </div>
+                    <div class="field" style="width:312px !important;">
+                        <label class="required" for="dob">Geburtsdatum</label>
+                        <div class="input-box" style="clear:both !important;width:310px;">
+                            <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/80.png")?>') no-repeat scroll 0 0 transparent;margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:80px;">
+                               
+                           <?php
+                           //year to start with
+                                $startdate = 1960;
+                          //year to end with - this is set to current year. You can change to specific year
+                                $enddate = date("Y");
+                                $years = range ($startdate,$enddate);
+
+                                 $startday = 1;
+                                $endday = 31;
+                                $days = range ($startday,$endday);
+                           ?>
+                           <select id="year" style="background: none repeat scroll 0 0 transparent;border: medium none; color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:100px;" name="year">
+                                <option>--Year--</option>
+                                <?php
+                                //print years
+                                foreach($years as $year)
+                                {
+                                  echo '<option value='.$year.'>'.$year.'</option> <br />';
+                                }
+                                ?>
+                             </select>
+                           </div>
+                              <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/80.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:80px;">
+                         
+                             <select id="month" style="background: none repeat scroll 0 0 transparent;border: medium none; color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:100px;" name="month">
+                                 <option>--Month--</option>
+                                  <option value="1">January</option>
+                                   <option value="2">February</option>
+                                    <option value="3">March</option>
+                                     <option value="4">April</option>
+                                      <option value="5">May</option>
+                                       <option value="6">June</option>
+                                        <option value="7">July</option>
+                                         <option value="8">August</option>
+                                          <option value="9">September</option>
+                                           <option value="10">October</option>
+                                            <option value="11">November</option>
+                                             <option value="12">December</option>
+                             </select>
+                           </div>
+                           <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/80.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:80px;">
+                             <select id="day" style="background: none repeat scroll 0 0 transparent;border: medium none; color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:100px;" name='day'>
+                                   <option>--Day--</option>
+                                   <?php
+                                        foreach($days as $day)
+                                        {
+                                             echo '<option value='.$day.'>'.$day.'</option> <br />';
+                                        }
+                                   ?>
+                            </select>
+                              </div>
+                       </div>
+                        <div class="validation-advice" id="agevalidation" style="display:none;"></div>
+                    </div>
+                </div>
+                </li>
+             <!--   <li>
+                    <div class="adminname" id="adminname" style="display:none;">
+                             <label class="required" for="firstname"><em>*</em>Admin User Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text" title="User Name" value="" name="username" id="username"/>
+                                 </div>
+                        </div>
+                </li> -->
+                 <div id="aboutme_outer" style="display:none;">
+                     <li class="fields">
+                         <div style="width: 100%; float: left;">
+                            <label for="status" class="required"><em></em>Status</label>
+                         </div>
+                         <div>
+                            <input type="text" class="input-text" style="width:567px;" name="status" id="user-status" value="" />
+                         </div>
+                    </li>
+                    <li class="fields">
+                         <div style="width: 100%; float: left;">
+                            <label for="vision" class="required"><em></em>Vision</label>
+                         </div>
+                         <div>
+                           <input type="text" class="input-text" style="width:567px;" name="vision" id="user-vision" value="" />
+                         </div>
+                    </li>
+                    <li class="fields">
+                         <div style="width: 100%; float: left;">
+                            <label for="aboutme" class="required"><em></em>über mich</label>
+                         </div>
+                         <div>
+                            <textarea id="about_me" name="about-me" style="width: 569px; height: 105px;"></textarea>
+                         </div>
+                    </li>
+                 </div>
+                <li class="control">
+                     
+                    <div class="input-box">
+                        <input type="checkbox" name="is_affialiate" title="<?php echo $this->__('Affilate werden - Anfrage') ?>" value="1" id="is_affialiate" class="checkbox" />
+                    </div>
+                    <label style="margin-left:-5px;" for="is_Affialiate"><?php echo $this->__('Affilate werden - Anfrage') ?></label>
+                </li>
+                  <li class="control">
+                    <div class="input-box" style="padding-top:10px;color:#666666;">
+                        <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('zum Newsletter eintragen') ?>" value="1" id="is_subscribed"  class="checkbox" /><?php echo $this->__('zum Newsletter eintragen') ?>
+                    </div>
+      </li>
+      <div class="buttons-set" style="width:580px;">
+        <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px;" class="button" title="Submit" type="submit" ><span><span>Submit</span></span></button>
+          <div style="clear: both"></div>
+          <?php
+          if ($block = $this->getLayout()->getBlock('facebookconnect_button')) {
+              echo $block->toHtml();
+          }
+          ?>
+
+   </div>
+	</ul>
+            </div>
+    </div>
+    
+   
+</form>
+    <script type="text/javascript">
+    //&lt;![CDATA[
+        var dataForm = new VarienForm('member-form-validate', true);
+         
+    //]]&gt;
+    </script>
+</div>
+<?php }?>
+

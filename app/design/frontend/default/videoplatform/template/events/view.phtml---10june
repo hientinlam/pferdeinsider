@@ -1,0 +1,178 @@
+
+<?php Mage::app()->cleanCache();
+flush();
+
+?>
+
+<link rel="stylesheet" href="<?php echo Mage::getBaseUrl('js').'events'. DS .'lightbox'. DS;?>css/lightbox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js').'events'. DS .'lightbox'. DS .'js'. DS;?>lightbox.js"></script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "dc20c671-3d88-4c19-b79b-7a996fe07904"});</script>
+<?php 
+
+if (Mage::helper('events')->isEnableMapShow()) :?>
+<script type="text/javascript">
+jQuery(document).ready(function () {
+	var cursorX;
+	var cursorY;
+	if (window.Event) {
+		document.captureEvents(Event.MOUSEMOVE);
+	}
+	document.onmousemove = getCursorXY;
+	jQuery(".mapThis").each(function() {
+		var dPlace = jQuery(this).attr("place");
+		var dZoom = jQuery(this).attr("zoom");
+		var dText = jQuery(this).html();
+		jQuery(this).html('<a onmouseover="mapThis.show(this);" style="text-decoration:none; border-bottom:1px dotted #999" href="http://maps.google.com/maps?q=' + dPlace + '&z=' + dZoom + '">' + dText + '</a>');
+	});
+});
+	var mapThis=function(){
+		var tt;
+		var errorBox;
+		return{
+			show:function(v){
+				if (tt == null) {
+					var pNode = v.parentNode;
+					pPlace = jQuery(pNode).attr("place");
+					pZoom = parseInt(jQuery(pNode).attr("zoom"));
+					pText = jQuery(v).html();
+					tt = document.createElement('div');
+					jQuery(tt).html('<a href="http://maps.google.com/maps?q=' + pPlace + '&z=11" target="new"><img border=0 src="http://maps.google.com/maps/api/staticmap?center=' + pPlace + '&zoom=' + pZoom + '&size=300x300&sensor=false&format=png&markers=color:blue|' + pPlace + '"></a>');
+					tt.addEventListener('mouseover', function() { mapHover = 1; }, true);
+					tt.addEventListener('mouseout', function() { mapHover = 0; }, true);
+					tt.addEventListener('mouseout', mapThis.hide, true);
+					document.body.appendChild(tt);
+				}
+				fromleft = cursorX;
+				fromtop = cursorY;
+				fromleft = fromleft - 25;
+				fromtop = fromtop - 25;
+				tt.style.cssText = "position:absolute; left:" + fromleft + "px; top:" + fromtop + "px; z-index:999; display:block; padding:1px; margin-left:5px; background-color:#333; width:302px; -moz-box-shadow:0 1px 10px rgba(0, 0, 0, 0.5);";
+				tt.style.display = 'block';
+			},
+			hide:function(){
+				tt.style.display = 'none';
+				tt = null;
+			}
+	};
+}();
+function getCursorXY(e) {
+	cursorX = (window.Event) ? e.pageX : event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+	cursorY = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+} 
+</script>
+<?php endif;?>
+ 
+
+
+<?php	$item 			= $this->getEvents();
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $query="select * from events_product where eventid=".$item['event_id'];
+        $result=$connection->query($query)->fetch();
+      // echo $result['product_id'];
+        $_product=Mage::getModel('catalog/product')->load($result['product_id']);
+       
+   //   echo $_product['name'];
+    //   echo '<pre>';print_r($_product);die('helo');
+        
+	$isExpiredEvent	= Mage::helper('events')->isExpiredEvent($item['event_id']);
+        $product 		= $this->getEventProduct(); 
+      
+	//$catalog 		= Mage::getModel('catalog/product');
+	//$_product 		= $catalog->load($product); echo '<pre>';print_r($_product);exit;
+	$typeProduct 	= $_product[type_id];
+	$stockLevel 	= (int)Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product)->getQty(); //echo $stockLevel;exit;
+	/* @param int $stockLevel @return int stock level in number */
+	$prefix 		= $this->getRequest()->getParam('pfx');
+	$medPath 		= Mage::getBaseUrl('media').'events'. DS .'mediums';
+	$path 			=  Mage::getBaseUrl('media');
+	$img 			= $path.$item['event_image'];
+	
+	$expiredStatus 	= Mage::helper('events')->getNotificationType(1);
+	$stockOut		= Mage::helper('events')->getNotificationType(0);
+	/* store configuration for notification types */
+	$prevUrlLink	= '';
+	
+	if (!Mage::helper('events')->isEnableBreadcrumbs())
+	{
+		$prevUrl = $_SERVER ['HTTP_REFERER'];
+		$prevUrlLink = "<a href='".$prevUrl."'>Back << </a>";
+	}
+ ?>
+
+
+<?php if ($item): ?>
+<div style="background:#f0f0f0;padding:15px 15px 30px 15px;">
+   <?php //echo $_product['live_streaming'];die('helo');?>
+       <iframe src="<?php echo $_product['live_streaming'] ?>" width="970" height="450" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
+    <div class = "event_social_wdgt">
+		<span class='' style="Padding-right:10px;">Invite friends to watch</span><span class='st_fblike_hcount'></span><span class='st_twitter_hcount'></span></span><span class='st_email_hcount'></span><span class='st_sharethis_hcount'></span>
+	</div>
+</div>
+<div>     <div class="product-shop" style="float:left;margin-top:15px">
+             <div class="identify">
+                    <div class="product-name">
+                     <h1><?php echo $item['event_title']?></h1>
+                    </div>
+                    <span> 
+                        
+                        <div class="short-description" style="font-size:13px;">
+                            <?php echo $_product->getShortDescription(); ?>
+                        <div class="std"></div>
+                        </div>
+                        
+                    </span>
+                   <?php $expertid =$_product['member_list']; 
+                    $attr = $_product->getResource()->getAttribute("member_list");
+                    if ($attr->usesSource()): $expertname = $attr->getSource()->getOptionText($expertid); endif;
+                    ?>
+                    <div class="instructor" style="color:#9E0B0F;">
+                       <?php echo $expertname; ?>
+                    </div>
+                   
+                </div>
+             <div class="buy_now_portion" style="width:335px;">
+                <div class="buy_now_part">
+                      <strong><div style="color:#333333;margin-top:20px;font-size: 26px;font-weight: normal;"><?php  $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); 
+                                            echo $curencySymbol.number_format($_product->getPrice(),2); ?>  </div>  </strong>
+                    <div class="buy_now_black" style="margin-top:10px;">
+                         <?php if (!$isExpiredEvent): ?>
+                            <!-- Ticket section begins -->
+                                    <?php if ($result['product_id']!=NULL AND $stockLevel > 0): ?>
+                           
+                                             <div style="width:100%;margin-top:3px;">
+                                                    <?php
+                                                                    $model = Mage::getModel('catalog/product')->load($result['product_id']);
+                                                                    $name = $model->getName();        
+                                                            ?>
+                                                    <a style="text-decoration:none;color:#333333;"href="<?php echo Mage::getUrl('checkout/cart/add', array('product' => $product)) ?>"><?php echo 'Buy Now' ?></a>&nbsp;
+                                               </div>
+                                    <?php elseif ($result['product_id']!= NULL AND $stockLevel == 0): ?>
+                                               <div style="width:100%;background: #8FD400;">
+                                                   <span>Buy Ticket</span>
+                                                  <p style="color:#D83820"><?php echo $stockOut; ?></p>
+                                               </div>
+                               <?php endif; ?>
+                               <!-- Ticket section ends -->
+                            <?php else: ?>
+                                    <div style="width:100%; background: #8FD400;">
+                                            <strong><?php echo $expiredStatus; ?></strong>
+                                    </div>
+                            <?php endif; ?> 
+                    </div>
+                </div>
+                <div class="buy_now_part2" style="font-size:16px !important;color:black;">
+                  <span style="float:right;margin-top:25px;">Watch live for free, or pre-order for anttime access.</span>
+                 </div>
+            </div>
+
+        </div>
+<div class="chatbox" style="float:right;width:615px;margin-top:15px;">
+	<?php echo $_product['social_streaming']; ?>
+</div>
+</div>
+</div>
+<div style="font-size:25px;font-family:verdana;margin-top:15px;">Upcoming Events</div>
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('upcomingevents')->toHtml(); ?>
+<?php endif; ?>
+ 

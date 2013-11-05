@@ -1,0 +1,13 @@
+
+
+.slider-wrapper { 
+	width: 677px !important; 
+	float:left;
+}
+
+/*====================*/
+/*=== Other Styles ===*/
+/*====================*/
+.clear {
+	clear:both;
+}

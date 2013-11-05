@@ -1,0 +1,74 @@
+<?php
+
+class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Action
+{
+    public function indexAction()
+    {
+         $this->loadLayout();     
+	 $this->renderLayout();
+    }
+    public function eventAction()
+    {
+         $this->loadLayout();     
+	 $this->renderLayout();
+    }
+    
+    public function subscribeAction()
+    {
+          $arrData=$this->getRequest()->getPost();
+          if($arrData['id']!= '')
+          {
+              $data1['id'] = $arrData['id'];
+              $data1['customer_id'] = $arrData['customerid'];
+              $data1['customer_email'] = $arrData['customeremail'];
+              $data1['member_id'] = $arrData['memberid'];
+              $data1['createddate'] = date('d/m/Y');
+              $data1['status'] = '1';
+              $model = Mage::getModel('allmembers/allmembers')->load($arrData['id']);	
+              $model->setData($data1);
+              $model->save();
+          }
+          else 
+          {
+              $data1['customer_id'] = $arrData['customerid'];
+              $data1['customer_email'] = $arrData['customeremail'];
+              $data1['member_id'] = $arrData['memberid'];
+              $data1['createddate'] = date('d/m/Y');
+              $data1['status'] = '1';
+              $model = Mage::getModel('allmembers/allmembers');		
+              $model->setData($data1);
+              $model->save();
+          }
+             $session = Mage::getSingleton('core/session');
+             $session->addSuccess($this->__('You have been subscribed successfully.'));
+             $this->_redirectReferer();
+    }
+    
+   public function unsubscribeAction()
+   {
+          $arrData=$this->getRequest()->getPost();
+          if($arrData['id']!= '')
+          {
+          $data1['id'] = $arrData['id'];
+          $data1['customer_id'] = $arrData['customerid'];
+          $data1['customer_email'] = $arrData['customeremail'];
+          $data1['member_id'] = $arrData['memberid'];
+          $data1['createddate'] = date('d/m/Y');
+          $data1['status'] = '0';
+          $model = Mage::getModel('allmembers/allmembers')->load($arrData['id']);	
+          $model->setData($data1);
+          $model->save();
+          $session = Mage::getSingleton('core/session');
+          $session->addSuccess($this->__('You have been unsubscribed successfully.'));
+          $this->_redirectReferer();
+          }
+   }
+    
+   public function videosAction()
+   {
+        $this->loadLayout();     
+	$this->renderLayout();
+   }
+   
+}
+?>

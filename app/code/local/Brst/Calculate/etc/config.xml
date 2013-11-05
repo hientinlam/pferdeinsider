@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Brst_Calculate>
+            <version>1.0.0</version>
+        </Brst_Calculate>
+    </modules>
+     
+    <global>
+        <helpers>
+            <brst_calculate>
+                <!-- This is where we define our helper directory -->
+                <class>Brst_Calculate_Helper</class>
+            </brst_calculate>
+        </helpers>
+                    
+        <blocks>
+            <brst_calculate>
+                <!-- Set a block definition and lookup directory -->
+                <class>Brst_Calculate_Block</class>
+            </brst_calculate>
+        </blocks>
+         
+        <models>
+            <brst_calculate>
+                <!-- This is where we define our model directory -->
+                <class>Brst_Calculate_Model</class>
+                <!-- Define a resource to create a custom table -->
+                <resourceModel>brst_calculate_mysql4</resourceModel>
+            </brst_calculate>
+             
+            <!-- Here's our resource model we'll use to create a database table -->
+            <brst_calculate_mysql4>
+                <class>Brst_Calculate_Model_Mysql4</class>
+                <entities>
+                    <!-- Let's define our table, we'll call it with the baz name, but the real table is foo_bar_baz -->
+                    <!-- After we define our entity, we can call it with our model by calling foo_bar/baz -->
+                    <discount>
+                        <table>brst_calculate_discount</table>
+                    </discount>
+                </entities>
+            </brst_calculate_mysql4>
+        </models>
+         
+        <!-- And finally we define our resource setup script -->
+        <resources>
+            <brst_calculate_setup>
+                <setup>
+                    <module>Brst_Calculate</module>
+                </setup>
+            </brst_calculate_setup>
+        </resources>
+    </global>
+     
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <!-- This is how we load our Adminhtml controllers -->
+                    <modules>
+                        <Brst_Calculate before="Mage_Adminhtml">Brst_Calculate_Adminhtml</Brst_Calculate>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+     
+    <adminhtml>
+        <layout>
+            <updates>
+                <brst_calculate>
+                    <!--
+                    We again keep a nice naming convention and make our module upgrade proof by placing it in a separate folder
+                    - Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
+                    -->
+                    <file>brst/calculate.xml</file>
+                </brst_calculate>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

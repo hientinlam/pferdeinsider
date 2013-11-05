@@ -1,0 +1,38 @@
+<?php if($this->getCollection()->getSize()): ?>
+<div class="toolbar">
+    <div class="pager">
+        <p class="amount">
+            <?php if($this->getLastPageNum()>1): ?>
+                <?php echo $this->__('Artikel <strong>%s</strong> bis <strong>%s</strong> von <strong>%s</strong> Gesamt', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+            <?php else: ?>
+                <span><?php echo $this->__('%s Artikel(s)', $this->getTotalNum()) ?></span>
+            <?php endif; ?>
+            		&nbsp;&nbsp;&nbsp;
+            		<strong><?php echo $this->__('Sortieren') ?>:&nbsp;</strong>
+            		<?php if($this->isSortCurrent('desc')): ?><span style="font-weight:bold; text-decoration:underline;"><?php endif;?><a href="<?php echo $this->getSortUrl(1) ?>" class="simple-forum-sort-links"><?php echo $this->__('Neueste') ?></a><?php if($this->isSortCurrent('desc')): ?></span><?php endif;?>
+					<?php if($this->isSortCurrent('asc')): ?><span style="font-weight:bold; text-decoration:underline;"><?php endif;?><a href="<?php echo $this->getSortUrl(2) ?>" class="simple-forum-sort-links"><?php echo $this->__('Älteste') ?></a><?php if($this->isSortCurrent('asc')): ?></span> <?php endif;?>
+        </p>
+
+        <div class="limiter">
+            <div class="toolbardemo">
+            <label><?php echo $this->__('Zeige') ?></label>
+             <span style="margin-top: 5px; float: right;"> <?php echo $this->__('pro Seite') ?></span>
+                <div class="toolbarimg">
+                <select onchange="setLocation(this.value)">
+                <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
+                    <option value="<?php echo $this->getLimitUrl($_limit) ?>"<?php if($this->isLimitCurrent($_limit)): ?> selected="selected"<?php endif ?>>
+                        <?php echo $_limit ?>
+                    </option>
+                <?php endforeach; ?>
+                </select> 
+            </div>
+            </div>
+        </div>
+
+        <?php echo $this->getPagerHtml() ?>
+
+    </div>
+
+    
+</div>
+<?php endif ?>

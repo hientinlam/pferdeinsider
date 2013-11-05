@@ -1,0 +1,24 @@
+<nobr>
+<table cellpadding="0" cellspacing="0" align="right">
+	<tr>
+		<td>
+			&nbsp;&nbsp;
+			<img src="<?php echo $this->getSkinUrl() ?>forum/images/bookmark.png" />
+			&nbsp;&nbsp;
+		</td>
+		<td style="padding-right:5px;">
+			<?php echo $this->__('You have') ?>  <span id="simple-forum-bookmark-items" class="simple-forum-bookmark-items-class"></span> <?php echo $this->__('bookmarked items') ?>
+		</td>
+		<?php if($this->isDisplayBookmark()): ?>
+			<td>
+				<button class="simple-forum-default-button" onclick="setBookmarkSF('<?php echo $this->getTopicId(); ?>', '<?php echo $this->getLimit(); ?>', <?php echo $this->getPageCurrent(); ?>)" title="<?php echo $this->getAddBookmarkTitle(); ?>" >
+							<?php echo $this->getAddBookmarkTitle(); ?>
+				</button>
+			</td>
+		<?php endif; ?>
+	</tr>
+</table>
+</nobr>
+<form id="simple-forum-bookmarked-items-form" action="<?php echo $this->_getBookmarsUrl(); ?>" method="post">
+
+</form>

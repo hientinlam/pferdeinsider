@@ -1,0 +1,18 @@
+.head-forum{
+	background-image:url(../images/folder_forum.png);
+}
+.head-topic{
+	background-image:url(../images/folder_topic.png);
+}
+.head-post{
+	background-image:url(../images/post.png);
+}
+h3.head-forum-moderators
+{
+	border-bottom: 4px solid #DFDFDF;
+	color: #EB5E00;
+	font-size: 1.25em;
+	line-height: 1.2em;
+	margin: 0.3em 0.5em 18px 0;
+	background-image:url(../images/moderators.png);
+}

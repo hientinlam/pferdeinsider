@@ -1,0 +1,115 @@
+<?php
+/**
+ * BelVG LLC.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ *
+ /***************************************
+ *         MAGENTO EDITION USAGE NOTICE *
+ *****************************************/
+ /* This package designed for Magento COMMUNITY edition
+ * BelVG does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * BelVG does not provide extension support in case of
+ * incorrect edition usage.
+ /***************************************
+ *         DISCLAIMER   *
+ *****************************************/
+ /* Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future.
+ *****************************************************
+ * @category   Belvg
+ * @package    Belvg_Userprofile
+ * @copyright  Copyright (c) 2010 - 2011 BelVG LLC. (http://www.belvg.com)
+ * @license    http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ */?>
+
+<?php
+
+
+class Belvg_Userprofile_Block_Adminhtml_Messages_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{	
+	public function __construct(){
+		parent::__construct();
+		$this->setId('statusGrid');
+		$this->setDefaultSort('created_time');
+		$this->setDefaultDir('DESC');
+	}
+
+	protected function _prepareCollection(){
+		$collection = Mage::getModel('userprofile/messages')->getCollection()->addCustomerEntityFilter()->addOutboxFilter();	
+               // echo "<pre>";print_r($collection->getData());die('abc');
+      		$this->setCollection($collection);				
+		return parent::_prepareCollection();
+	}
+
+
+	public function setFilterValues($data){
+		return $this->_setFilterValues($data);
+	}
+
+	protected function _prepareColumns(){
+		$this->addColumn('title', array(
+			'header'    => $this->__('Title'),
+			'align'     =>'left',			
+			'truncate'      => 100,
+			'index'     => 'title'
+		));
+                $this->addColumn('customer_email', array(
+			'header'    => $this->__('From'),
+			'align'     =>'left',
+			'truncate'      => 100,
+			'index'     => 'customer_email'
+		));
+                $this->addColumn('date', array(
+			'header'    => $this->__('Date'),
+			'align'     =>'left',
+			'truncate'      => 100,
+			'index'     => 'date',
+                        'type' => 'date'
+		));
+                $this->addColumn('date', array(
+			'header'    => $this->__('Date'),
+			'align'     =>'left',
+			'truncate'      => 100,
+			'index'     => 'date',
+                        'type' => 'date'
+		));
+                $this->addColumn('action',
+                    array(
+                        'header'    =>  $this->__('Action'),
+                        'width'     => '100px',
+                        'type'      => 'action',
+                        'getter'    => 'getId',
+                        'actions'   => array(
+
+                                                array(
+                                'caption'   => $this->__('Delete'),
+                                'url'       => array('base'=> '*/*/delete'),
+                                'field'     => 'id'
+                            )
+                        ),
+                        'filter'    => false,
+                        'sortable'  => false,
+                        'index'     => 'stores',
+                        'is_system' => true,
+                ));
+
+
+		return parent::_prepareColumns();
+	}
+
+	
+		
+
+	public function getRowUrl($row)
+	{
+		return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+	}
+}
+

@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Related_Searchproduct>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Related_Searchproduct>
+    </modules>
+</config>

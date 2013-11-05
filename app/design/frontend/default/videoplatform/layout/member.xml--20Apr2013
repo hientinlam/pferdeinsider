@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : registration.xml
+    Created on : 15 February, 2013, 5:09 PM
+    Author     : lenovo
+    Description:
+        Purpose of the document follows.
+-->
+
+<layout version="0.1.0">
+        <member_index_index>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+       	 	</reference>
+                
+		<reference name="content">
+                    <block type="member/member" name="product_list" template="custom/searchform.phtml"/>
+                </reference>
+                
+	</member_index_index>        
+</layout>

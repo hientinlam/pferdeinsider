@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<config>
+	<global>
+		<modules>
+                    <display_allmembers>
+                            <version>0.1.0</version>
+                    </display_allmembers>
+                </modules>
+                
+                <blocks>
+                    <allmembers>              
+                            <class>
+                               Display_Allmembers_Block
+                         	</class>  
+                    </allmembers> 
+                     
+                </blocks>
+                 
+                <models>
+                    <allmembers>
+                         <class>Display_Allmembers_Model</class>
+                         <resourceModel>allmembers_mysql4</resourceModel>
+                     </allmembers>
+                    <allmembers_mysql4>
+                         <class>Display_Allmembers_Model_Mysql4</class>
+                         <entities>
+                             <allmembers>
+                               <table>tbl_brstmembersubscriber</table>
+                             </allmembers>
+                          </entities>
+                    </allmembers_mysql4>
+                </models>
+                        <!-- allow the plugin to read and write -->
+                <resources>
+                            <!-- connection to write -->
+                            <allmembers_write>
+                                <connection>
+                                    <use>core_write</use>
+                                </connection>
+                            </allmembers_write>
+
+                           <allmembers_read>
+                              <connection>
+                                 <use>core_read</use>
+                              </connection>
+                           </allmembers_read>
+                           
+                </resources> 
+        </global>
+        
+	<frontend>
+                <routers>
+                        <allmembers>
+                                <use>standard</use>
+                                <args>
+                                      <module>Display_Allmembers</module>
+                                      <frontName>allmembers</frontName>
+                                </args>
+                        </allmembers>
+                </routers>
+		<layout>
+			<updates>
+				<allmembers>
+		   		      <file>allmembers.xml</file>
+				</allmembers>
+			</updates>
+       		</layout>
+        </frontend>
+        
+</config>

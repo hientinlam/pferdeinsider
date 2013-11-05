@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<layout version="0.1.0">
+	<default>
+		<reference name="head">
+			<action method="addCss"><stylesheet>mw_dailydeal/css/promo_group.css</stylesheet></action>
+		</reference>
+		<reference name="left">
+			<block type="dailydeal/sidebar_left" name="left.static.deal" before="-" />			
+		</reference> 
+		<reference name="right">
+			<block type="dailydeal/sidebar_right" name="right.static.deal" before="-" />										
+		</reference>
+
+
+	</default>
+	
+	<dailydeal_comming_index>
+		<remove name="todaydeal_right"/>
+		<remove name="activedeal_right"/>
+		<remove name="calendar_right"/>
+		<remove name="todaydeal_left"/>
+		<remove name="activedeal_left"/>
+		<remove name="calendar_left"/>
+		<reference name="root">
+            <action method="setTemplate">
+				<template helper="dailydeal/data/chooseColumnLayout"/>
+			</action>
+        </reference>
+        <reference name="content">
+			<block type="dailydeal/showtabs_comming" name="content_tab" template="mw_dailydeal/showtabs/comming.phtml"></block>
+		</reference>
+	</dailydeal_comming_index>
+	<dailydeal_past_index>
+		<remove name="todaydeal_right"/>
+		<remove name="activedeal_right"/>
+		<remove name="calendar_right"/>
+		<remove name="todaydeal_left"/>
+		<remove name="activedeal_left"/>
+		<remove name="calendar_left"/>
+		<reference name="root">
+            <action method="setTemplate">
+				<template helper="dailydeal/data/chooseColumnLayout"/>
+			</action>
+        </reference>
+		<reference name="content">
+			<block type="dailydeal/showtabs_past" name="content_tab" template="mw_dailydeal/showtabs/past.phtml"></block>
+		</reference>
+	</dailydeal_past_index>
+	<dailydeal_index_index>
+	<remove name="todaydeal_right"/>
+		<remove name="activedeal_right"/>
+		<remove name="calendar_right"/>
+		<remove name="todaydeal_left"/>
+		<remove name="activedeal_left"/>
+		<remove name="calendar_left"/>
+		<reference name="root">
+            <action method="setTemplate">
+				<template helper="dailydeal/data/chooseColumnLayout"/>
+			</action>
+        </reference>
+        <reference name="content">
+			<block type="dailydeal/showtabs_active" name="content_tab" template="mw_dailydeal/showtabs/active.phtml">
+				<block type="dailydeal/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+                     <block type="page/html_pager" name="product_list_toolbar_pager"/>
+                     <!-- The following code shows how to set your own pager increments -->
+                     <!--
+                         <action method="setDefaultListPerPage"><limit>4</limit></action>
+                         <action method="setDefaultGridPerPage"><limit>9</limit></action>
+                         <action method="addPagerLimit"><mode>list</mode><limit>2</limit></action>
+                         <action method="addPagerLimit"><mode>list</mode><limit>4</limit></action>
+                         <action method="addPagerLimit"><mode>list</mode><limit>6</limit></action>
+                         <action method="addPagerLimit"><mode>list</mode><limit>8</limit></action>
+                         <action method="addPagerLimit" translate="label"><mode>list</mode><limit>all</limit><label>All</label></action>
+                     -->
+				</block>
+			</block>
+		</reference>
+	</dailydeal_index_index>
+
+	<catalog_product_view>
+		<remove name="right.static.deal"/> 
+    </catalog_product_view>
+<!-- Support for all type product -->
+	<PRODUCT_TYPE_simple>    
+	    <reference name="product.info">
+		    <action method="unsetChild"><name>product.info.simple</name></action>
+		 	<block type="dailydeal/deal" name="product.info.simple" as="product_type_data"  template="mw_dailydeal/timer/view.phtml"> 
+			</block> 
+	    </reference>
+    </PRODUCT_TYPE_simple>  
+    
+	<PRODUCT_TYPE_configurable translate="label" module="catalog">
+	    <reference name="product.info">
+	    	<action method="unsetChild"><name>product.info.configurable</name></action>
+	 		<block type="dailydeal/deal" name="product.info.configurable" as="product_type_data"  template="mw_dailydeal/timer/view.phtml"> 
+		    </block> 
+    	</reference>
+ 
+	</PRODUCT_TYPE_configurable>
+	
+	<PRODUCT_TYPE_downloadable>
+		<reference name="product.info">
+			<block type="dailydeal/deal" name="product.info.downloadable" as="product_type_data"  template="mw_dailydeal/catalog/product/type.phtml"> 
+				<block type="downloadable/catalog_product_samples" name="product.info.downloadable.samples" as="samples" template="downloadable/catalog/product/samples.phtml"/>
+                <block type="cataloginventory/stockqty_default" name="product.info.downloadable.extra" as="product_type_data_extra" template="cataloginventory/stockqty/default.phtml"/>
+		    </block>
+		</reference>
+	</PRODUCT_TYPE_downloadable>
+
+</layout>

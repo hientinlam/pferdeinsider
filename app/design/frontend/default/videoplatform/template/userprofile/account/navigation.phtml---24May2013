@@ -1,0 +1,84 @@
+<?php
+/**
+ * BelVG LLC.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ *
+ /***************************************
+ *         MAGENTO EDITION USAGE NOTICE *
+ *****************************************/
+ /* This package designed for Magento COMMUNITY edition
+ * BelVG does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * BelVG does not provide extension support in case of
+ * incorrect edition usage.
+ /***************************************
+ *         DISCLAIMER   *
+ *****************************************/
+ /* Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future.
+ *****************************************************
+ * @category   Belvg
+ * @package    Belvg_Userprofile
+ * @copyright  Copyright (c) 2010 - 2011 BelVG LLC. (http://www.belvg.com)
+ * @license    http://store.belvg.com/BelVG-LICENSE-COMMUNITY.txt
+ */
+
+?>
+<div class="block block-account">
+    <div class="block-title">
+        <strong><span><?php echo $this->__('My Account'); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul>
+             <?php 
+             $_links = $this->getLinks();
+             $stat= $this->getRequest()->getParam('status');
+             $customer=Mage::getModel('customer/session')->getCustomer();
+             $customerId=$customer->getId();
+             $groupId=$customer['group_id'];
+             $affiliate =  Mage::getModel('awaffiliate/affiliate')->getCollection()->getData();
+             foreach($affiliate as $inactive):
+                 if($customerId==$inactive['customer_id']):
+                    $status=$inactive['status'];
+                     break;
+                 endif;
+             endforeach;
+             ?>
+            <?php $_links = $this->getLinks(); ?>
+            <?php $_index = 1; ?>
+            <?php $_count = count($_links); ?>
+            <?php foreach ($_links as $_link): ?>
+            <?php if($groupId=='1')
+                  {
+                    if($_link->getLabel()!='Bank Information'&& $_link->getLabel()!='My Product' && $_link->getLabel()!='Promote Products' && $_link->getLabel()!='Create Product' && $_link->getLabel()!='Promote Products Bank Information') {
+                       $_last = ($_index++ >= $_count);
+                       if ($this->isActive($_link)): ?>
+                             <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
+                         <?php else: ?>
+                             <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                        <?php endif; ?>
+                            
+                    <?php }
+                     } 
+                    elseif($groupId=='4') 
+                        {  if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos') { ?> 
+                                     <?php $_last = ($_index++ >= $_count); ?>
+                                        <?php if ($this->isActive($_link)): ?>
+                                             <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
+                                        <?php else: ?>
+                                              <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                                         <?php endif; ?>
+                       <?php } } ?>
+            <?php endforeach; ?>
+                    <li><a href="<?php echo $this->getUrl('userprofile/messages/all')?>"><?php echo $this->__('Messages')?></a></li>
+          
+        </ul>
+    </div>
+</div>
+

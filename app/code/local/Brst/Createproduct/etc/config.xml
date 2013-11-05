@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<config>
+	<global>
+		<modules>
+                    <brst_createproduct>
+                            <version>0.1.0</version>
+                    </brst_createproduct>
+                </modules>
+                
+                <blocks>
+                    <createproduct>              
+                            <class>
+                               Brst_Createproduct_Block
+                         	</class>  
+                    </createproduct> 
+                     
+                </blocks>
+                 
+               
+        </global>
+        
+	<frontend>
+                <routers>
+                        <createproduct>
+                                <use>standard</use>
+                                <args>
+                                      <module>Brst_Createproduct</module>
+                                      <frontName>createproduct</frontName>
+                                </args>
+                        </createproduct>
+                </routers>
+		<layout>
+			<updates>
+				<createproduct>
+		   		      <file>createproduct.xml</file>
+				</createproduct>
+			</updates>
+       		</layout>
+        </frontend>
+        
+</config>

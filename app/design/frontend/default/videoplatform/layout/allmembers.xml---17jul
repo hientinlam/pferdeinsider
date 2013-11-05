@@ -1,0 +1,182 @@
+<layout version="0.1.0">
+        <allmembers_index_index>
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+       	 	</reference>
+                
+		<reference name="content">
+                    <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
+                </reference>
+	</allmembers_index_index> 
+        <allmembers_index_products>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+       	 	</reference>
+                
+		<reference name="content">
+                    <block type="allmembers/allmembers" name="allmembers" template="custom/specialoffer.phtml"/>
+                </reference>
+	</allmembers_index_products> 
+        
+        <allmembers_index_event>
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+       	 	</reference>
+		<reference name="content">
+                    <block type="allmembers/viewevent" name="viewevent" template="custom/viewevents.phtml"/>
+                </reference>
+	</allmembers_index_event>
+        
+        <allmembers_index_subscribe>
+		<reference name="root">
+			<action method="setTemplate"><template>page/3columns.phtml</template></action>
+       	 	</reference>
+		<reference name="content">
+                    <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
+                </reference>
+	</allmembers_index_subscribe> 
+        
+        <allmembers_index_unsubscribe>
+		<reference name="root">
+			<action method="setTemplate"><template>page/3columns.phtml</template></action>
+       	 	</reference>
+		<reference name="content">
+                    <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
+                </reference>
+	</allmembers_index_unsubscribe> 
+        
+        <allmembers_index_videos>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+       	 	</reference>
+                
+               <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_editInfo</name><path>register/index/personalinfo/</path><label>Personal Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
+                
+            <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+-->
+                <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Member Videos</label></action>
+               
+
+                <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
+                <action method="addLink" translate="label" module="sales"><name>Billing Agreements</name><path>sales/billing_agreement/</path><label>Billing Agreements</label></action>
+                <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
+                <action method="addLink" translate="label" module="sales"><name>review</name><path>review/customer/</path><label>My Product Reviews</label></action>
+                <action method="addLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>My Tags</label></action>
+                <action method="addLink" translate="label" module="oauth"> <name>OAuth Customer Tokens</name> <path>oauth/customer_token</path><label>My Applications</label></action>
+                <action method="addLink" translate="label" module="wishlist"><name>wishlist</name><path>wishlist/</path><label>My wishlist</label></action>
+                <action method="addLink" translate="label" module="newsletter"><name>manage</name><path>newsletter/manage/</path><label>Newsletter Subscription</label></action>
+                <action method="addLink" translate="label" module="downloadable"><name>customer</name><path>/downloadable/customer/products/</path><label>My Downloadable Products</label></action>
+                 <action method="addLink" translate="label" module="forum"><name>forums</name><path>forum/mytopics/</path><label>My Forum Topics</label></action>
+                 <action method="addLink" translate="label" module="forum"><name>forum</name><path>forum/myposts/</path><label>My Forum Posts</label></action>
+                <action method="addLink" translate="label" module="customer"><name>customer.profile.messages</name><path>userprofile/messages/all/</path><label>Message</label></action>
+          </block>
+         
+           
+            <remove name="tags_popular"/>
+        </reference>
+		<reference name="content">
+                    <block type="allmembers/membervideos" name="membervideos" template="custom/membervideos.phtml"/>
+                </reference>
+                
+	</allmembers_index_videos> 
+        
+         <allmembers_index_earnings>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+       	 	</reference>
+                
+               <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_editInfo</name><path>register/index/personalinfo/</path><label>Personal Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
+                <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bank Information</label></action>
+                 <action method="addLink" translate="label" module="customer"><name>brst_createproduct</name><path>createproduct/index/index</path><label>Create Product</label></action>
+                <action method="addLink" translate="label" module="customer"><name>create_product</name><path>createproduct/index/showproduct/</path><label>My Products</label></action>
+            <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+-->                <action method="addLink" translate="label" module="customer"><name>allmembers</name><path>allmembers/index/earnings/</path><label>Earnings Via Website</label></action> 
+                    <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Earnings Via Affiliate</label></action> 
+            
+                <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Member Videos</label></action>
+               
+
+                <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
+                <action method="addLink" translate="label" module="sales"><name>Billing Agreements</name><path>sales/billing_agreement/</path><label>Billing Agreements</label></action>
+                <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
+                <action method="addLink" translate="label" module="sales"><name>review</name><path>review/customer/</path><label>My Product Reviews</label></action>
+                <action method="addLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>My Tags</label></action>
+                <action method="addLink" translate="label" module="oauth"> <name>OAuth Customer Tokens</name> <path>oauth/customer_token</path><label>My Applications</label></action>
+                <action method="addLink" translate="label" module="wishlist"><name>wishlist</name><path>wishlist/</path><label>My wishlist</label></action>
+                <action method="addLink" translate="label" module="newsletter"><name>manage</name><path>newsletter/manage/</path><label>Newsletter Subscription</label></action>
+                <action method="addLink" translate="label" module="downloadable"><name>customer</name><path>/downloadable/customer/products/</path><label>My Downloadable Products</label></action>
+
+                 <action method="addLink" translate="label" module="forum"><name>forums</name><path>forum/mytopics/</path><label>My Forum Topics</label></action>
+                                <action method="addLink" translate="label" module="forum"><name>forum</name><path>forum/myposts/</path><label>My Forum Posts</label></action>
+                                
+                <action method="addLink" translate="label" module="customer"><name>customer.profile.messages</name><path>userprofile/messages/all/</path><label>Message</label></action>
+          </block>
+         
+           
+            <remove name="tags_popular"/>
+        </reference>
+		<reference name="content">
+                    <block type="allmembers/allmembers" name="allmembers" template="custom/expert-earnings.phtml"/>
+                </reference>
+                
+	</allmembers_index_earnings> 
+        
+        
+         
+         <allmembers_index_viaaffiliate>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+       	 	</reference>
+                
+               <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
+                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Dashboard</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>account_editInfo</name><path>register/index/personalinfo/</path><label>Personal Information</label></action>
+                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
+                <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bank Information</label></action>
+                 <action method="addLink" translate="label" module="customer"><name>brst_createproduct</name><path>createproduct/index/index</path><label>Create Product</label></action>
+                <action method="addLink" translate="label" module="customer"><name>create_product</name><path>createproduct/index/showproduct/</path><label>My Products</label></action>
+            <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+-->                 <action method="addLink" translate="label" module="customer"><name>allmembers</name><path>allmembers/index/earnings/</path><label>Earnings Via Website</label></action> 
+                    <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Earnings Via Affiliate</label></action> 
+            
+             <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Member Videos</label></action>
+               
+
+                <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
+                <action method="addLink" translate="label" module="sales"><name>Billing Agreements</name><path>sales/billing_agreement/</path><label>Billing Agreements</label></action>
+                <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
+                <action method="addLink" translate="label" module="sales"><name>review</name><path>review/customer/</path><label>My Product Reviews</label></action>
+                <action method="addLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>My Tags</label></action>
+                <action method="addLink" translate="label" module="oauth"> <name>OAuth Customer Tokens</name> <path>oauth/customer_token</path><label>My Applications</label></action>
+                <action method="addLink" translate="label" module="wishlist"><name>wishlist</name><path>wishlist/</path><label>My wishlist</label></action>
+                <action method="addLink" translate="label" module="newsletter"><name>manage</name><path>newsletter/manage/</path><label>Newsletter Subscription</label></action>
+                <action method="addLink" translate="label" module="downloadable"><name>customer</name><path>/downloadable/customer/products/</path><label>My Downloadable Products</label></action>
+
+                 <action method="addLink" translate="label" module="forum"><name>forums</name><path>forum/mytopics/</path><label>My Forum Topics</label></action>
+                                <action method="addLink" translate="label" module="forum"><name>forum</name><path>forum/myposts/</path><label>My Forum Posts</label></action>
+                                
+                <action method="addLink" translate="label" module="customer"><name>customer.profile.messages</name><path>userprofile/messages/all/</path><label>Message</label></action>
+          </block>
+         
+           
+            <remove name="tags_popular"/>
+        </reference>
+		<reference name="content">
+                    <block type="allmembers/allmembers" name="allmembers" template="custom/expert-affiliate-earning.phtml"/>
+                </reference>
+                
+	</allmembers_index_viaaffiliate> 
+         
+</layout>

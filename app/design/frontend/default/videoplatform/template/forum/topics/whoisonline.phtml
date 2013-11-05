@@ -1,0 +1,5 @@
+<div class="forum-who-is-online-block">
+	<h4><?php echo $this->__('Wer ist online?') ?></h4>
+	<div class="forum-hor-divider">&nbsp;</div>
+	<?php echo $this->__('Insgesamt sind <b>%s</b> User online ::<b>%s</b> User eingelogged :: <b>%s</b> und <b>%s</b> Gäste (basierend auf aktive User in den letzten 5 Minuten)', $this->getTotaUsers(true), $this->getRigisteredUsers(true), $this->getGuests(true)); ?> 
+</div>

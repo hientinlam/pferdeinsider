@@ -1,0 +1,52 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Top menu for store
+ *
+ * @see Mage_Page_Block_Html_Topmenu
+ */
+?>
+<?php $_menu = $this->getHtml('level-top');
+       // echo "<pre>";print_r($_menu);die('hello');
+        ?>
+<?php if($_menu): ?>
+    <div class="nav-container">
+        <ul id="nav">
+            <?php 
+        
+            $menu=str_replace('http://54.228.195.42/magento/index.php/horse-experts.html','http://54.228.195.42/magento/index.php/allmembers/index/index/',$_menu);
+            $menu1= str_replace('http://54.228.195.42/magento/index.php/blog.html','http://blog.pferdeinsider.com',$menu);
+            $menu2=   str_replace('http://54.228.195.42/magento/index.php/special-offer.html','http://54.228.195.42/magento/index.php/daily-deals/',$menu1);
+            $menu3= str_replace('http://54.228.195.42/magento/index.php/forum.html','http://54.228.195.42/magento/index.php/forum',$menu2);
+            echo  str_replace('http://54.228.195.42/magento/index.php/test.html','http://54.228.195.42/magento/index.php/',$menu3);
+            ?>
+           <li class="level0 nav-8 level-top"><a class="level-top" style="color:#333333;margin-top: -2px;" href="<?php echo Mage::getBaseurl() ?>coming-soon"><span>Live Webinare</span></a></li>
+              <li class="level0 nav-8 level-top"><a class="level-top" style="color:#333333;margin-top: -2px;" href="<?php echo Mage::getBaseurl() ?>faq"><span>FAQ</span></a></li>
+       </ul>
+    </div>
+<?php endif ?>

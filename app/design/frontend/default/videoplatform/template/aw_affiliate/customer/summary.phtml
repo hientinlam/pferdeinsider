@@ -1,0 +1,68 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This package designed for Magento community edition
+ * aheadWorks does not guarantee correct work of this extension
+ * on any other Magento edition except Magento community edition.
+ * aheadWorks does not provide extension support in case of
+ * incorrect edition usage.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Affiliate
+ * @version    1.0.2
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?><?php
+ $current_url = Mage::helper('core/url')->getCurrentUrl();
+if($current_url==Mage::getBaseUrl().'affiliate/customer_affiliate/view/')
+{
+    $class='affialiatetitle';
+}
+else
+{
+     $class='affialiatetitle1';
+}
+$customer=Mage::getModel('customer/session')->getCustomer()->getId();
+$collection = Mage::getModel('brst_experts/amount')->getCollection()->addFieldToFilter('affiliate_id', array('eq'=>$customer)); 
+$affiliateearning=0;
+foreach($collection as $record)
+{
+    $result=$record['affiliate_pay'];
+    $affiliateearning=$result+$affiliateearning;
+}
+
+?>
+
+
+<div class="summary fieldset">
+    <div class="<?php echo $class?>">
+    <h2 class=""><?php echo $this->__("Summary"); ?></h2>
+    </div>
+    <ul>
+        <li>
+            <span class="title"><?php echo $this->__("Available balance"); ?></span>
+            <span class="value"><?php  echo $affiliateearning;; ?></span>
+        </li>
+        <li>
+            <span class="title"><?php echo $this->__("Total earnings"); ?></span>
+            <span class="value"><?php echo $affiliateearning; ?></span>
+        </li>
+        <li>
+            <span class="title"><?php echo $this->__("Life time earnings"); ?></span>
+            <span class="value"><?php echo $affiliateearning; ?></span>
+        </li>
+    </ul>
+</div>

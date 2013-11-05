@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Brst_Member>
+            <version>1.0.0</version>
+        </Brst_Member>
+    </modules>
+     
+    <global>
+        <helpers>
+            <brst_member>
+                <!-- This is where we define our helper directory -->
+                <class>Brst_Member_Helper</class>
+            </brst_member>
+        </helpers>
+                    
+        <blocks>
+            <brst_member>
+                <!-- Set a block definition and lookup directory -->
+                <class>Brst_Member_Block</class>
+            </brst_member>
+        </blocks>
+         
+        <models>
+            <brst_member>
+                <!-- This is where we define our model directory -->
+                <class>Brst_Member_Model</class>
+                <!-- Define a resource to create a custom table -->
+                <resourceModel>brst_member_mysql4</resourceModel>
+            </brst_member>
+             
+            <!-- Here's our resource model we'll use to create a database table -->
+            <brst_member_mysql4>
+                <class>Brst_Member_Model_Mysql4</class>
+                <entities>
+                    <!-- Let's define our table, we'll call it with the baz name, but the real table is foo_bar_baz -->
+                    <!-- After we define our entity, we can call it with our model by calling foo_bar/baz -->
+                    <payment>
+                        <table>brst_member_payment</table>
+                    </payment>
+                </entities>
+            </brst_member_mysql4>
+        </models>
+         
+        <!-- And finally we define our resource setup script -->
+        <resources>
+            <brst_member_setup>
+                <setup>
+                    <module>Brst_Member</module>
+                </setup>
+            </brst_member_setup>
+        </resources>
+    </global>
+     
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <!-- This is how we load our Adminhtml controllers -->
+                    <modules>
+                        <Brst_Member before="Mage_Adminhtml">Brst_Member_Adminhtml</Brst_Member>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+     
+    <adminhtml>
+        <layout>
+            <updates>
+                <brst_member>
+                    <!--
+                    We again keep a nice naming convention and make our module upgrade proof by placing it in a separate folder
+                    - Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
+                    -->
+                    <file>brst/member.xml</file>
+                </brst_member>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

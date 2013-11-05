@@ -1,0 +1,10 @@
+<?php
+class Find_Member_IndexController extends Mage_Core_Controller_Front_Action
+{
+    public function indexAction()
+    {
+		$this->loadLayout();     
+                 $this->getLayout()->getBlock('head')->setTitle('Expert');
+		$this->renderLayout();
+    }
+}

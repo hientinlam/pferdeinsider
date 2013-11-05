@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Mageplace_Notification>
+			<version>1.0.1</version>
+		</Mageplace_Notification>
+	</modules>
+        
+    <global>
+		<models>
+                <mageplace_notification>
+					   <class>Mageplace_Notification_Model</class>
+						<resourceModel>mageplace_notification_mysql4</resourceModel>
+                </mageplace_notification>
+			
+		</models>
+	</global>
+	
+	<adminhtml>
+                <events>
+                    <controller_action_predispatch>
+                        <observers>
+                            <notification>
+                                <type>singelton</type>
+                                <class>mageplace_notification/feed</class>
+                                <method>check</method>
+                            </notification>
+                        </observers>
+                    </controller_action_predispatch>
+                </events>
+        </adminhtml>
+        
+        
+        <default>
+            <mageplace_notification>
+                <feed>
+                    <url>mageplace.com/index.php?option=com_extensionfeed&amp;view=feed&amp;extension=xxx&amp;format=feed </url>
+                    <use_https>0</use_https>
+                    <check_frequency>24</check_frequency>
+                    <enabled>1</enabled>
+                    <socialbundle>facebookbundle,twitterbundle,googlebundle,Mageplace_Pinit</socialbundle>
+					<googlebundle>Mageplace_Google_Connect,Mageplace_Google_Plusone,Mageplace_Google_Share</googlebundle>
+                    <facebookbundle>Mageplace_Facebook_Comments,Mageplace_Facebook_Connect,Mageplace_Facebook_Like,Mageplace_Facebook_Share,Mageplace_Facebook_Subscribe</facebookbundle>
+                    <twitterbundle>Mageplace_Twitter_Connect,Mageplace_Twitter_Follow,Mageplace_Twitter_Tweet</twitterbundle>
+                </feed>
+            </mageplace_notification>
+        </default>
+</config>

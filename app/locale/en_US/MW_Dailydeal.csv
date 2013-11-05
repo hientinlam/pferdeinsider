@@ -1,0 +1,41 @@
+Active Deals,Active Deals
+Past Deals,Past Deals
+Comming Deals,Coming Deals
+There are no products matching the selection.,There are no products matching the selection.
+Add to Cart,Add to Cart
+Out of stock,Out of stock
+Add to Wishlist,Add to Wishlist
+Add to Compare,Add to Compare
+Get it before it&acute;s gone!,Get it before it&acute;s gone!
+"Hurry,",Hurry
+Availability:,Availability:
+In stock,In stock
+Out of stock,Out of stock
+Deals of Week,Deals of Week
+"There are <span class=deal-qty"">%s items</span> available""","There are <span class=deal-qty"">%s items</span> available."""
+"Hurry, there are only <span class=deal-qty"">%s items</span> left!""","Hurry, there are only <span class=deal-qty"">%s items</span> left!"""
+"Hurry, there is only <span class=deal-qty"">%s item</span> left!""","Hurry, there is only <span class=deal-qty"">%s item</span> left!"""
+The deadline has passed.,The deadline has passed.
+/*symbolicdeal.phtml*/,
+Buy !,Buy !
+Old price,Old price
+Discount,Discount
+You Save,You Save
+Time left to Buy,Time left to Buy
+Hours,Hours
+Years,Years
+Months,Months
+Days,Days
+Minutes,Minutes
+Seconds,Seconds
+Quick Overview,Quick Overview
+Description,Description
+View all,View all
+(Posted on %s) long,(Posted on %s) long
+There is no review for this product currently.,There is no review for this product currently.
+/* showtabs*/,
+More,More
+"There are <span class=deal-qty-one"">%s items</span>&nbsp;solved.""","There are <span class=deal-qty-one"">%s items</span>&nbsp;solved."""
+"<span class=deal-qty-one"">An item</span> has solved.""","<span class=deal-qty-one"">An item</span> has solved."""
+Deal starts at: <h4>%s</h4>,Deal starts at: <h4>%s</h4>
+"There are <span class=deal-qty-red"">%s items</span> available.""","There are <span class=deal-qty-red"">%s items</span> available."""

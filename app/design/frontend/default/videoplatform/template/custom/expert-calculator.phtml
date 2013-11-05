@@ -1,0 +1,100 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php 
+$customer=Mage::getModel('customer/session')->getCustomer();
+$customeremail=$customer->getEmail();
+$adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
+foreach($adminmodel as $admindata)
+{
+    if($customeremail==$admindata['email'])
+    {
+        $expertname1=explode('-',$admindata['username']);
+        $expertname=$expertname1[0];
+        break;
+    }
+}
+
+$totalmemberpayment = Mage::getModel('brst_member/payment')->getCollection()->getData();
+foreach($totalmemberpayment as $totalmemberpaymentdata)
+{
+    if($expertname==$totalmemberpaymentdata['member_name'])
+    {
+        $totalpaid=$totalmemberpaymentdata['total_paid'];
+        break;
+    }
+}
+$collection = Mage::getModel('brst_experts/amount')->getCollection()
+              ->addFieldToFilter('expert_name', array('like'=>$expertname));
+  // echo  "<pre>";print_r($collection->getData());die('abc'); 
+
+echo '<table  width="750">';
+echo '<th class="myproductth">Umsatz gesamt pro Experte </th>
+    <th class="myproductth">Kosten Affiliates</th>
+    <th class="myproductth">Anteil Experten</th>
+    <th class="myproductth">Anteil Pferdeinsider</th>
+    <th class="myproductth">Steuern </th>
+    <th class="myproductth">Summe gesamt (netto) </th>';
+$count=1;
+if($collection->getSize() >0 ) 
+{
+ foreach ($collection as $record):
+ 
+     if($count % 2 == 0)
+     {
+       $myproducttr='myproducttd' ; 
+     }
+     else
+     {
+           $myproducttr='myproductotr' ; 
+     }
+     //echo $record['admin_pay']."<br>";
+     $expertamount=$record['getyoupaid']+$expertamount;
+     $affiliateamount=$record['affiliate_pay']+$affiliateamount;
+     $adminamount=$record['admin_pay']+$adminamount;
+     $taxamount=$record['tax_pay']+$tax;
+     $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); 
+     $count++;
+      
+endforeach;
+echo '<tr class='.$myproducttr.'><td style="padding:5px;">'.$curencySymbol.number_format($expertamount,2).'</td>';
+    echo '<td style="padding:5px;">'.$curencySymbol.number_format($affiliateamount,2).'</td>';
+    echo '<td style="padding:5px;">'.$abc.'</td>';
+    echo '<td style="padding:5px;">'.$adminamount.'</td>';
+    echo '<td style="padding:5px;">'.$taxamount.'</td>';
+    echo '<td style="padding:5px;">'.$totalpaid.'</td></tr>';
+}
+else 
+ {
+   echo '<tr class='.$myproducttr.'><td colspan="7" style="padding:5px;text-align:center">No Result Found</td>';
+ }
+echo '</table>';
+
+?>
+
+
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : Member_Search.xml
+    Created on : 21 February, 2013, 2:40 PM
+    Author     : lenovo
+    Description:
+        Purpose of the document follows.
+-->
+
+<config>
+    <modules>
+        <Brst_Embeded>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Brst_Embeded>
+    </modules>
+</config>

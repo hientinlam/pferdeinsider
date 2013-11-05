@@ -1,0 +1,381 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/jconfirmaction.jquery.js') ?>"></script>
+<script type="text/javascript">
+
+                        jQuery(document).ready(function() {
+                                jQuery('.ask').jConfirmAction();
+
+
+                        });
+	
+</script>
+
+<link rel="stylesheet" type="text/css" media="all" href="<?php echo $this->getSkinUrl('css/style.css') ?>" />
+<script type="text/javascript">
+
+function setcookie(cName,cValue) 
+{ 
+  document.cookie=cName+"=" + cValue;
+} 
+</script>
+<div class="page-title">
+        <h1>Meine Produkte</h1>
+    </div>
+<?php 
+$_helper = $this->helper('catalog/output');
+$currentPage = (int) $this->getRequest()->getParam('p', 1);
+
+$cookiedata=explode('=',$_COOKIE["myproductpagelength"]);
+if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'createproduct/index/showproduct/' || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'createproduct/index/showproduct' )
+{
+    
+   setcookie('myproductpagelength', '', -3600);
+   unset($_COOKIE["myproductpagelength"]);
+   $pageSize = (int) $this->getRequest()->getParam('s',9);
+}
+else {
+     if($cookiedata[1]!= NULL)
+     {
+        $pageSize = (int) $this->getRequest()->getParam('s',$cookiedata[1]);
+     }
+     else
+     {
+       $pageSize = (int) $this->getRequest()->getParam('s',9);
+     }
+}
+$customersession=Mage::getModel('customer/session')->getCustomer();
+$customerEmail=$customersession->getEmail();
+$adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
+foreach($adminmodel as $admininfo)
+{
+    if($admininfo['email']==$customerEmail)
+    {
+       $expertname =explode('-',$admininfo['username']);
+        break;
+    }
+}
+$productModel = Mage::getModel('catalog/product');
+$attr = $productModel->getResource()->getAttribute("member_list");
+if ($attr->usesSource()) {
+   $id = $attr->getSource()->getOptionId($expertname[0]);  }
+$collection = Mage::getResourceModel('catalog/product_collection'); 
+$_product=$collection->getData();
+$attributes = Mage::getSingleton('catalog/config')
+                            ->getProductAttributes();
+$collection->addAttributeToSelect($attributes)
+                                    ->addStoreFilter();
+ $collection->addFieldToFilter(array(
+                            array('attribute'=>'member_list',array('eq'=>$id)),
+                            ))->setPageSize($pageSize)
+            ->setCurPage($currentPage);   
+ $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); 
+        
+
+
+
+
+$totCat = $collection->getSize();
+$store_cats = $collection->load();
+$pageTot = ceil( $totCat / $pageSize );
+$pageSize1=array('9','15','30',All);
+
+$firstproduct=1;
+if(($this->getRequest()->getParam('p') > 1 ))
+{
+$from=(($this->getRequest()->getParam('p')-1)*$pageSize)+1;
+}else
+{
+   $from=($firstproduct*$pageSize)+1; 
+}
+if(($this->getRequest()->getParam('p') > 1 ))
+{
+    if(($currentPage < $pageTot))
+    {
+        $to=$this->getRequest()->getParam('p')*$pageSize;
+    }  else {
+        $to=$totCat;
+    }
+}
+ else {
+ $to=$pageSize;
+}
+?>
+<div   style="margin-bottom:10px;clear:both" class="cattoolbar">
+    <div class="toolbar">
+    <div class="pager">
+         <p class="amount" style="padding-top:5px;padding-right:5px;">
+            <?php if($pageTot > 1): if($currentPage!= 1){?>
+                    <?php echo $this->__('Items '. $from.' to '.$to.' von '.$totCat.' Gesamt ') ?>
+             <?php } else { ?>
+                       <?php echo $this->__('Artikel '. $currentPage.' bis '. $pageSize. ' von '.$totCat.' Gesamt ') ?>
+             <?php } ?>
+            <?php else: ?>
+                <strong><?php echo $this->__('Anzahl Artikel Gesamt '.$totCat) ?></strong>
+            <?php endif; ?>
+        </p>
+         
+        <div class="limiter">
+            <label>Zeige</label>
+             <span style="margin-top: 5px; float: right;">pro Seite</span>
+            <div class="toolbarimg">
+                <select onchange="setcookie('myproductpagelength',this.value);setLocation(this.value);">
+                        <?php foreach($pageSize1 as $key=>$limit) { ?>  
+                             <option <?php if($_COOKIE["myproductpagelength"]== Mage::getBaseUrl().'createproduct/index/showproduct?s='.$limit) { echo 'selected=selected'; }?> value="<?php echo Mage::getBaseUrl().'createproduct/index/showproduct?s='.$limit  ?>" > <?php echo $limit;?> </option>
+                    <?php } ?>
+               </select>
+            </div>
+        </div>
+        
+        
+    <div class="pages">
+        <strong></strong>
+        <ol>
+             <?php if ($currentPage != '1'): ?>
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+            <?php 
+             $adjacents = "2";
+             $pageTot = ceil( $totCat / $pageSize );
+             $lpm1 = $pageTot - 1;
+         ?>
+          <?php  if ($pageTot < 7 + ($adjacents * 2)){ ?>
+                    <?php for ( $counter=1; $counter<=$pageTot; $counter++ ) : ?>
+                        <?php if ( $counter == $currentPage ) : ?>
+                            <li class="current"><?php echo $counter ?></li>
+                            <?php else : ?>
+                            <li><a href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $counter ?>" ><?php echo $counter ?></a></li>
+                            <?php endif; ?>
+                    <?php endfor; ?>
+                    <?php }
+                    elseif($pageTot > 5 + ($adjacents * 2))
+                        {
+                            if($currentPage <= 1 + ($adjacents * 2))		
+                                {
+    				for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
+    				{
+    					if ($counter == $currentPage): ?>
+    						<li class="current" ><a class='' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php	else : ?>
+    						<li><a href='?p=<?php echo $counter ?>'> <?php echo $counter ?></a></li>				
+    				<?php endif; ?>
+    				<?php $current=$counter+1; ?>
+    			<?php } ?> 
+                                <li class='dot'><a href='?p=<?php echo $current ?>'>...</a></li>
+    				<li><a href='?p=<?php echo $lpm1 ?>'><?php echo $lpm1 ?></a></li>
+    				<li><a href='?p=<?php echo $pageTot ?>'><?php echo $pageTot ?></a></li>	
+                                <?php } 
+                                elseif($pageTot - ($adjacents * 2) > $currentPage && $currentPage > ($adjacents * 2)) { ?>
+    			
+    			<?php	for ($counter = $currentPage - $adjacents; $counter <= $currentPage + $adjacents; $counter++)
+    				{
+    					if ($counter == $currentPage) { ?>
+    						<li class="current" ><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php }	else { ?>
+    						<li><a href='?p=<?php echo $counter ?>'><?php echo $counter ?></a></li>					
+    				<?php } $current=$counter+1; } ?>
+    				<li class='dot'><a href='?p=<?php echo $current ?>'>...</a></li>
+    				<li><a href='?p=<?php echo $lpm1 ?>'><?php echo $lpm1 ?></a></li>
+    				<li><a href='?p=<?php echo $pageTot ?>'><?php echo $pageTot ?></a></li>
+    			<?php } 
+                        else { ?>
+    				<li><a href='?p=1'>1</a></li>
+    				<li><a href='?p=2'>2</a></li>
+    				<li class='dot'><a href='?p=<?php echo $current ?>'>...</a></li>
+    				<?php for ($counter = $pageTot - (2 + ($adjacents * 2)); $counter <= $pageTot; $counter++)
+    				{
+    					if ($counter == $currentPage) : ?>
+    						<li class="current"><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    					<?php else: ?>
+    						<li><a href='?p=<?php echo $counter ?>'><?php echo $counter ?></a></li>	
+                                        <?php endif;
+    				}
+    			}
+    		} ?>
+                     <?php if ($currentPage < $pageTot): ?>
+              
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage+1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+           
+        </ol>
+
+    </div>
+    </div>
+</div>
+</div>
+<?php
+echo '<table  width="750">';
+echo '<th class="myproductth">Produktbild </th><th class="myproductth">Produkt Name </th><th class="myproductth">Produktart</th><th class="myproductth">Preis</th><th colspan="2" class="myproductth">Aktion</th>';
+$count=1;
+ foreach ($collection as $_product):
+ 
+     if($count % 2 == 0)
+     {
+       $myproducttr='myproducttd' ; 
+     }
+     else
+     {
+           $myproducttr='myproductotr' ; 
+     }
+   $product= Mage::getModel('catalog/product')->load($_product->getId());
+    $attr1 = $product->getResource()->getAttribute("product_material");
+    if ($attr1->usesSource()) {
+         $productmaterial = $attr1->getSource()->getOptionText($product['product_material']);
+    }
+        echo '<tr class='.$myproducttr.'><td style="padding:5px;"><img src="'. $this->helper('catalog/image')->init($_product, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(100,50).'" ></td>';
+      echo '<td style="padding:5px;">'.substr( $_product->getName(), 0, 100).'</td>';
+      echo '<td style="padding:5px;">'.$productmaterial.'</td>';
+      echo '<td style="padding:5px;">'.$curencySymbol.number_format($_product->getPrice(),2).'</td>';
+      echo '<td style="padding:5px;"><a style="cursor:pointer" href="'.Mage::getBaseUrl().'createproduct/index/edit?id='.$_product->getEntityId().'"><img src="'.$this->getSkinUrl('images/user_edit.png').'"/></a></td>';
+       echo '<td style="padding:5px;"><a   style="cursor:pointer" class="ask" href="'.Mage::getBaseUrl().'createproduct/index/delete?id='.$_product->getEntityId().'"><img  src="'.$this->getSkinUrl('images/btn_trash.gif').'"/></a></td></tr>';
+      $count++;
+endforeach;
+echo '</table>';
+ 
+?>
+
+<div style="margin-top:10px;"  class="cattoolbar">
+    <div class="toolbar">
+    <div class="pager">
+         <p class="amount" style="padding-top:5px;padding-right:5px;">
+            <?php if($pageTot > 1): if($currentPage!= 1){?>
+                    <?php echo $this->__('Artikel '. $from.' bis '.$to.' von '.$totCat.' Gesamt ') ?>
+             <?php } else { ?>
+                       <?php echo $this->__('Artikel '. $currentPage.' bis '. $pageSize. ' von '.$totCat.' Gesamt ') ?>
+             <?php } ?>
+            <?php else: ?>
+                <strong><?php echo $this->__('Anzahl Artikel Gesamt '.$totCat) ?></strong>
+            <?php endif; ?>
+        </p>
+         
+        <div class="limiter">
+            <label>Zeige</label>
+             <span style="margin-top: 5px; float: right;">pro Seite</span>
+            <div class="toolbarimg">
+                <select onchange="setcookie('myproductpagelength',this.value);setLocation(this.value);">
+                        <?php foreach($pageSize1 as $key=>$limit) { ?>  
+                             <option <?php if($_COOKIE["myproductpagelength"]== Mage::getBaseUrl().'createproduct/index/showproduct?s='.$limit) { echo 'selected=selected'; }?> value="<?php echo Mage::getBaseUrl().'createproduct/index/showproduct?s='.$limit  ?>" > <?php echo $limit;?> </option>
+                    <?php } ?>
+               </select>
+            </div>
+        </div>
+        
+        
+    <div class="pages">
+        <strong></strong>
+        <ol>
+             <?php if ($currentPage != '1'): ?>
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+         <?php 
+             $adjacents = "2";
+             $pageTot = ceil( $totCat / $pageSize );
+             $lpm1 = $pageTot - 1;
+         ?>
+          <?php  if ($pageTot < 7 + ($adjacents * 2)){ ?>
+                    <?php for ( $counter=1; $counter<=$pageTot; $counter++ ) : ?>
+                        <?php if ( $counter == $currentPage ) : ?>
+                            <li class="current"><?php echo $counter ?></li>
+                            <?php else : ?>
+                            <li><a href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $counter ?>" ><?php echo $counter ?></a></li>
+                            <?php endif; ?>
+                    <?php endfor; ?>
+                    <?php }
+                    elseif($pageTot > 5 + ($adjacents * 2))
+                        {
+                            if($currentPage <= 1 + ($adjacents * 2))		
+                                {
+    				for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++)
+    				{
+    					if ($counter == $currentPage): ?>
+    						<li class="current" ><a class='' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php	else : ?>
+    						<li><a href='?p=<?php echo $counter ?>'> <?php echo $counter ?></a></li>				
+    				<?php endif; ?>
+    				<?php $current=$counter+1; ?>
+    			<?php } ?> 
+                                <li class='dot'><a href='?p=<?php echo $current ?>'>...</a></li>
+    				<li><a href='?p=<?php echo $lpm1 ?>'><?php echo $lpm1 ?></a></li>
+    				<li><a href='?p=<?php echo $pageTot ?>'><?php echo $pageTot ?></a></li>	
+                                <?php } 
+                                elseif($pageTot - ($adjacents * 2) > $currentPage && $currentPage > ($adjacents * 2)) { ?>
+    			
+    			<?php	for ($counter = $currentPage - $adjacents; $counter <= $currentPage + $adjacents; $counter++)
+    				{
+    					if ($counter == $currentPage) { ?>
+    						<li class="current" ><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    				<?php }	else { ?>
+    						<li><a href='?p=<?php echo $counter ?>'><?php echo $counter ?></a></li>					
+    				<?php } $current=$counter+1; } ?>
+    				<li class='dot'><a href='?p=<?php echo $current ?>'>...</a></li>
+    				<li><a href='?p=<?php echo $lpm1 ?>'><?php echo $lpm1 ?></a></li>
+    				<li><a href='?p=<?php echo $pageTot ?>'><?php echo $pageTot ?></a></li>
+    			<?php } 
+                        else { ?>
+    				<li><a href='?p=1'>1</a></li>
+    				<li><a href='?p=2'>2</a></li>
+    				<li class='dot'><a href='?p=<?php echo $current ?>'>...</a></li>
+    				<?php for ($counter = $pageTot - (2 + ($adjacents * 2)); $counter <= $pageTot; $counter++)
+    				{
+    					if ($counter == $currentPage) : ?>
+    						<li class="current"><a class='current' style="color:#FFFFFF;text-decoration:none;"><?php echo $counter ?></a></li>
+    					<?php else: ?>
+    						<li><a href='?p=<?php echo $counter ?>'><?php echo $counter ?></a></li>	
+                                        <?php endif;
+    				}
+    			}
+    		} ?>
+                     <?php if ($currentPage < $pageTot): ?>
+              
+            <li>
+                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage+1 ?>" title="<?php echo $this->__('Previous') ?>">
+                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
+                </a>
+            </li>
+        <?php endif;?>
+           
+        </ol>
+
+    </div>
+    </div>
+</div>
+</div>
+
+

@@ -1,0 +1,16 @@
+<script>
+	var SFdefault_language = '<?=$this->getLangDef() ?>';
+</script>
+<script src="<?php echo $this->getSkinUrl('forum/js/tiny_mce/tiny_mce.js') ?>"></script>
+<script src="<?php echo $this->getSkinUrl('forum/js/init_rte.js') ?>"></script>
+
+<script>
+	Simple_Forum_INIT = setInterval(
+		function(){
+			if(typeof tinyMCE != 'undefined' && $('anchor-content')){
+				initRTE();
+				clearInterval(Simple_Forum_INIT);
+			}
+		}
+	,500)
+</script>

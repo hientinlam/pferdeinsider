@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : Account_Customer.xml
+    Created on : 15 February, 2013, 1:37 PM
+    Author     : lenovo
+    Description:
+        Purpose of the document follows.
+-->
+<config>
+    <modules>
+        <Cust_Purchasedevents>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Cust_Purchasedevents>
+    </modules>
+</config>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+	<global>
+		<modules>
+                <related_searchproduct>
+                        <version>0.1.0</version>
+                </related_searchproduct>
+        </modules>
+	<blocks>
+            <catalogsearch>
+                <rewrite>
+                    <result>Related_Searchproduct_Block_Searchproduct</result>
+		</rewrite>
+            </catalogsearch>
+	 </blocks>
+
+        </global>
+	
+</config>

@@ -1,0 +1,248 @@
+<?php
+/**
+ * Media Gallery & Product Videos extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @category   FME
+ * @package    Mediaappearance
+ * @copyright  Copyright 2010 © free-magentoextensions.com All right reserved
+ **/
+?>
+<script type="text/javascript">
+Shadowbox.init({
+    overlayOpacity: 0.8,
+	flashVars: {
+   		skin: '<?php echo Mage::getBaseUrl('js').'mediaappearance/skin01.zip'?>'
+  	}
+});
+</script>
+<?php
+	$popupWidth  = Mage::getStoreConfig('mediaappearance/popupsettings/width');
+	$popupHeight = Mage::getStoreConfig('mediaappearance/popupsettings/height');
+	$autoPlay 	 = Mage::getStoreConfig('mediaappearance/popupsettings/autoplay');
+	$playAgain 	 = Mage::getStoreConfig('mediaappearance/popupsettings/playagain');
+?>
+<?php 
+$blockidentifier = $this->getBlockId(); 
+$model = Mage::getModel('mediaappearance/videoblocks')->load($blockidentifier);
+?>
+
+<?php 
+
+$collection = Mage::getModel('mediaappearance/mediaappearance')->getCollection();		  
+$collection->getSelect()
+->join(array('related' => 'media_block_videos'),
+			'main_table.mediaappearance_id = related.mediaappearance_id AND related.media_block_id = '.$model["media_block_id"].''
+	);
+$collection->getSelect()->order('main_table.created_time desc');
+
+?>
+<?php
+	if($model["block_area"] == 'main') {
+?>
+<div class="widget widget-static-block">
+       <span class="media-block-text"><?php echo $model["block_content"] ?></span>
+</div>
+<div class="video_container">
+	<?php if ( count($collection) == 0 ) : ?>
+		<p class="text_1"><?php echo $this->__('No Media yet...'); ?></p>
+	<?php else : ?>
+    	 <div class="row_main">
+        <?php $_collectionSize = count($collection); ?>
+        <?php $_columnCount = 3; ?>
+		<?php $i=1; foreach ( $collection as $_item ) : ?> 	
+        	<?php
+				if($_item["mediatype"] == "1") {
+					
+					$videoURL = Mage::getBaseUrl('media').$_item["filename"];
+					$videoRel = 'shadowbox; height='.$popupHeight.';width='.$popupWidth.';options={flashVars:{skin: '.Mage::getBaseUrl('js').'mediaappearance/skin01.zip,autostart: '.autoPlay.'}}';
+					 if($_item["filethumb"] != "") {
+						$imgURL = Mage::getBaseUrl('media').$_item["filethumb"];
+					} else {
+						$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon.jpg";
+					} 
+					
+				} elseif ($_item["mediatype"] == "2") {
+					
+					//For Thumb
+					$videoURL = $_item["videourl"];
+					$videoData = Mage::helper('mediaappearance')->video_info($_item["videourl"]);
+					if ($videoData!==false) {
+						if(Mage::getStoreConfig('mediaappearance/general/useyoutubethumb')) {
+							$imgURL = $videoData['thumb_large'];	
+						} else {
+							if($_item["filethumb"] != "") {
+								$imgURL = Mage::getBaseUrl('media').$_item["filethumb"];
+							} else {
+								$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon_full.jpg";
+							}
+						}
+					} else {
+						if($_item["filethumb"] != "") {
+							$imgURL = Mage::getBaseUrl('media').$_item["filethumb"];
+						} else {
+							$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon_full.jpg";
+						}
+					}
+					
+					//For Video URL
+					if ($videoData!==false) {
+						
+						$video_type  = $videoData['video_type'];
+						$video_id    = $videoData['video_id'];
+						if($video_type == "vimeo") {
+							$videoRel = "shadowbox;height=".$popupHeight.";width=".$popupWidth.";";
+							$videoURL = 'http://vimeo.com/moogaloop.swf?clip_id='.$video_id.'&autoplay=1';
+						} elseif($video_type == "youtube") {
+							$videoRel = 'shadowbox;height='.$popupHeight.';width='.$popupWidth.';options={flashVars:{autostart: '.$autoPlay.'}}';
+							$videoURL = "http://www.youtube.com/v/".$video_id;
+						} 
+						
+					} else {
+						
+						$videoURL = $_item["videourl"];
+						$videoRel = 'shadowbox;height='.$popupHeight.';width='.$popupWidth.';options={flashVars:{skin: '.Mage::getBaseUrl('js').'mediaappearance/skin01.zip,autostart: '.$autoPlay.'}}';
+						
+					}
+				} else {
+					$videoRel = "";
+					$videoURL = "#";
+					$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon_full.jpg";
+				}	
+			?>
+            <div class="casestudies">
+                <div class="casestudy">
+                          <div class="mediaimage">
+                            <img src="<?php echo $imgURL; ?>"  width="189" height="140" alt="<?php echo $_item["title"]; ?>" border="0" />
+                            <a class="media_play_icon_mediablock" href="<?php echo $videoURL; ?>" title="<?php echo $_item['title']; ?>" rel="<?php echo $videoRel; ?>" >
+                            <img src="<?php echo $this->getSkinUrl() ?>images/mediaappearance/play_icon.png" alt="" width="41" height="41" border="0" /></a>
+                          </div> 
+                          <div class="window_content video" id="rbird_video" style="display: none;"></div>
+                          <div class="who">
+                            <h3><?php echo $_item['title']; ?></h3>
+                          </div>
+                          <div class="what">
+                            <?php echo substr($_item['content'], 0, 140); ?>...
+                          </div>
+                </div>
+            </div>
+              
+             <?php if($i % 3 == 0): ?>
+             	</div>
+                <br  style="clear:both;" /><br />
+                <div class="row_main">
+             <?php endif ?>
+             <?php $i++; ?>
+             
+  		<?php endforeach; ?>
+</div>  
+<?php endif; ?>
+</div>
+<?php
+	} elseif($model["block_area"] == 'side') {
+?>
+<?php if ( count($collection) == 0 ) : ?>
+	<p><?php echo $this->__('No Media yet...'); ?></p>
+<?php else : ?> 
+<div id="video" class="block">
+	<div class="block-title">
+		<strong><span><?php echo $this->__($model["block_title"]); ?></span></strong>
+	</div>
+	<div class="block-content">       
+		<div class="widget widget-static-block">
+			<span class="media-block-text"><?php echo $model["block_content"] ?></span>
+		</div> 
+		<table width="100%" border="0" align="center" cellpadding="0" style="margin-left:0px;" cellspacing="8">
+                         	<!-- <tr>
+                            	<td colspan="3">&nbsp;</td>
+                            </tr> -->
+                        	<?php $i=0; foreach ( $collection as $_media ) : ?>
+                            <?php
+								if($_media["mediatype"] == "1") {
+									$videoURL = Mage::getBaseUrl('media').$_media["filename"];
+									$videoRel = 'shadowbox; height='.$popupHeight.';width='.$popupWidth.';options={flashVars:{skin: '.Mage::getBaseUrl('js').'mediaappearance/skin01.zip,autostart: '.autoPlay.'}}';
+									 if($_media["filethumb"] != "") {
+										$imgURL = Mage::getBaseUrl('media').$_media["filethumb"];
+									} else {
+										$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon.jpg";
+									} 
+									
+								} elseif ($_media["mediatype"] == "2") {
+									
+									//For Thumb
+									$videoURL = $_media["videourl"];
+									$videoData = Mage::helper('mediaappearance')->video_info($_media["videourl"]);
+									if ($videoData!==false) {
+										if(Mage::getStoreConfig('mediaappearance/general/useyoutubethumb')) {
+											$imgURL = $videoData['thumb_large'];	
+										} else {
+											if($_media["filethumb"] != "") {
+												$imgURL = Mage::getBaseUrl('media').$_media["filethumb"];
+											} else {
+												$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon_full.jpg";
+											}
+										}
+									} else {
+										if($_media["filethumb"] != "") {
+											$imgURL = Mage::getBaseUrl('media').$_media["filethumb"];
+										} else {
+											$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon_full.jpg";
+										}
+									}
+									
+									//For Video URL
+									if ($videoData!==false) {
+										
+										$video_type  = $videoData['video_type'];
+										$video_id    = $videoData['video_id'];
+										if($video_type == "vimeo") {
+											$videoRel = "shadowbox;height=".$popupHeight.";width=".$popupWidth.";";
+											$videoURL = 'http://vimeo.com/moogaloop.swf?clip_id='.$video_id.'&autoplay='.$autoPlay.'';
+										} elseif($video_type == "youtube") {
+											$videoRel = 'shadowbox;height='.$popupHeight.';width='.$popupWidth.';options={flashVars:{autostart: '.$autoPlay.'}}';
+											$videoURL = "http://www.youtube.com/v/".$video_id;
+										} 
+										
+									} else {
+										
+										$videoURL = $_media["videourl"];
+										$videoRel = 'shadowbox;height='.$popupHeight.';width='.$popupWidth.';options={flashVars:{skin: '.Mage::getBaseUrl('js').'mediaappearance/skin01.zip,autostart: '.$autoPlay.'}}';
+										
+									}
+								} else {
+									$videoRel = "";
+									$videoURL = "#";
+									$imgURL = Mage::getBaseUrl('media')."mediaappearance/video_icon_full.jpg";
+								}	
+								?>
+
+                            
+			<tr>
+				<td width="70" align="center" valign="top">
+					<div class="mediaimage">
+						<img src="<?php echo $imgURL; ?>"  width="193" height="130" alt="<?php echo $_media["title"]; ?>" border="0" />
+						<a class="media_play_icon" href="<?php echo $videoURL; ?>" title="<?php echo $_media['title']; ?>" rel="<?php echo $videoRel; ?>" >
+						<img src="<?php echo $this->getSkinUrl() ?>images/mediaappearance/play_icon.png" alt="" width="41" height="41" border="0" /></a>
+					</div>
+                                
+					<span class="blocktitle"><a href="<?php echo $this->__('/video'); ?>" title="<?php echo $this->__('More videos >>>>'); ?>"><?php echo $this->__('More videos >>>>'); ?></a><br /></span>
+					<a href="<?php echo $videoURL; ?>" rel="shadowbox height=500;width=600;options={flashVars:{skin: '<?php echo Mage::getBaseUrl('js').'mediaappearance/skin01.zip'?>',autostart: true}}" title="<?php echo $_media["title"]; ?>" class="style9"></a>
+				</td>
+			</tr>
+                	<!--<tr>
+                	<td colspan="3">&nbsp;</td>
+                 	</tr>-->
+            <?php endforeach; ?> 
+		</table>
+	</div>
+</div>
+<?php endif; ?>  
+<?php
+	}
+?>

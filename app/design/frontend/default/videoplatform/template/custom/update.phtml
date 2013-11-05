@@ -1,0 +1,583 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @var $this Mage_Customer_Block_Form_Register
+ */
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl().'css/tcal.css' ?>" />
+<script type="text/javascript" src="<?php echo $this->getSkinUrl().'js/tcal.js'?>"></script>
+<script type="text/javascript">
+     function changeimage()
+    {
+        
+        document.getElementById('amazoncontent').style.display='none';
+        document.getElementById('change').style.display='none';
+         document.getElementById('youtubeiframediv').style.display='block'; 
+    }
+
+
+    jQuery(document).ready(function() {
+         jQuery('#productbutton').click(function() { 
+         if(document.getElementById('dealdiv').style.display =='block')
+                                    {
+
+                                       var activeto=jQuery('#date_to_live').val();
+                                       var activefrom=jQuery('#date_from_live').val();
+                                      
+
+                                       var x=activeto.split("/");
+                                      var y=activefrom.split("/"); //date format(Fullyear,month,date)
+
+                                          var date2=new Date(x[2],(x[0]-1),x[1]);
+
+                                      // it is not coded by me,but it works correctly,it may be useful to all
+
+                                          var date1=new Date(y[2],(y[0]-1),y[1])
+
+                                          var one_day=1000*60*60*24; 
+                                  //Calculate difference between the two dates, and convert to days
+
+                                      var  _Diff=Math.ceil((date2.getTime()-date1.getTime())/(one_day));
+                                       if(_Diff > 99)
+                                        {
+                                             jQuery("#livedaysmsg").show();  
+                                             jQuery("#livedaysmsg").html("You cannot create a Deal which has more than 99 Days away.");
+                                        }
+                                         else
+                                        {
+                                            jQuery("#livedaysmsg").hide();  
+                                        }
+                                  }
+    
+    });
+        var proimage  =jQuery('#proimage').val();
+          var type =jQuery('#producttype').val();
+          if(type==7)
+              {
+                if(proimage!='no_selection')
+                    {
+                        document.getElementById('amazoncontent').style.display='block'; 
+                    }
+                else
+                    {
+                        document.getElementById('youtubeiframediv').style.display='block'; 
+                    }
+              }
+        var val= document.getElementById('specialproduct').value;
+        if(val=='48')
+            {
+                document.getElementById('dealdiv').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('dealdiv').style.display='none';
+                }
+                
+        jQuery("#productbutton").click(function() {
+          
+            var discounttype  =jQuery('#discounttype').val();
+             var discountamount  =jQuery('#discount').val();
+             var productprice  =jQuery('#productprice').val();
+            
+              if(discounttype==1 || discounttype==4)
+              {
+                    var calculation = (productprice* discountamount)/100;
+                    var dealprice = productprice-calculation;
+                    jQuery('#dealprice').val(dealprice);
+              }
+              if(discounttype==2)
+              {
+                    var dealprice = productprice-discountamount;
+                    jQuery('#dealprice').val(dealprice);
+              }
+              if(discounttype==3)
+              {
+                  var dealprice = productprice;
+                    jQuery('#dealprice').val(dealprice);
+              }
+            
+        });
+        
+        
+       
+    });
+    function showdeal(val)
+    {
+        
+        if(val=='48')
+            {
+                document.getElementById('dealdiv').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('dealdiv').style.display='none';
+                }
+    
+    }
+</script>
+  <script type="text/javascript" src="<?php  echo $this->getSkinUrl('js/jquery.fancybox-1.3.4.pack.js') ?>"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/jquery.fancybox-1.3.4.css') ?>" media="screen" />
+<?php
+$productId=$_GET['id'];
+$_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+$productdata=Mage::getModel('catalog/product')->load($productId);
+foreach ($_myprodsamples as $_sample):
+     $video= $_sample['sample_url'];
+ $video1= $_sample['link_url'];
+endforeach;
+ $vdata=explode("v=",$video);
+
+
+$connection = Mage::getSingleton('core/resource')->getConnection('core_read');
+$query="select * from events_product where product_id=".$productId;
+$result=$connection->query($query)->fetch();
+$eventdatas=Mage::getModel('events/events')->load($result['eventid']);
+$eventstartdate=$eventdatas['event_start_date'];
+$eventenddate=$eventdatas['event_end_date'];
+$venue=$eventdatas['event_venu'];
+$downloadablelink = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($productId);
+foreach ($downloadablelink as $downloadable):
+    $sampleurl= $downloadable['sample_url'];
+    $linkurl= $downloadable['link_url'];
+endforeach;
+$productmaterial=$productdata->getProductMaterial();
+  
+$customersession=Mage::getModel('customer/session')->getCustomer();
+$email=$customersession->getEmail();
+$adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
+foreach($adminmodel as $admininfo):
+    if($admininfo['email']==$email)
+    {
+        $adminusername1=explode('-',$admininfo['username']);
+        $adminusername=$adminusername1[0];
+        break;
+    }
+endforeach;
+
+$attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'member_list ');
+if ($attribute->usesSource()):
+$options = $attribute->getSource()->getAllOptions(false);
+endif;
+foreach($options as $optiondata): 
+    if($optiondata['label']==$adminusername):
+        $productexpertname=$optiondata['value'];
+    endif;
+endforeach; 
+//echo "<pre>";print_r($productdata);die('heklo');
+?>
+    <div class="page-title">
+        <h1>Edit Product</h1>
+    </div>
+        <form id="product-update" name="product-update" method="post" enctype="multipart/form-data" action="<?php echo $this->getUrl()?>createproduct/index/update" />
+         <input type="hidden" value="<?php echo $productId; ?>" name="prodId" />
+         <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
+        <div class="fieldset">
+           
+            <ul class="form-list">
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="firstname"><em> </em>Produkt Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Name" value="<?php echo $productdata->getName() ?>" name="productname" id="productname"/>
+                                 </div>
+                        </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="description"><em> </em>Beschreibung</label>
+                        <textarea class="input-text required-entry" name="description" style="height:50px; width:400px;"><?php echo $productdata->getDescription() ?></textarea>
+                    </div>
+                 </li>
+                
+                
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="price"><em> </em>Preis</label>
+                                 <div class="input-box">
+                                     <?php $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); ?>
+                                     <input type="text" class="input-text required-entry" title="Product price" value="<?php echo number_format($productdata->getPrice(),2); ?>" name="productprice" id="productprice"/>
+                                 </div>
+                        </div>
+                 </li>
+              
+                 <!--<li class="fields">
+                      <div class="field name">
+                             <label class="required" for="qty"><em> </em>Qty</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" width="30" title="Product Specialprice" value="<?php echo (int) Mage::getModel('cataloginventory/stock_item')->loadByProduct($productId)->getQty() ?>" name="qty" id="qty"/>
+                                 </div>
+                        </div>
+                 </li> -->
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="category"><em> </em>Produkt Kategorie
+</label>
+                                  <div class="category-choose">
+                                     <?php $_helper = Mage::helper('catalog/category') ?>
+                                        <?php $_categories = $_helper->getStoreCategories() ?>
+                                        <?php if (count($_categories) > 0): ?>
+                                         <select class="validate-select" name="productcategory" >  <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                        <?php foreach($_categories as $_category): 
+                                            $catid=$_category->getId();  ?>
+                                             <option <?php if(in_array($_category->getId(), $productdata->getCategoryIds())) { echo "selected='selected'"; } ?> value="<?php echo $_category->getId() ?>"><?php echo $_category->getName() ?></option>
+                                        <?php endforeach; ?>
+                                            </select>
+                                       <?php endif; ?>
+                                 </div>
+                         </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Downloadable Option"><em> </em>Download Option
+</label>
+                                  <div class="category-choose">
+                                     <select name="downloadableoption" class="validate-select">  <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'downloadable_option ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option <?php if($optiondata['value']==$productdata->getDownloadableOption()) { echo "selected='selected'"; } ?> value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div>   
+                        </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Product Material"><em> </em>Product Material</label>
+                                  <div class="category-choose">
+                                     <select class="validate-select" name="productmaterial" id="producttype">  <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'product_material ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option <?php if($optiondata['value']==$productdata->getProductMaterial()) { echo "selected='selected'"; } ?> value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div>          
+                      </div>
+                 </li>
+               
+                 
+                 
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                                  <div class="category-choose">
+                                     <select id="specialproduct" class="validate-select" name="specialproduct" onchange="showdeal(this.value)">
+                                           <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                         
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option <?php if($optiondata['value']==$productdata->getSpecialProduct()) { echo "selected='selected'"; } ?> value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div> 
+                        </div>
+                 </li>
+                  <input type="hidden" name="productids" value="<?php echo $productId; ?>"/>
+                    <div id="dealdiv" style="display:none">
+                        <?php $dealcollection=Mage::getModel('dailydeal/dailydeal')->getCollection()->getData();
+                        //echo "<pre>";print_r($dealcollection->getData());die('helo');
+                        $i=0;
+                        foreach($dealcollection as $deal)
+                        {
+                            if($deal['product_id'] == $productId)
+                            {
+                                $dealid=$deal['dailydeal_id'];
+                                $discounttype=$deal['discount_type'];
+                                $dealqty=$deal['deal_qty'];
+                                $discount=$deal['discount'];
+                                $dailydealprice=$deal['dailydeal_price'];
+                                $startdate=$deal['start_date_time'];
+                                $enddate=$deal['end_date_time'];
+                                 break;
+                            }
+                            
+                        }
+                       ?>
+                   <li class="fields">
+                       <input type="hidden" name="dealid" value="<?php echo $dealid; ?>"/>
+                       <input type="hidden" name="currenturl" id="currenturl" value="<?php echo Mage::helper('core/url')->getCurrentUrl();?>"/>
+                      
+                      
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <input type="text" class="input-text required-entry"  name="dealqty" value="<?php if($deal['product_id'] == $productId){  echo $dealqty; } ?>"/>
+                    </div>
+                 </li>
+                 
+                   
+                  <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="specialprice"><em> </em>Special Price</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry"title="Product Specialprice" value="<?php    if($deal['product_id'] == $productId){ echo $deal['dailydeal_price']; } ?>" name="dealprice" id="dealprice"/>
+                                 </div>
+                        </div>
+                 </li>
+               
+                    
+                 <li class="fields">
+                     <div class="field name" style="width:335px">
+                        <label class="required" for="Active From"><em> </em>Active From</label>
+                         <span><input type="text" class="input-text" id="date_from_live" name="activefrom" value="<?php if($deal['product_id'] == $productId){ echo $startdate;  } ?>"/></span>
+                           <span><img title="Select date" id="date_from_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                 </li>
+                
+               
+                 <li class="fields">
+                     <div class="field name" style="width:330px">
+                        <label class="required" for="Active To"><em> </em>Active To</label>
+                       <span> <input type="text" class="input-text" id="date_to_live" name="activeto" value="<?php if($deal['product_id'] == $productId){  echo $enddate; } ?>" /></span>
+                         <span><img title="Select date" id="date_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                                     <div class="validation-advice" id="livedaysmsg" style="display:none;"></div>
+                 </li>
+                <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'date_from_live',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_from_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'date_to_live',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script> 
+                 
+                 
+                 
+                 
+                 </div>     
+                 
+                 
+                 <?php if($productmaterial == 7 ) { ?>
+               <li class="fields">
+                          <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'Vorschau Video hochladen';?></h4>
+                            </div>
+                              <input type="hidden" value="<?php echo $productdata['image'] ?>" id="proimage"/>
+                          
+                                  <div id="amazoncontent" style="display:none"> 
+                                          <img style="margin:18px;padding-left:0px;" src="<?php echo $this->helper('catalog/image')->init($productdata, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(120,90); ?>" width="120" height="90" style="cursor:pointer" />
+                                          <a id="change"  class="button" href="javascript:void(0)" onclick="changeimage()">change</a>
+                                       
+                                  </div>
+                             </div>
+                         
+                              
+                   <div id="youtubeiframediv"  style="display:none">
+                                        <fieldset id="grop_fields" style="padding-left:15px;">
+                                         <a id="various3" class="videofancybox" style="text-decoration:none;padding:5px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'youtube/index.php'?>">Upload Video</a>
+                                        </fieldset>
+                                   </div>
+                       
+                           
+                        
+                 </li>
+            
+
+ 	<!--<link rel="stylesheet" href="style.css" />-->
+        
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".videofancybox").fancybox({
+				'width'				: '50%',
+				'height'			: '75%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+                                'type'			: 'iframe',
+				'transitionOut'		: 'none'
+				
+			});
+
+			
+		});
+	</script>
+  
+
+                 
+               <input type="hidden" class="input-text" title="Product Sampleurl" value="" name="sampleurl" id="sampleurl"/>
+              
+                 <?php } ?>
+                 
+                  <?php if($productmaterial == 7 || $productmaterial == 8 || $productmaterial == 10 ) { ?>
+                 <li>
+                             <li class="fields">
+                      <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                  <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'neues Produkt hochladen';?></h4>
+                            </div>
+                            <div id="s3amazondiv">
+                            <fieldset id="grop_fields" style="padding-left:15px;">
+                                  <a id="various3" class="s3fancybox" style="text-decoration:none;font-size: 12px; padding: 5px 30px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>">hochladen </a>
+                            </fieldset>
+                          </div>
+                           <div id="amazoncontentimg">
+                                 </div> 
+                        </div>
+                    <script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".s3fancybox").fancybox({
+				'width'				: '45%',
+				'height'			: '45%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+
+			
+		});
+	</script>
+                   <li class="fields">
+                      <div class="field name">
+                          <div class="input-box">
+                                     <input type="hidden" class="input-text" title="Product LinkUrl" value="" name="linkurl" id="linkurl"/>
+                                 </div>
+                        </div>
+                 </li>
+                       
+                 <?php } ?>
+                 
+                  <?php if($productmaterial == 60 ){ ?>
+                    <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="livestreaming"><em> </em>Place your Live Streaming Embed Code</label>
+                        <textarea  class="input-text required-entry" style="height:50px; width:400px;" name="livestreaming"><?php echo $productdata->getLiveStreaming(); ?></textarea>
+                    </div>
+                 </li>
+                 <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="socialstreaming"><em> </em>Place your Live Chat Embed Code</label>
+                        <textarea class="input-text required-entry" name="socialstreaming" style="height:50px; width:400px;"><?php echo $productdata->getSocialStreaming(); ?></textarea>
+                    </div>
+                 </li>
+                       <li class="fields">
+                  <div class="field name" style="width:330px;">
+                        <label class="required" for="startdate"><em> </em>Startdatum</label>
+                       <span> <input type="text"  class="input-text" id="startdate" title="startdate" value="<?php echo $eventstartdate ?>" name="startdate" /></span>
+                       <span><img title="Select date" id="start_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                
+                    </div>
+                 </li>
+                 <li class="fields">
+                     <div class="field name" style="width:330px;">
+                        <label class="required" for="enddate"><em> </em>Enddatum</label>
+                      <span> <input type="text"  class="input-text" id="enddate" title="enddate" value="<?php echo $eventenddate ?>" name="enddate" /></span>
+                      <span><img title="Select date" id="end_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                
+                    </div>
+                 </li>
+                  <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'startdate',
+                            ifFormat : '%m/%e/%y',
+                            button : 'start_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'enddate',
+                            ifFormat : '%m/%e/%y',
+                            button : 'end_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+                 
+                 
+                 
+                 
+                 
+               <!--  <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="startdate"><em> </em>Start Date</label>
+                        <input type="text" class="input-text required-entry" title="startdate" value="" name="startdate" id="startdate"/>
+                    </div>
+                 </li>
+                 <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="enddate"><em> </em>End Date</label>
+                       <input type="text" class="input-text required-entry" title="enddate" value="" name="enddate" id="enddate"/>
+                    </div>
+                 </li>  -->
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="venue"><em> </em>Place of Event</label>
+                        <input type="text" class="input-text required-entry" title="venue" value="<?php echo $venue ?>" name="venue" id="venue"/>
+                    </div>
+                 </li>
+                
+                  
+                 <?php } ?>
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                                 <div class="input-box">
+                                     <input type="file" name="file" class="input-text" title="Product Image" value=""  id="productimage"/>
+                                 </div>
+                        </div>
+                 </li>
+                 
+                 
+        </ul>
+    </div>
+    
+   <div class="buttons-set">
+        <button style="padding:5px;float:left;color:#FFFFFF;background:#333333;width:100px;"class="button" title="Submit" id="productbutton" type="submit" ><span><span>Submit</span></span></button>
+   </div>
+</form>
+
+ <script type="text/javascript">
+        var dataaudio = new VarienForm('product-update', true)
+ </script> 

@@ -1,0 +1,1849 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @var $this Mage_Customer_Block_Form_Register
+ */
+?>
+
+<?php echo $this->getChildHtml('html_calendar') ?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl().'css/tcal.css' ?>" />
+<script type="text/javascript" src="<?php echo $this->getSkinUrl().'js/tcal.js'?>"></script>
+<script type="text/javascript">
+ function changeimage()
+    {
+        document.getElementById('youtubeiframediv').style.display='block';
+        document.getElementById('amazoncontent').innerHTML='';
+        document.getElementById('sampleurl').value='';
+    }
+function changes3image()
+    {
+        document.getElementById('s3amazondiv').style.display='block';
+        document.getElementById('amazoncontentimg').innerHTML='';
+        document.getElementById('linkurl').value='';
+    }
+function changeaudioimage()
+    {
+        document.getElementById('s3audioamazondiv').style.display='block';
+        document.getElementById('amazonaudiocontentimg').innerHTML='';
+        document.getElementById('audiolinkurl').value='';
+    }
+function changeebookimage()
+{
+    document.getElementById('s3ebookamazondiv').style.display='block';
+    document.getElementById('amazonebookcontentimg').innerHTML='';
+    document.getElementById('ebooklinkurl').value='';
+    
+}
+function changephotoimage()
+{
+    document.getElementById('s3photoamazondiv').style.display='block';
+    document.getElementById('amazonphotocontentimg').innerHTML='';
+    document.getElementById('photolinkurl').value='';
+    
+}
+
+
+  
+   function showdeal(val)
+    {
+        if(val=='48')
+            {
+                document.getElementById('dealdiv').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('dealdiv').style.display='none';
+                }
+    }
+    function showdeal1(val)
+    {
+        if(val=='48')
+            {
+                document.getElementById('dealdiv1').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('dealdiv1').style.display='none';
+                }
+    }
+    function showdeal2(val)
+    {
+        if(val=='48')
+            {
+                document.getElementById('dealdiv2').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('dealdiv2').style.display='none';
+                }
+    }
+    function showdeal3(val)
+    {
+        if(val=='48')
+            {
+                document.getElementById('dealdiv3').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('dealdiv3').style.display='none';
+                }
+    }
+     function eventshowdeal(val)
+    {
+        if(val=='48')
+            {
+                document.getElementById('eventdealdiv').style.display='block';
+            }
+            else
+                {
+                    document.getElementById('eventdealdiv').style.display='none';
+                }
+    }
+    </script>
+<script type="text/javascript">
+   
+ jQuery(document).ready(function() {
+     
+     jQuery('#videoproductbutton').click(function() { 
+         if(document.getElementById('dealdiv').style.display=='block')
+             {
+         var activeto=jQuery('#date_to_video').val();
+         var activefrom=jQuery('#date_from_video').val();
+
+         var x=activeto.split("/");
+        var y=activefrom.split("/"); //date format(Fullyear,month,date)
+
+    var date2=new Date(x[2],(x[0]-1),x[1]);
+
+// it is not coded by me,but it works correctly,it may be useful to all
+
+    var date1=new Date(y[2],(y[0]-1),y[1])
+  
+    var one_day=1000*60*60*24; 
+    //Calculate difference between the two dates, and convert to days
+
+   var  _Diff=Math.ceil((date2.getTime()-date1.getTime())/(one_day));
+   if(_Diff > 99)
+       {
+            jQuery("#daysmsg").show();  
+            jQuery("#daysmsg").html("You cannot create a Deal which has more than 99 Days away.");
+       }
+       else
+           {
+               jQuery("#daysmsg").hide();  
+           }
+             }
+     });
+     
+     
+     
+     
+        jQuery('#productbuttonaudio').click(function() { 
+         if(document.getElementById('dealdiv1').style.display =='block')
+             {
+                
+                var activeto=jQuery('#date_to_audio').val();
+                var activefrom=jQuery('#date_from_audio').val();
+                
+
+                var x=activeto.split("/");
+               var y=activefrom.split("/"); //date format(Fullyear,month,date)
+
+                   var date2=new Date(x[2],(x[0]-1),x[1]);
+
+               // it is not coded by me,but it works correctly,it may be useful to all
+
+                   var date1=new Date(y[2],(y[0]-1),y[1])
+
+                   var one_day=1000*60*60*24; 
+           //Calculate difference between the two dates, and convert to days
+
+               var  _Diff=Math.ceil((date2.getTime()-date1.getTime())/(one_day));
+               if(_Diff > 99)
+            {
+                 jQuery("#audiodaysmsg").show();  
+                 jQuery("#audiodaysmsg").html("You cannot create a Deal which has more than 99 Days away.");
+            }
+            else
+           {
+               jQuery("#audiodaysmsg").hide();  
+           }
+                  }
+          });
+
+        jQuery('#productbuttonebook').click(function() { 
+         if(document.getElementById('dealdiv2').style.display=='block')
+             {
+         var activeto=jQuery('#date_to_ebook').val();
+         var activefrom=jQuery('#date_from_ebook').val();
+
+         var x=activeto.split("/");
+        var y=activefrom.split("/"); //date format(Fullyear,month,date)
+
+    var date2=new Date(x[2],(x[0]-1),x[1]);
+
+// it is not coded by me,but it works correctly,it may be useful to all
+
+    var date1=new Date(y[2],(y[0]-1),y[1])
+  
+    var one_day=1000*60*60*24; 
+    //Calculate difference between the two dates, and convert to days
+
+   var  _Diff=Math.ceil((date2.getTime()-date1.getTime())/(one_day));
+   if(_Diff > 99)
+       {
+            jQuery("#ebookdaysmsg").show();  
+            jQuery("#ebookdaysmsg").html("You cannot create a Deal which has more than 99 Days away.");
+       }
+        else
+           {
+               jQuery("#ebookdaysmsg").hide();  
+           }
+             }
+     });
+     
+        jQuery('#productbuttonphoto').click(function() { 
+         if(document.getElementById('dealdiv3').style.display=='block')
+             {
+         var activeto=jQuery('#date_to').val();
+         var activefrom=jQuery('#date_from').val();
+
+         var x=activeto.split("/");
+        var y=activefrom.split("/"); //date format(Fullyear,month,date)
+
+    var date2=new Date(x[2],(x[0]-1),x[1]);
+
+// it is not coded by me,but it works correctly,it may be useful to all
+
+    var date1=new Date(y[2],(y[0]-1),y[1])
+  
+    var one_day=1000*60*60*24; 
+    //Calculate difference between the two dates, and convert to days
+
+   var  _Diff=Math.ceil((date2.getTime()-date1.getTime())/(one_day));
+   if(_Diff > 99)
+       {
+            jQuery("#photodaysmsg").show();  
+            jQuery("#photodaysmsg").html("You cannot create a Deal which has more than 99 Days away.");
+       }
+        else
+           {
+               jQuery("#photodaysmsg").hide();  
+           }
+       
+             }
+     });
+jQuery('#livebutton').click(function() { 
+                               var live=jQuery('#livestreaming').val();
+                               var stream=jQuery('#socialstreaming').val();
+                               
+                               if(live.length > 0)
+                                {
+                                     if(/^(http|https|ftp):\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(live)) 
+                                   {
+                                       jQuery("#livestreamurl").hide();
+                                       
+                                   }
+                                   else
+                                   {
+                                       jQuery("#livestreamurl").show();  
+                                        jQuery("#livestreamurl").html("Please enter correct url");
+                                   }
+                               }
+                               
+                               if(stream.length > 0)
+                                {
+                                      
+                                  if(/^(http|https|ftp):\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(stream)) 
+                                   {
+                                      jQuery("#socialstreamurl").hide();
+                                   }
+                                   else
+                                   {
+                                       jQuery("#socialstreamurl").show();  
+                                        jQuery("#socialstreamurl").html("Please enter correct url");
+                                   }
+                                }
+                                
+                                 if(document.getElementById('eventdealdiv').style.display =='block')
+                                    {
+
+                                       var activeto=jQuery('#date_to_live').val();
+                                       var activefrom=jQuery('#date_from_live').val();
+                                      
+
+                                       var x=activeto.split("/");
+                                      var y=activefrom.split("/"); //date format(Fullyear,month,date)
+
+                                          var date2=new Date(x[2],(x[0]-1),x[1]);
+
+                                      // it is not coded by me,but it works correctly,it may be useful to all
+
+                                          var date1=new Date(y[2],(y[0]-1),y[1])
+
+                                          var one_day=1000*60*60*24; 
+                                  //Calculate difference between the two dates, and convert to days
+
+                                      var  _Diff=Math.ceil((date2.getTime()-date1.getTime())/(one_day));
+                                       if(_Diff > 99)
+                                        {
+                                             jQuery("#livedaysmsg").show();  
+                                             jQuery("#livedaysmsg").html("You cannot create a Deal which has more than 99 Days away.");
+                                        }
+                                         else
+                                        {
+                                            jQuery("#livedaysmsg").hide();  
+                                        }
+                                  }
+                                
+			});
+jQuery('#dealprice').keypress(function(event) {
+          {
+              if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#msg6").show();  
+                       jQuery("#msg6").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+              if(jQuery(this).val().length > 7)
+                  {
+                       var max = 7;
+                       var top =  jQuery('#dealprice').scrollTop();
+                       jQuery('#dealprice').val( jQuery('#dealprice').val().substr(0, max));
+                       jQuery('#dealprice').scrollTop(top);
+                       jQuery("#msg6").show();  
+                       jQuery("#msg6").html("You can enter only eight digits");
+                   }
+              } 
+           });
+      jQuery('#audiodealprice').keypress(function(event) {
+          {
+              if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#audiomsg").show();  
+                       jQuery("#audiomsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+              if(jQuery(this).val().length > 7)
+                  {    
+                       var max = 7;
+                       var top =  jQuery('#audiodealprice').scrollTop();
+                       jQuery('#audiodealprice').val( jQuery('#audiodealprice').val().substr(0, max));
+                       jQuery('#audiodealprice').scrollTop(top);
+                       jQuery("#audiomsg").show();  
+                       jQuery("#audiomsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+           jQuery('#ebookdealprice').keypress(function(event) {
+          {
+              if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#ebookmsg").show();  
+                       jQuery("#ebookmsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+              if(jQuery(this).val().length > 7)
+                  {    
+                       var max = 7;
+                       var top =  jQuery('#ebookdealprice').scrollTop();
+                       jQuery('#ebookdealprice').val( jQuery('#ebookdealprice').val().substr(0, max));
+                       jQuery('#ebookdealprice').scrollTop(top);
+                       jQuery("#ebookmsg").show();  
+                       jQuery("#ebookmsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+           jQuery('#photodealprice').keypress(function(event) {
+          {
+               if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#photomsg").show();  
+                       jQuery("#photomsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+             
+              if(jQuery(this).val().length > 7)
+                  {      
+                       var max = 7;
+                       var top =  jQuery('#photodealprice').scrollTop();
+                       jQuery('#photodealprice').val( jQuery('#photodealprice').val().substr(0, max));
+                       jQuery('#photodealprice').scrollTop(top);
+                       jQuery("#photomsg").show();  
+                       jQuery("#photomsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+           jQuery('#livedealprice').keypress(function(event) {
+          {
+             if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#livemsg").show();  
+                       jQuery("#livemsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+             
+              if(jQuery(this).val().length > 7)
+                  {     
+                       var max = 7;
+                       var top =  jQuery('#livedealprice').scrollTop();
+                       jQuery('#livedealprice').val( jQuery('#livedealprice').val().substr(0, max));
+                       jQuery('#livedealprice').scrollTop(top);
+                       jQuery("#livemsg").show();  
+                       jQuery("#livemsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+ jQuery('#description').keypress(function() {
+      
+        var max = 1000;
+        if (jQuery(this).val().length > max) {
+            var top =  jQuery('#description').scrollTop();
+             jQuery('#description').val( jQuery('#description').val().substr(0, max));
+             jQuery('#description').scrollTop(top);
+             jQuery("#desvalidation").show();  
+        jQuery("#desvalidation").html("Maximum Length Exceeded.."); 
+        
+
+        }
+    });
+ 
+
+jQuery("#shortdescription").keypress(function(e) {
+     var max = 250;
+        if (jQuery(this).val().length > max) {
+            var top =  jQuery('#shortdescription').scrollTop();
+             jQuery('#shortdescription').val( jQuery('#shortdescription').val().substr(0, max));
+             jQuery('#shortdescription').scrollTop(top);
+             jQuery("#shortdesvalidation").show();  
+        jQuery("#shortdesvalidation").html("Maximum Length Exceeded.."); 
+        }
+  
+});
+
+
+jQuery('#price').keypress(function(event) {
+          {
+              if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#videopricemsg").show();  
+                       jQuery("#videopricemsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+              if(jQuery(this).val().length > 7)
+                  {
+                       var max = 7;
+                       var top =  jQuery('#price').scrollTop();
+                       jQuery('#price').val( jQuery('#price').val().substr(0, max));
+                       jQuery('#price').scrollTop(top);
+                       jQuery("#videopricemsg").show();  
+                       jQuery("#videopricemsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+      jQuery('#audioprice').keypress(function(event) {
+          {
+              if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#audiopricemsg").show();  
+                       jQuery("#audiopricemsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+              if(jQuery(this).val().length > 7)
+                  {    
+                       var max = 7;
+                       var top =  jQuery('#audioprice').scrollTop();
+                       jQuery('#audioprice').val( jQuery('#audioprice').val().substr(0, max));
+                       jQuery('#audioprice').scrollTop(top);
+                       jQuery("#audiopricemsg").show();  
+                       jQuery("#audiopricemsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+           jQuery('#ebookprice').keypress(function(event) {
+          {
+              if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#ebookpricemsg").show();  
+                       jQuery("#ebookpricemsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+              if(jQuery(this).val().length > 7)
+                  {    
+                       var max = 7;
+                       var top =  jQuery('#ebookprice').scrollTop();
+                       jQuery('#ebookprice').val( jQuery('#ebookprice').val().substr(0, max));
+                       jQuery('#ebookprice').scrollTop(top);
+                       jQuery("#ebookpricemsg").show();  
+                       jQuery("#ebookpricemsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+           jQuery('#photoprice').keypress(function(event) {
+          {
+               if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#photopricemsg").show();  
+                       jQuery("#photopricemsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+             
+              if(jQuery(this).val().length > 7)
+                  {      
+                       var max = 7;
+                       var top =  jQuery('#photoprice').scrollTop();
+                       jQuery('#photoprice').val( jQuery('#photoprice').val().substr(0, max));
+                       jQuery('#photoprice').scrollTop(top);
+                       jQuery("#photopricemsg").show();  
+                       jQuery("#photopricemsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+           jQuery('#liveprice').keypress(function(event) {
+          {
+             if(event.which < 46
+                    || event.which > 59) {
+                        event.preventDefault();
+                        jQuery("#livepricemsg").show();  
+                       jQuery("#livepricemsg").html("You can enter only numeric value");
+                    } // prevent if not number/dot
+
+                    if(event.which == 46
+                    && $(this).val().indexOf('.') != -1) {
+                        event.preventDefault();
+                    } // 
+             
+              if(jQuery(this).val().length > 7)
+                  {     
+                       var max = 7;
+                       var top =  jQuery('#liveprice').scrollTop();
+                       jQuery('#liveprice').val( jQuery('#liveprice').val().substr(0, max));
+                       jQuery('#liveprice').scrollTop(top);
+                       jQuery("#livepricemsg").show();  
+                       jQuery("#livepricemsg").html("You can enter only eight digits");
+                   }
+              } 
+           });
+
+
+
+
+
+
+
+});
+
+
+</script>
+
+<?php 
+$login=Mage::getModel('customer/session')->isLoggedIn();
+if($login):
+    
+$customersession=Mage::getModel('customer/session')->getCustomer();
+$email=$customersession->getEmail();
+//$adminusername=$customersession->getFirstname();
+
+$user = Mage::getModel('admin/user')->getCollection()->getData();
+	foreach($user as $userinfo)
+	{
+	  if($userinfo['email']==$email)
+	  {
+	     //$memberemailid=$userinfo['email'];
+             $adminusername=explode('-',$userinfo['username']);
+	      break;
+	  }
+	}
+
+$attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'member_list ');
+if ($attribute->usesSource()):
+$options = $attribute->getSource()->getAllOptions(false);
+endif;
+foreach($options as $optiondata): 
+    if($optiondata['label']==$adminusername[0]):
+        $productexpertname=$optiondata['value'];
+   
+    endif;
+endforeach; 
+
+$resource = Mage::getSingleton('core/resource');
+$connection= $resource->getConnection('core_read');			
+$query="select * from tbl_brstmembersubscriber  where member_id = $productexpertname";
+$result=$connection->query($query);
+$custdata = $result->fetch($select); 
+//echo "<pre>";print_r($custdata);die('aghasg');
+
+?>
+<div class="recent_bg1" style="margin-bottom:15px;">
+      <div class="aa">
+           <div class="tabContainer" >
+                <ul class="digiTabs" id="sidebarTabs">
+                  <li  id="tab1" class="selected"  onclick="tabdata(this);">VIDEO</li>
+                  <li id="tab2" onclick="tabdata(this);">AUDIO</li>
+                  <li id="tab3"  onclick="tabdata(this);">EBOOKS</li>
+                  <li id="tab4"  onclick="tabdata(this);">FOTOS</li>
+                  <li id="tab5"  onclick="tabdata(this);">LIVE WEBINARE</li>
+                </ul>
+            </div>
+      </div>
+</div>  
+<input type="hidden" value="video" name="pro" id="linktype">
+<div id="tab1Content" style="margin-top: 50px;">
+
+    <div class="page-title">
+        <h1>VIDEO PRODUKT ERSTELLEN</h1>
+    </div>
+        <form id="productvideoform" name="productvideoform" method="post" enctype="multipart/form-data" action="<?php echo $this->getUrl()?>createproduct/index/create" />
+         <input type="hidden" value="video" name="producttype" />
+         <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
+         <input type="hidden"  width="30" title="qty" value="10000" name="qty" id="qty"/>
+        <div class="fieldset">
+           
+            <ul class="form-list">
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="firstname"><em> </em>Produkt Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Name" value="" name="productname" id="productname"/>
+                                 </div>
+                        </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="description"><em> </em>Beschreibung</label>
+                        <textarea class="input-text required-entry" name="description" id="description" style="height:50px; width:400px;"></textarea>
+                         <div class="validation-advice" id="desvalidation" style="display:none;"></div>
+                    </div>
+                 </li>
+                <!-- <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="shortdescription"><em> </em>Short Description</label>
+                        <textarea class="input-text required-entry" name="shortdescription" id="shortdescription" style="height:50px; width:400px;"></textarea>
+                         <div class="validation-advice" id="shortdesvalidation" style="display:none;"></div>
+                    </div>
+                 </li> -->
+                
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="price"><em> </em>Preis</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="price"/>
+                                 </div>
+                              <div class="validation-advice" id="videopricemsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                
+                
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="category"><em> </em>Produkt Kategorie</label>
+                                  <div class="">
+                                     <!--   <select class="validate-select" name="productcategory" >  <option value="" selected="selected">Please select an option.</option>-->
+                     <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'video_category ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                              <input type="checkbox" name="productcategory[]" value="<?php echo $optiondata['value']; ?>" /><span style="padding-left:5px;"><?php echo $optiondata['label']; ?></span></br>
+                                            
+                                <?php endforeach; ?>
+                                       
+                                 </div>
+                         </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Downloadable Option"><em> </em>Download Option
+</label>
+                                  <div class="category-choose">
+                                     <select name="downloadableoption" class="validate-select">  <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'downloadable_option ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                        
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div>   
+                        </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                              <input type="hidden" value="7" name="productmaterial" />
+                      </div>
+                 </li>
+                <input type="hidden" name="currenturl" id="currenturl" value=""/>
+                 
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                                  <div class="category-choose">
+                                      <select class="validate-select" name="specialproduct" onchange="showdeal(this.value);">
+                                           <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                         
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div> 
+                        </div>
+                 </li>
+                 <div id="dealdiv" style="display:none">
+                   
+                 
+                  <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="specialprice"><em> </em>Special Price</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Specialprice" value="" name="dealprice" id="dealprice"/>
+                                 </div>
+                               <div class="validation-advice" id="msg6" style="display:none;"></div>
+                        </div>
+                 </li>
+                
+                        
+                   <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <input type="text" class="input-text required-entry"  name="dealqty"/>
+                    </div>
+                 </li>
+                 
+                 
+                <li class="fields">
+                     <div class="field name" style="width:335px">
+                        <label class="required" for="Active From"><em> </em>Active From</label>
+                         <span><input type="text" class="input-text" id="date_from_video"  name="activefrom" value="" /></span>
+                           <span><img title="Select date" id="date_from_trig1" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                 </li>
+                
+               
+                 <li class="fields">
+                     <div class="field name" style="width:330px">
+                        <label class="required" for="Active To"><em> </em>Active To</label>
+                       <span> <input type="text" class="input-text" id="date_to_video" name="activeto" value="" /></span>
+                         <span><img title="Select date" id="date_to_trig1" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                       <div class="validation-advice" id="daysmsg" style="display:none;"></div>
+                 </li>
+                <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'date_from_video',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_from_trig1',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'date_to_video',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_to_trig1',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+
+                 
+                 </div>     
+                 
+             <li class="fields">
+                      <div class="entry-edit" >
+                            <div class="entry-edit-head">
+                                <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'Vorschau Video hochladen';?></h4>
+                            </div>
+                          <div id="youtubeiframediv">
+                            <fieldset id="grop_fields" style="padding-left:15px;">
+                                
+                                    <a id="various3" class="videofancybox" style="text-decoration:none;font-size: 12px; padding: 5px 30px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'youtube/index.php'?>">hochladen </a>
+                                 
+    
+                                </fieldset>
+                          </div>
+                        </div>
+                  <div id="amazoncontent"> </div>
+                 </li>
+            
+    <script type="text/javascript" src="<?php  echo $this->getSkinUrl('js/jquery.fancybox-1.3.4.pack.js') ?>"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/jquery.fancybox-1.3.4.css') ?>" media="screen" />
+ 	<!--<link rel="stylesheet" href="style.css" />-->
+        
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".videofancybox").fancybox({
+				'width'				: '50%',
+				'height'			: '67%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+                                
+                                  
+			})
+
+			
+		});
+	</script>
+  
+
+                 
+               <input type="hidden" class="input-text required-entry" title="Product Sampleurl" value="" name="sampleurl" id="sampleurl"/>
+                <li class="fields">
+                      <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                  <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'neues Produkt hochladen';?></h4>
+                            </div>
+                          <div id="s3amazondiv">
+                            <fieldset id="grop_fields" style="padding-left:15px;">
+                                  <a id="various3" class="videos3fancybox" style="text-decoration:none;font-size: 12px; padding: 5px 30px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>">hochladen </a>
+                            </fieldset>
+                          </div>
+                           <div id="amazoncontentimg">
+                                 </div>  
+                        </div>
+                    <script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".videos3fancybox").fancybox({
+				'width'				: '45%',
+				'height'			: '45%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+
+			
+		});
+	</script>
+                 </li>
+                   <input type="hidden" class="input-text required-entry" title="Product LinkUrl" value="" name="linkurl" id="linkurl"/>
+                        
+                   
+  
+                
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                                 <div class="input-box">
+                                     <input type="file" name="file" class="input-text" title="Product Image" value=""  id="productimage"/>
+                                 </div>
+                        </div>
+                 </li>
+                 
+                 
+        </ul>
+    </div>
+    
+   <div class="buttons-set">
+        <button style="padding:5px;float:left;color:#FFFFFF;background:#333333;width:100px;"class="button" title="Submit" type="submit" id="videoproductbutton" ><span><span>Submit</span></span></button>
+   </div>
+
+</form>
+  <script type="text/javascript">
+        var dataForm = new VarienForm('productvideoform', true)
+ </script>
+
+</div>
+<div id="tab2Content" style="display:none;margin-top: 50px;">
+   <div class="page-title">
+        <h1>AUDIO PRODUKT ERSTELLEN</h1>
+    </div>
+        <form id="audio-form-validate" enctype="multipart/form-data" method="post" action="<?php echo $this->getUrl()?>createproduct/index/create" />
+        <input type="hidden" value="audio" name="producttype" />
+         <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
+          <input type="hidden"  width="30" title="qty" value="10000" name="qty" id="qty"/>
+          <input type="hidden" name="currenturl" id="currenturl" value=""/>
+        <div class="fieldset">
+          <ul class="form-list">
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="firstname"><em> </em>Produkt Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Name" value="" name="productname" id="productname"/>
+                                 </div>
+                        </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="description"><em> </em>Beschreibung</label>
+                        <textarea class="input-text required-entry" style="height:50px; width:400px;" name="description"></textarea>
+                    </div>
+                 </li>
+                <!-- <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="shortdescription"><em> </em>Short Description</label>
+                        <textarea class="input-text required-entry" name="shortdescription" style="height:50px; width:400px;"></textarea>
+                    </div>
+                 </li> -->
+               
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="price"><em> </em>Preis</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="audioprice"/>
+                                 </div>
+                              <div class="validation-advice" id="audiopricemsg" style="display:none;"></div>
+                        </div>
+                 </li>
+              
+                  <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="category"><em> </em>Produkt Kategorie</label>
+                                  <div class="">
+                                   
+                                        <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'video_category ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                               <input type="checkbox" name="productcategory[]" value="<?php echo $optiondata['value']; ?>" /><span style="padding-left:5px;"><?php echo $optiondata['label']; ?></span></br>
+                                <?php endforeach; ?>
+                                     
+                                 </div>
+                         </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Downloadable Option"><em> </em>Download Option
+</label>
+                                  <div class="category-choose">
+                                     <select class="validate-select" name="downloadableoption"><option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'downloadable_option ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div>   
+                        </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                            <input type="hidden" value="8" name="productmaterial" />      
+                      </div>
+                 </li>
+               
+                 
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                                  <div class="category-choose">
+                                      <select class="validate-select" name="specialproduct" onchange="showdeal1(this.value)">
+                                           <option value="" selected="selected">Bitte wähle eine Option aus
+.</option>
+                                         
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div> 
+                        </div>
+                 </li>
+                 <div id="dealdiv1" style="display:none">
+                   
+                  <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="specialprice"><em> </em>Special Price</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Specialprice" value="" name="dealprice" id="audiodealprice"/>
+                                 </div>
+                             <div class="validation-advice" id="audiomsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                 
+                      
+                   
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <input type="text" class="input-text required-entry"  name="dealqty"/>
+                    </div>
+                 </li>
+                  <li class="fields">
+                     <div class="field name" style="width:335px">
+                        <label class="required" for="Active From"><em> </em>Active From</label>
+                         <span><input type="text" class="input-text required-entry" id="date_from_audio"  name="activefrom" value="" /></span>
+                           <span><img title="Select date" id="date_from_trig_audio" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                 </li>
+                
+               
+                 <li class="fields">
+                     <div class="field name" style="width:330px">
+                        <label class="required" for="Active To"><em> </em>Active To</label>
+                       <span> <input type="text" class="input-text required-entry" id="date_to_audio" name="activeto" value="" /></span>
+                         <span><img title="Select date" id="date_to_trig_audio" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                      <div class="validation-advice" id="audiodaysmsg" style="display:none;"></div>
+                 </li>
+                <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'date_from_audio',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_from_trig_audio',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'date_to_audio',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_to_trig_audio',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+                 
+                 </div>   
+                       
+                <li class="fields">
+                      <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                  <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'neues Produkt hochladen';?></h4>
+                            </div>
+                          <div id="s3audioamazondiv">
+                            <fieldset id="grop_fields" style="padding-left:15px;">
+                                  <a id="various3" class="audios3fancybox" style="text-decoration:none;font-size: 12px; padding: 5px 30px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>">hochladen </a>
+
+                            </fieldset>
+                          </div>
+                          <div id="amazonaudiocontentimg"></div>
+                        </div>
+                </li>
+                    <script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".audios3fancybox").fancybox({
+				'width'				: '45%',
+				'height'			: '45%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+
+			
+		});
+	</script>
+                   <li class="fields">
+                      <div class="field name">
+                          <div class="input-box">
+                                     <input type="hidden" class="input-text required-entry" title="Product LinkUrl" value="" name="linkurl" id="audiolinkurl"/>
+                                 </div>
+                        </div>
+                 </li>
+
+                  <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                                 <div class="input-box">
+                                     <input type="file" name="file" class="input-text" title="Product Image" value=""  id="productimage"/>
+                                 </div>
+                        </div>
+                 </li>
+                 
+                 
+                 
+        </ul>
+    </div>
+    
+   <div class="buttons-set">
+        <button style="padding:5px;float:left;color:#FFFFFF;background:#333333;width:100px;"class="button" title="Submit" id="productbuttonaudio" type="submit" ><span><span>Submit</span></span></button>
+   </div>
+</form>
+     <script type="text/javascript">
+        var dataaudio = new VarienForm('audio-form-validate', true)
+ </script>
+    </div>
+
+<div id="tab3Content" style="display:none;margin-top: 50px;">
+       <div class="page-title">
+        <h1>EBOOK PRODUKT ERSTELLEN</h1>
+    </div>
+        <form id="ebook-form-validate" enctype="multipart/form-data" method="post" action="<?php echo $this->getUrl()?>createproduct/index/create" />
+        <div class="fieldset">
+           <input type="hidden" value="ebook" name="producttype" />
+        <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
+        <input type="hidden"  width="30" title="qty" value="10000" name="qty" id="qty"/>
+        <input type="hidden" name="currenturl" id="currenturl" value=""/>
+          <ul class="form-list">
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="firstname"><em> </em>Produkt Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Name" value="" name="productname" id="productname"/>
+                                 </div>
+                        </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="description"><em> </em>Beschreibung</label>
+                        <textarea class="input-text required-entry" style="height:50px; width:400px;" name="description"></textarea>
+                    </div>
+                 </li>
+                <!-- <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="shortdescription"><em> </em>Short Description</label>
+                        <textarea class="input-text required-entry" name="shortdescription" style="height:50px; width:400px;"></textarea>
+                    </div>
+                 </li>-->
+                
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="price"><em> </em>Preis</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="ebookprice"/>
+                                 </div>
+                             <div class="validation-advice" id="ebookpricemsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                 
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="category"><em> </em>Produkt Kategorie</label>
+                                  <div class="">
+                                    
+                                        <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'video_category ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                              <input type="checkbox" name="productcategory[]" value="<?php echo $optiondata['value']; ?>" /><span style="padding-left:5px;"><?php echo $optiondata['label']; ?></span></br>
+                                <?php endforeach; ?>
+                                   
+                                 </div>
+                         </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Downloadable Option"><em> </em>Download Option
+</label>
+                                  <div class="category-choose">
+                                     <select class="validate-select" name="downloadableoption"><option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'downloadable_option ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): 
+                                                if($optiondata['label']!= 'Both' && $optiondata['label']!= 'Streaming' ):
+                                                ?>
+                                         
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endif; endforeach; ?>
+                        
+                                      </select>
+                                  </div>   
+                        </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                            <input type="hidden" value="10" name="productmaterial" />        
+                      </div>
+                 </li>
+               
+                 
+                <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                                  <div class="category-choose">
+                                      <select class="validate-select" name="specialproduct" onchange="showdeal2(this.value)">
+                                           <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                         
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div> 
+                        </div>
+                 </li>
+                 <div id="dealdiv2" style="display:none">
+                   
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="specialprice"><em> </em>Special Price</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Specialprice" value="" name="dealprice" id="ebookdealprice"/>
+                                 </div>
+                             <div class="validation-advice" id="ebookmsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                 
+                       
+                   <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <input type="text" class="input-text required-entry"  name="dealqty"/>
+                    </div>
+                 </li>
+                 
+                 <li class="fields">
+                     <div class="field name" style="width:335px">
+                        <label class="required" for="Active From"><em> </em>Active From</label>
+                         <span><input type="text" class="input-text required-entry" id="date_from_ebook"  name="activefrom" value="" /></span>
+                           <span><img title="Select date" id="date_from_trig_ebook" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                 </li>
+                
+               
+                 <li class="fields">
+                     <div class="field name" style="width:330px">
+                        <label class="required" for="Active To"><em> </em>Active To</label>
+                       <span> <input type="text" class="input-text required-entry" id="date_to_ebook" name="activeto" value="" /></span>
+                         <span><img title="Select date" id="date_to_trig_ebook" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                      <div class="validation-advice" id="ebookdaysmsg" style="display:none;"></div>
+                 </li>
+                <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'date_from_ebook',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_from_trig_ebook',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'date_to_ebook',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_to_trig_ebook',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+                 
+                 </div>   
+                 
+                  <li class="fields">
+                      <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                  <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'neues Produkt hochladen';?></h4>
+                            </div>
+                          <div id="s3ebookamazondiv">
+                             <fieldset id="grop_fields" style="padding-left:15px;">
+                                  <a id="various3" class="ebooks3fancybox" style="text-decoration:none;font-size: 12px; padding: 5px 30px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>">hochladen</a>
+
+                            </fieldset>
+                          </div>
+                          <div id="amazonebookcontentimg"></div>
+                        </div>
+                </li>
+                    <script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".ebooks3fancybox").fancybox({
+				'width'				: '45%',
+				'height'			: '45%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+
+			
+		});
+	</script>
+                   <li class="fields">
+                      <div class="field name">
+                          <div class="input-box">
+                                     <input type="hidden" class="input-text required-entry" title="Product LinkUrl" value="" name="linkurl" id="ebooklinkurl"/>
+                                 </div>
+                        </div>
+                 </li>
+
+                   <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                                 <div class="input-box">
+                                     <input type="file" name="file" class="input-text required-entry" title="Product Image" value=""  id="productimage"/>
+                                 </div>
+                        </div>
+                 </li>
+                 
+                 
+        </ul>
+    </div>
+    
+  <div class="buttons-set">
+        <button style="padding:5px;float:left;color:#FFFFFF;background:#333333;width:100px;"class="button" id="productbuttonebook" title="Submit" type="submit" ><span><span>Submit</span></span></button>
+   </div>
+</form>
+        <script type="text/javascript">
+        var dataaudio = new VarienForm('ebook-form-validate', true)
+ </script>
+</div>
+<div id="tab4Content" style="display:none;margin-top: 50px;">
+       <div class="page-title">
+           <h1>FOTO PRODUKT ERSTELLEN</h1>
+    </div>
+        <form id="photo-form-validate" enctype="multipart/form-data" method="post" action="<?php echo $this->getUrl()?>createproduct/index/create" />
+        <input type="hidden" value="photo" name="producttype" />
+         <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
+         <input type="hidden"  width="30" title="qty" value="10000" name="qty" id="qty"/>
+         <input type="hidden" name="currenturl" id="currenturl" value=""/>
+        <div class="fieldset">
+          <ul class="form-list">
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="firstname"><em> </em>Produkt Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Name" value="" name="productname" id="productname"/>
+                                 </div>
+                        </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="description"><em> </em>Beschreibung</label>
+                        <textarea  class="input-text required-entry" style="height:50px; width:400px;" name="description"></textarea>
+                    </div>
+                 </li>
+                <!-- <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="shortdescription"><em> </em>Short Description</label>
+                        <textarea class="input-text required-entry" name="shortdescription" style="height:50px; width:400px;"></textarea>
+                    </div>
+                 </li> -->
+                 
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="price"><em> </em>Preis</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="photoprice"/>
+                                 </div>
+                                <div class="validation-advice" id="photopricemsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                
+                  <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="category"><em> </em>Produkt Kategorie</label>
+                                  <div class="">
+                                        
+                                        <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'video_category ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                              <input type="checkbox" name="productcategory[]" value="<?php echo $optiondata['value']; ?>" /><span style="padding-left:5px;"><?php echo $optiondata['label']; ?></span></br>
+                                <?php endforeach; ?>
+                                        
+                                 </div>
+                         </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Downloadable Option"><em> </em>Download Option
+</label>
+                                  <div class="category-choose">
+                                     <select class="validate-select" name="downloadableoption"><option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'downloadable_option ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                             foreach($options as $optiondata): 
+                                                if($optiondata['label']!= 'Both' && $optiondata['label']!= 'Streaming' ):
+                                                ?>
+                                         
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endif; endforeach; ?>
+                        
+                                      </select>
+                                  </div>   
+                        </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                            <input type="hidden" value="9" name="productmaterial" />      
+                      </div>
+                 </li>
+               
+                 
+                <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                                  <div class="category-choose">
+                                      <select class="validate-select" name="specialproduct" onchange="showdeal3(this.value)">
+                                           <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                         
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div> 
+                        </div>
+                 </li>
+                 <div id="dealdiv3" style="display:none">
+                  
+                  <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="specialprice"><em> </em>Special Price</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Specialprice" value="" name="dealprice" id="photodealprice"/>
+                                 </div>
+                             <div class="validation-advice" id="photomsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                 
+                       
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <input type="text" class="input-text required-entry"  name="dealqty"/>
+                    </div>
+                 </li>
+   
+
+
+                <li class="fields">
+                     <div class="field name" style="width:335px">
+                        <label class="required" for="Active From"><em> </em>Active From</label>
+                         <span><input type="text" class="input-text required-entry" id="date_from"  name="activefrom" value="" /></span>
+                           <span><img title="Select date" id="date_from_trig" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                 </li>
+                
+               
+                 <li class="fields">
+                     <div class="field name" style="width:330px">
+                        <label class="required" for="Active To"><em> </em>Active To</label>
+                       <span> <input type="text" class="input-text required-entry" id="date_to" name="activeto" value="" /></span>
+                         <span><img title="Select date" id="date_to_trig" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                      <div class="validation-advice" id="photodaysmsg" style="display:none;"></div>
+                 </li>
+                <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'date_from',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_from_trig',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'date_to',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_to_trig',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+                 
+                 </div>  
+        
+                       <li class="fields">
+                      <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                  <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'neues Produkt hochladen';?></h4>
+                            </div>
+                          <div id="s3photoamazondiv">
+                           <fieldset id="grop_fields" style="padding-left:15px;">
+                                  <a id="various3" class="photos3fancybox" style="text-decoration:none;padding:5px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>">Upload Photo</a>
+
+                            </fieldset>
+                          </div>
+                             <div id="amazonphotocontentimg"></div>
+                        </div>
+                </li>
+                    <script type="text/javascript">
+		jQuery(document).ready(function() {
+			
+                        jQuery(".photos3fancybox").fancybox({
+				'width'				: '45%',
+				'height'			: '45%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+
+			
+		});
+	</script>
+                 
+                   <li class="fields">
+                      <div class="field name">
+                          <div class="input-box">
+                                     <input type="hidden" class="input-text" title="Product LinkUrl" value="" name="linkurl" id="photolinkurl"/>
+                                 </div>
+                        </div>
+                 </li>
+
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                                 <div class="input-box">
+                                     <input type="file" name="file" class="input-text required-entry" title="Product Image" value=""  id="productimage"/>
+                                 </div>
+                        </div>
+                 </li>
+                 
+                 
+                 
+        </ul>
+    </div>
+    
+   <div class="buttons-set">
+        <button style="padding:5px;float:left;color:#FFFFFF;background:#333333;width:100px;"class="button" id="productbuttonphoto" title="Submit" type="submit" ><span><span>Submit</span></span></button>
+   </div>
+</form>
+           <script type="text/javascript">
+        var dataaudio = new VarienForm('photo-form-validate', true)
+ </script> 
+</div>
+
+<div id="tab5Content" style="display:none;margin-top: 50px;">
+       <div class="page-title">
+        <h1>LIVE WEBINAR ERSTELLEN</h1>
+    </div>
+        <form id="event-form-validate" enctype="multipart/form-data" method="post" action="<?php echo $this->getUrl()?>createproduct/index/create" />
+        <input type="hidden" value="ustream" name="producttype" />
+         <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
+         <input type="hidden"  width="30" title="qty" value="10000" name="qty" id="qty"/>
+         <input type="hidden" name="currenturl" id="currenturl" value=""/>
+        <div class="fieldset">
+          <ul class="form-list">
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="firstname"><em> </em>Produkt Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Name" value="" name="productname" id="productname"/>
+                                 </div>
+                        </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="description"><em> </em>Beschreibung</label>
+                        <textarea  class="input-text required-entry" style="height:50px; width:400px;" name="description"></textarea>
+                    </div>
+                 </li>
+                <!-- <li class="fields">
+                     <div class="field name">
+                        <label class="required" for="shortdescription"><em> </em>Short Description</label>
+                        <textarea class="input-text required-entry" name="shortdescription" style="height:50px; width:400px;"></textarea>
+                    </div>
+                 </li> -->
+                
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="price"><em> </em>Preis</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="liveprice"/>
+                                        <div class="validation-advice" id="livepricemsg" style="display:none;"></div>
+                                 </div>
+                        </div>
+                 </li>
+                
+               
+                  <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="category"><em> </em>Produkt Kategorie</label>
+                                  <div class="">
+                                     
+                                        <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'video_category ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                             <input type="checkbox" name="productcategory[]" value="<?php echo $optiondata['value']; ?>" /><span style="padding-left:5px;"><?php echo $optiondata['label']; ?></span></br>
+                                <?php endforeach; ?>
+                                   
+                                 </div>
+                         </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="Downloadable Option"><em> </em>Download Option
+</label>
+                                  <div class="category-choose">
+                                     <select class="validate-select" name="downloadableoption"><option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'downloadable_option ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div>   
+                        </div>
+                 </li>
+                 <li class="fields">
+                      <div class="field name">
+                             <input type="hidden" value="60" name="productmaterial" />      
+                      </div>
+                 </li>
+               
+                 
+                 <li class="fields">
+                      <div class="field name">
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                                  <div class="category-choose">
+                                     <select class="validate-select" name="specialproduct" onchange="eventshowdeal(this.value)"><option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                      <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
+                                            if ($attribute->usesSource()):
+                                                $options = $attribute->getSource()->getAllOptions(false);
+                                            endif;
+                                            foreach($options as $optiondata): ?>
+                                                <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
+                                <?php endforeach; ?>
+                        
+                                      </select>
+                                  </div> 
+                        </div>
+                 </li>
+                 
+                 <div id="eventdealdiv" style="display:none">
+                   
+                 <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="specialprice"><em> </em>Special Price</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry" title="Product Specialprice" value="" name="dealprice" id="livedealprice"/>
+                                 </div>
+                             <div class="validation-advice" id="livemsg" style="display:none;"></div>
+                        </div>
+                 </li>
+                 
+                        
+                   <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <input type="text" class="input-text required-entry"  name="dealqty"/>
+                    </div>
+                 </li>
+                 
+                <li class="fields">
+                     <div class="field name" style="width:335px">
+                        <label class="required" for="Active From"><em> </em>Active From</label>
+                         <span><input type="text" class="input-text required-entry" id="date_from_live"  name="activefrom" value="" /></span>
+                           <span><img title="Select date" id="date_from_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                 </li>
+                
+               
+                 <li class="fields">
+                     <div class="field name" style="width:330px">
+                        <label class="required" for="Active To"><em> </em>Active To</label>
+                       <span> <input type="text" class="input-text required-entry" id="date_to_live" name="activeto" value="" /></span>
+                         <span><img title="Select date" id="date_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                    </div>
+                      <div class="validation-advice" id="livedaysmsg" style="display:none;"></div>
+                 </li>
+                <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'date_from_live',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_from_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'date_to_live',
+                            ifFormat : '%m/%e/%y',
+                            button : 'date_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+                
+                 </div>   
+                 
+                 <li class="fields">
+                  <div style="width:900px;">
+                      <div class="field name" style="float:left">
+                        <label class="required" for="livestreaming"><em> </em>Place your Live Streaming Embed Code</label>
+                        
+                        <input type="text" class="input-text required-entry" id="livestreaming" name="livestreaming" value="" />
+                        </div>
+                        <div class="validation-advice" id="livestreamurl" style="display:none;width:200px;float:left;"></div>
+                     <div  style="float: right;position:relative;">
+                        <label  id="livestreamingtext" class="input-text required-entry" style="height:30px; width:600px;border:none;font-size:12px;" >
+                            <span style="font-color:#9E0B0F">Enter highlighted code<div>(&lt;iframe  src="<strong><span style="color:#9E0B0F !important;">http://www.ustream.tv/embed/13564237</span></strong>"&gt;&lt;&#47;iframe&gt; )</div></span> 
+                        </label>
+                            </div>
+                    </div>
+                 </li>
+                 <li class="fields">
+                     <div style="width:900px;">
+                     <div class="field name" style="float:left">
+                        <label class="required" for="socialstreaming"><em> </em>Place your Live Chat Embed Code</label>
+                        <input type="text" class="input-text required-entry" id="socialstreaming" name="socialstreaming" value="" />
+                       <!-- <textarea class="input-text required-entry" name="socialstreaming" style="height:50px; width:400px;"></textarea> -->
+                    </div>
+                           <div  class="validation-advice" id="socialstreamurl" style="display:none;width:200px;float:left;"></div>
+                      <div  style="float: right;position:relative;">
+                        <label  id="livestreamingtext" class="input-text required-entry" style="height:30px; width:600px;border:none;font-size:12px;" >
+                        <span style="font-color:#9E0B0F">Enter highlighted code<div>(&lt;iframe  src="<strong><span style="color:#9E0B0F !important;">http://www.ustream.tv/socialstream/13564237</span></strong>"&gt;&lt;&#47;iframe&gt;)</div></span>
+                        </label>
+                            </div>
+                     </div>
+                 </li>
+                 <li class="fields">
+                  <div class="field name" style="width:330px;">
+                        <label class="required" for="startdate"><em> </em>Startdatum</label>
+                       <span> <input type="text"  class="input-text" id="startdate" title="startdate" value="" name="startdate" /></span>
+                       <span><img title="Select date" id="start_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                
+                    </div>
+                 </li>
+                 <li class="fields">
+                     <div class="field name" style="width:330px;">
+                        <label class="required" for="enddate"><em> </em>Enddatum</label>
+                      <span> <input type="text"  class="input-text" id="enddate" title="enddate" value="" name="enddate" /></span>
+                      <span><img title="Select date" id="end_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
+                
+                    </div>
+                 </li>
+                  <script type="text/javascript">// <![CDATA[
+                        Calendar.setup({
+                            inputField : 'startdate',
+                            ifFormat : '%m/%e/%y',
+                            button : 'start_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+
+                        Calendar.setup({
+                            inputField : 'enddate',
+                            ifFormat : '%m/%e/%y',
+                            button : 'end_to_trig_live',
+                            align : 'Bl',
+                            singleClick : true
+                        });
+// ]]>          </script>
+                 <li class="fields">
+                  <div class="field name">
+                        <label class="required" for="venue"><em> </em>Place of Event</label>
+                        <input type="text" class="input-text required-entry" title="venue" value="" name="venue" id=""/>
+                    </div>
+                 </li>
+                
+                 
+                <li class="fields">
+                      <div class="field name">
+                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                                 <div class="input-box">
+                                     <input type="file" name="file" class="input-text required-entry" title="Product Image" value=""  id="productimage"/>
+                                 </div>
+                        </div>
+                 </li>
+                 
+                 
+                 
+        </ul>
+    </div>
+    
+   <div class="buttons-set">
+        <button style="padding:5px;color:#FFFFFF;background:#333333;width:100px;float:left;" id="livebutton" class="button" title="Submit" type="submit" ><span><span>Submit</span></span></button>
+   </div>
+</form>
+           <script type="text/javascript">
+        var dataaudio = new VarienForm('event-form-validate', true)
+ </script> 
+</div>
+
+
+<?php endif; ?>

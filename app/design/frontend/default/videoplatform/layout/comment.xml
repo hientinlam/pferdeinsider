@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+ 
+    <layout version="0.1.0">
+ 
+        <comment_index_index>
+            <reference name="root">
+                <action method="setTemplate"><template>page/1column.phtml</template></action>
+            </reference>
+            <reference name="content">
+                <block type="comment/comment" name="comment" template="custom/comment.phtml"/>
+            </reference>
+        </comment_index_index>
+        
+        <comment_index_save>
+            <reference name="root">
+                <action method="setTemplate"><template>page/1column.phtml</template></action>
+            </reference>
+            <reference name="content">
+                <block type="comment/comment" name="comment" template="custom/comment.phtml"/>
+            </reference>
+        </comment_index_save>
+ 
+    </layout>

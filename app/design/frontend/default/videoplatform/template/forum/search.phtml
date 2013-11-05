@@ -1,0 +1,69 @@
+<?php echo $this->getHeadHtml(); ?>
+<div class="forum-top">
+<?php echo $this->getTop(); ?>
+<table width="100%">
+	<tr>
+		<td>
+			<div class="forum-title">
+				<?php echo $this->getTitleContent(); ?>
+			</div>
+		</td>
+		<td>
+			<div class="forum-controls">
+				<?php echo $this->getControls(); ?>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+<?php echo $this->getToolbarHtml(); ?>
+<?php $objects = $this->getSearchResult(); ?>
+<div>
+    <table witdh="100%" border="0" id="forum_table" class="data-table">
+		<thead>
+		<tr class="first last">
+			<th><?php echo $this->__('Search Results') ?></th>	
+		<tr>
+		</thead>
+	
+	<?php if($objects->getSize()): ?>
+		<?php foreach($objects as $object): ?>
+		<tr class="first odd">	
+			<td>
+				<div class="search-forum-topic">
+					<a href="<?php echo $this->getViewUrl($object->getParentTopic()->getId(), $object->getParentTopic() ) ?>"><?php echo $object->getParentTopic()->getTitle() ?></a>
+				</div>
+				<div class="search-forum-post">
+					<?php echo $object->getPost_search() ?>
+				</div>
+			</td>						
+		</tr>
+		<?php endforeach; ?>
+
+	<?php else: ?>
+		<tr>
+		<td colspan="4">
+			<div style="text-align:center" class="forum-no-data-table">
+				<?php echo $this->__('No Results Matches Search'); ?> "<?php echo $this->getSearchValue(); ?>"
+			</div>
+		</td>
+	</tr>
+	<?php endif; ?>
+	</table>
+<?php echo $this->getToolbarHtml(); ?>
+	<br>
+	<table width="100%">
+	<tr>
+		<td>
+			<div class="forum-title">
+				<?php echo $this->getTitleContent(); ?>
+			</div>
+		</td>
+		<td>
+			<div class="forum-controls">
+				<?php echo $this->getControls(); ?>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>

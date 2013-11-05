@@ -1,0 +1,268 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplace Facebook Connect
+ *
+ * @category    Mageplace_Facebook
+ * @package     Mageplace_Facebook_Connect
+ * @copyright   Copyright (c) 2011 Mageplace. (http://www.mageplace.com)
+ * @license     http://www.mageplace.com/disclaimer.html
+ */
+-->
+<config>
+    <tabs>
+        <mageplace translate="label" module="facebookconnect">
+            <label>Mageplace</label>
+            <sort_order>300</sort_order>
+        </mageplace>
+    </tabs>
+    <sections>
+        <facebookconnect translate="label" module="facebookconnect">
+            <label>Facebook Connect</label>
+            <tab>mageplace</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>30</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_extension translate="label">
+                            <label>Enable Extension</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_extension>
+                        <app_id translate="label">
+                            <label>Application ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </app_id>
+                        <app_secret translate="label">
+                            <label>Application Secret</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </app_secret>
+                        <title translate="label comment">
+                            <label>Title</label>
+                            <comment>The title of the button.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <orderstatus translate="label comment">
+                            <label>Order status to post order details to Facebook Wall</label>
+                            <comment>Indicate at what order status order details should be posted to user's Facebook wall.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>facebookconnect/system_config_source_orderstatus</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </orderstatus>
+                        <!--size translate="label">
+                            <label>Size</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>facebookconnect/system_config_source_size</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </size>
+                        <show_faces translate="label comment">
+                            <label>Show Faces</label>
+                            <comment>Specifies whether to show faces underneath the Login button.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_faces>
+                        <max_rows translate="label comment">
+                            <label>Max Rows</label>
+                            <comment>The maximum number of rows of profile pictures to display.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_rows-->
+						<language translate="label">
+                            <label>Language</label>
+                            <frontend_type>select</frontend_type>
+							<comment>You should choose only one language for all Mageplace Facebook Extensions.</comment>
+                            <source_model>facebookconnect/system_config_source_language</source_model>
+                            <sort_order>18</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </language>
+						<publish_order translate="label">
+                            <label>Publish order on FaceBook wall</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>19</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </publish_order>
+                    </fields>
+                </general>
+                <content translate="label">
+                    <label>Content Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <show_in_login translate="label">
+                            <label>Display on Login Page</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_in_login>
+                        <show_in_checkout translate="label">
+                            <label>Display on Checkout Page</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_in_checkout>
+                        <show_custom translate="label">
+                            <label>Display Custom Buttons</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_custom>
+                        <show_widget translate="label">
+                            <label>Display Widget Buttons</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_widget>
+                    </fields>
+                </content>
+                <singup translate="label">
+                    <label>Facebook "Sign Up" Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <singup_enable_message translate="label">
+                            <label>Enable Facebook Wall "Sign Up" Message</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </singup_enable_message>
+                        <singup_message translate="label">
+                            <label>Message Text</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </singup_message>						
+                        <singup_image translate="label">
+                            <label>Image URL</label>
+                            <comment>Image URL. Ex.: http://magentoshopurl.com/images/signupimage.jpg</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </singup_image>						
+                        <singup_name translate="label">
+                            <label>Message Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </singup_name>						
+                        <singup_description translate="label">
+                            <label>Message Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </singup_description>						
+                    </fields>
+                </singup>
+                <create_account translate="label">
+                    <label>Create New Account Options</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_notify>
+                            <frontend_type>select</frontend_type>
+                            <label>Enable Notifications</label>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_notify>
+                        <email_template translate="label">
+                            <label>Welcome Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email_template>
+                        <email_identity translate="label">
+                            <label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </email_identity>
+                    </fields>
+                </create_account>
+                                        
+            </groups>
+        </facebookconnect>
+    </sections>
+</config>

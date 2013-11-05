@@ -1,0 +1,241 @@
+<?php 
+
+/**
+ * Contus Support Interactive.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file PRICE COUNTDOWN-LICENSE.txt.
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This package designed for Magento 1.4.x and 1.5.x COMMUNITY edition
+ * Contus Support does not guarantee correct work of this package
+ * on any other Magento edition except Magento 1.4.x and 1.5.x COMMUNITY edition.
+ * =================================================================
+ */
+?>
+
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('mw_dailydeal/css/superneat.css')?>" type="text/css" media="all"/>
+
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php $title = Mage::getStoreConfig('dailydeal/general/productdetaillabel');?>
+
+<?php //var_dump($_product->getId());die();
+//$_deal = array();
+$currenttime = date('Y-m-d H:i:s',Mage::getModel('core/date')->timestamp(time()));
+$_deal = Mage::getModel('dailydeal/dailydeal')->getCollection()->loadcurrentdeal($_product->getId());
+//Zend_Debug::dump($_deal);die;
+if ($_deal){
+	$gmtcore = Mage::getSingleton('core/date')->getGmtOffset();//var_dump($gmtcore*1000);die;
+	$currenttime = Mage::getModel('core/date')->timestamp(time());//var_dump($_deal->getEndDateTime());
+	$beforetime = $currenttime - strtotime($_deal->getStartDateTime());
+	$aftertime = strtotime($_deal->getEndDateTime())- $currenttime;
+	$timechange = (int)Mage::getStoreConfig('dailydeal/general/timechange'); 
+$dealqty = $_deal->getDealQty();
+$soldqty = $_deal->getSoldQty(); 
+if (($soldqty < $dealqty) && ($aftertime > 0) && ($beforetime >= 0)){ 
+?>
+
+<?php 
+	
+	//var_dump($aftertime/3600);die;
+?>
+	<div class="deal-product">
+		<div class="catalogproductview">
+			<?php if ($title == ''){?>
+			<h3><?php echo $this->__('Get it before it&acute;s gone!');?></h3>
+			<?php }else {?>
+			<h3 style="color: white;padding:0; margin:0; line-height:40px; "><?php echo $title;?></h3>
+			<?php }?>
+			</div>
+		<div class="ct-deal-pro">
+			<!-- Countdown Javascript -->
+			<div id="counter" class="counter">
+				<ul class="countdown">	
+					 <li><div class="countdown_num" id="left_cd_hour-<?php echo $_deal->getDailydealId()?>"></div><div id="hour">Hours</div></li>
+					<li><div class="countdown_num" id="left_cd_min-<?php echo  $_deal->getDailydealId()?>"></div><div id="minute">Minutes</div></li>
+					<li><div class="countdown_num" id="left_cd_sec-<?php echo  $_deal->getDailydealId()?>"></div><div id="second">Seconds</div></li>
+				</ul>
+			</div>
+			<div id="expired" style="display:none;">
+				The deadline has passed.
+			</div>
+<script type="text/javascript">
+	function countDown(y,m,d,h,i,cdhour,cdmin,cdsec) { 
+					/*
+						Countdown Timer©, 2012, Bui Trung Chinh
+						Based on the "Count down until any date script" - By JavaScript Kit (www.javascriptkit.com)			
+						Email: btchinh2906@gmail.com
+						URL: https://www.facebook.com/chuoixanh
+						Licence : Open Source MIT Licence	
+					*/
+					
+					//alert(y);alert(m);alert(d);alert(h);alert(i);
+					//alert(cdhour);alert(cdmin);alert(cdsec);
+	they = y;
+	them = m;
+	thed = d;
+	theh = h;
+	thei = i;	
+	// Offset from GMT
+    var now = new Date();
+    var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+    var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+    var gmt_offset = date1 - date2 ; //alert(gmt_offset);
+	var today=new Date();//alert(Date.parse(today));
+	var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+					//alert(realtime);
+	futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+	dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+					
+		if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+					dday=Math.floor( dd / 86400000       ); //alert(dday); 
+					dhour=Math.floor(dd /  3600000 %   24 ) + dday*24; //alert(dhour);
+					dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+					dsec=Math.floor( dd /     1000 %   60 ); //alert(dsec);
+					var dhour_string;
+					var dhour_span ='';
+					dhour_string = dhour.toString();
+					if (dhour_string < 10) dhour_string = "0"+dhour_string;
+					for(var i=0; i<dhour_string.length; i++) {
+							dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+					}
+					
+					var dmin_string;
+					var dmin_span ='';
+					dmin_string = dmin.toString();
+					if (dmin_string < 10) dmin_string = "0"+dmin_string;
+					for(var i=0; i<dmin_string.length; i++) {
+							dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+					}
+					
+					var dsec_string;
+					var dsec_span ='';
+					dsec_string = dsec.toString();
+					//alert(dsec_string);
+					if (dsec_string < 10) dsec_string = "0"+dsec_string;
+					for(var i=0; i<dsec_string.length; i++) {
+							dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+					}
+						
+					if (document.getElementById) { 
+					document.getElementById(cdhour).innerHTML = dhour_span;
+					document.getElementById(cdmin).innerHTML = dmin_span;
+					document.getElementById(cdsec).innerHTML = dsec_span; 
+					}
+					//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+					  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+					//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+		} else {
+			dday=Math.floor( dd / 86400000       ); //alert(dday); 
+			dhour=Math.floor(dd /  3600000 %   24 ); //alert(dhour);
+			dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+			var dday_string;
+			var dday_span ='';
+			dday_string = dday.toString();
+			if (dday_string < 10) dday_string = "0"+dday_string;
+			for(var i=0; i<dday_string.length; i++) {
+					dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+			}		
+			var dhour_string;
+			var dhour_span ='';
+			dhour_string = dhour.toString();
+			if (dhour_string < 10) dhour_string = "0"+dhour_string;
+			for(var i=0; i<dhour_string.length; i++) {
+					dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+			}
+			
+			var dmin_string;
+			var dmin_span ='';
+			dmin_string = dmin.toString();
+			if (dmin_string < 10) dmin_string = "0"+dmin_string;
+			for(var i=0; i<dmin_string.length; i++) {
+					dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+			}
+			
+	
+				
+			if (document.getElementById) { 
+			document.getElementById(cdhour).innerHTML = dday_span;//alert(document.getElementById('hour').innerHTML);
+			document.getElementById('hour').innerHTML = 'Days';
+			document.getElementById(cdmin).innerHTML = dhour_span;
+			document.getElementById('minute').innerHTML = 'Hours';
+			document.getElementById(cdsec).innerHTML = dmin_span;
+			document.getElementById('second').innerHTML = 'Minutes'; 
+			}
+			//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+			  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+			//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+		}
+	}
+					function addLoadEvent(func) {
+					  var oldonload = window.onload;
+					  if (typeof window.onload != 'function') {
+						window.onload = func;
+					  } else {
+						window.onload = function() {
+						  if (oldonload) {
+							oldonload();
+						  }
+						  func();
+						}
+					  }
+					}
+				
+				addLoadEvent(function() {
+					 countDown(<?php echo date('Y',strtotime($_deal->getEndDateTime()));?>, 
+								<?php echo date('m',strtotime($_deal->getEndDateTime()));?>, 
+								<?php echo date('d',strtotime($_deal->getEndDateTime()));?>,
+								<?php echo date('H',strtotime($_deal->getEndDateTime()));?>,
+								<?php echo date('i',strtotime($_deal->getEndDateTime()));?>,
+								  "left_cd_hour-<?php echo $_deal->getDailydealId()?>",
+								  "left_cd_min-<?php echo  $_deal->getDailydealId()?>",
+								  "left_cd_sec-<?php echo  $_deal->getDailydealId()?>");
+				});
+			</script>     
+			<div class="clear"><span>&nbsp;</span></div>
+			<div class="qty-deal">
+				<span>
+				<?php 
+								
+							?>
+					<?php echo $this->__('Hurry,');?>
+					<?php if (($dealqty-$soldqty) > 10){?>
+						there are <strong><?php echo $dealqty-$soldqty;?> items</strong>  available.
+						<?php } elseif(($dealqty-$soldqty) <= 10) {?>
+						there are only <strong><?php echo $dealqty-$soldqty;?> items</strong> left!
+						<?php } elseif (($dealqty-$soldqty) == 1){?>
+						there is only <strong><?php echo $dealqty-$soldqty;?> item</strong> left!
+					<?php }?>	
+				</span>
+			</div>
+		</div>					
+	</div>
+<?php echo $this->getChildHtml('product_type_data_extra') ?>
+<?php echo $this->getPriceHtml($_product);?>
+
+<?php } else {/*if ($_deal && ($soldqty < $dealqty)*/?>
+
+<?php }?>
+<?php }/*if ($_deal)){ */else { ?>
+<?php if ($_product->isAvailable()): ?>
+    <p class="availability in-stock"><?php echo $this->__('Availability:') ?> <span><?php echo $this->__('In stock') ?></span></p>
+<?php else: ?>
+    <p class="availability out-of-stock"><?php echo $this->__('Availability:') ?> <span><?php echo $this->__('Out of stock') ?></span></p>
+<?php endif; ?>
+
+<?php
+	$_coreHelper = $this->helper('core');
+	$_taxHelper  = $this->helper('tax');
+	$_regularPrice = $_taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax) 
+?>
+<div class="price-box">
+		<span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>-related">
+			  <span class="price"><?php echo $_coreHelper->currency($_regularPrice,true,false) ?></span>
+		</span>
+</div>
+<?php }?>

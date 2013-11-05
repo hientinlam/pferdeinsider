@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<menu>
+		<promo>
+			<children>
+				<dailydeal>
+					<title>Daily Deals</title>
+					<sort_order>30</sort_order>
+					<children>
+						<adddeal module="dailydeal">
+							<title>Add Deal</title>
+							<sort_order>10</sort_order>
+							<action>dailydeal/adminhtml_dealitems/new</action>
+						</adddeal><!-- 
+						<managedeals module="dailydeal">
+							<title>Manage Daily Deals</title>
+							<sort_order>20</sort_order>
+							<action>dailydeal/adminhtml_deal/index</action>
+						</managedeals> -->
+						<dealitems module="dailydeal">
+							<title>Manage Deals</title>
+							<sort_order>20</sort_order>
+							<action>dailydeal/adminhtml_dealitems/index</action>
+						</dealitems>
+						<dealschedule module="dailydeal">
+							<title>Deal Schedule</title>
+							<sort_order>30</sort_order>
+							<action>dailydeal/adminhtml_dailyschedule/list</action>
+						</dealschedule>
+						<configuration module="dailydeal">
+							<title>Configuration</title>
+							<sort_order>40</sort_order>
+							<action>adminhtml/system_config/edit/section/dailydeal</action>
+						</configuration>
+					</children>
+				</dailydeal>
+			</children>
+		</promo>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<promo>
+       			<children>
+       				<dailydeal>
+       					<title>Daily Deals</title>
+       					<sort_order>30</sort_order>
+       					<children>
+       						<adddeal module="dailydeal">
+       							<title>Add Deal</title>
+       							<sort_order>10</sort_order>
+       						</adddeal>
+       						<dealitems module="dailydeal">
+       							<title>Manage Deals</title>
+       							<sort_order>20</sort_order>
+       						</dealitems>
+       						<dealschedule module="dailydeal">
+       							<title>Deal Schedule</title>
+       							<sort_order>30</sort_order>
+       						</dealschedule>
+       						<configuration module="dailydeal">
+       							<title>Configuration</title>
+       							<sort_order>40</sort_order>
+       						</configuration>
+       					</children>
+       				</dailydeal>
+       			</children>
+       		</promo>						
+					<system>
+                 <children>
+                     <config>
+                         <children><!-- !Important : to view groups of tab module-->
+                             <dailydeal module="dailydeal" translate="title">
+                               <title>Daily Deals</title>                                            
+                             </dailydeal> 
+                         </children>
+                     </config>
+                 </children>
+             </system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+	<translate>
+		<modules>
+			<MW_Dailydeal>
+				<files>
+					<default>MW_Dailydeal.csv</default>
+				</files>
+			</MW_Dailydeal>
+		</modules>
+	</translate>
+</config>

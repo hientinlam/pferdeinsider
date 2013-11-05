@@ -1,0 +1,139 @@
+<?php echo $this->getHeadHtml(); ?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php echo $this->getBreadCrumbs(); ?>
+<?php echo $this->getTop(); ?>
+<div style="background:url('http://54.228.195.42/magento/skin/frontend/default/videoplatform/forum/images/topic-lists-from2.png') no-repeat;padding:25px;">
+<div class="forum-top" style="border-bottom:1px solid #CECECE;">
+<table width="100%">
+	<tr>
+		<td>
+			<div class="forum-title" style="width:300px;float:left;border:none;">
+				<?php echo $this->getTitleContent(); ?>
+			</div>
+		
+			<div class="forum-controls" style="width:320px;float:right;margin:5px 0 5px">
+				<?php echo $this->getControls(); ?>
+			</div>
+		
+	</tr>
+</table>
+</div>
+    <div class="toptoolbar" style="width:930px;">
+<?php echo $this->getToolbarHtml(); ?>
+    </div>
+
+
+<?php $topics = $this->getAllObjects(); ?>
+<div class="forumdata">
+    <table witdh="100%" border="0" id="" class="data-table">
+		<thead style="background:#333333;">
+		<tr class="first last">		
+			<th class="forum-th" width="40%"><?php echo $this->__('Topic Title') ?></th>			
+			<th class="forum-th" width="10%"><?php echo $this->__('Anzahl Beiträge') ?></th>			
+			<th class="forum-th" width="10%"><?php echo $this->__('Views') ?></th>
+			<th class="forum-th" width="40%"><?php echo $this->__('Latest Reply') ?></th>
+		<tr>
+		</thead>
+	<?php if($topics->getSize()):
+            $count=0;?>
+		<?php foreach($topics as $topic): ?>
+		<tr>
+			<td width="100%" colspan="4">
+				<table width="100%" cellpadding="2" cellspacing="2" class="topictbl">
+						<tr>
+							 <?php if($count%2 ==0 ){ ?>
+						<td width="1%" class="forumtd" style="padding:0px !important;">
+							<img src="<?php echo $this->getSkinUrl() ?>forum/images/topic-lists_grey.png" />
+						</td>
+                                            <?php   } else { ?>
+                                                <td width="1%" class="forumtd" style="padding:0px !important;">
+							<img src="<?php echo $this->getSkinUrl() ?>forum/images/topic-lists-green.png" />
+						</td>
+                                                <?php } ?>
+							<td  class="forumtd" style="width:281px;">
+								<a id="simple-forum-link-<?php echo $topic->getId() ?>" href="<?php echo $this->getViewUrl( $topic->getId(), $topic);?>">
+									<?php echo $topic->getTitle(); ?>
+								</a>
+							<?php if($topic->getDescription() && trim($topic->getDescription()) != '' && Mage::helper('forum/topic')->getDisplayShortDescriptionField()): ?>
+								<script>
+									var ___tBaloon = new doBaloon($('simple-forum-link-<?php echo $topic->getId() ?>'), false, false, '<?php echo addslashes($topic->getDescription()) ?>');
+
+								</script>
+							<?php endif; ?>
+								<br>
+							<?php echo $this->__('erstellt') ?>: <?php echo $this->getFormatedDate($topic->getCreated_time());?><br>
+								<?php echo $this->__('erstellt von') ?>: <?php echo $this->getCreateTopicUser($topic); ?>
+							</td>
+							<?php if($this->getHaveEditableRights($topic->getSystem_user_id())): ?>
+							<td  class="forumtd" style="width:79px;">
+								<div class="forum-controls-user">
+									<nobr>
+									<a href="<?php echo $this->getEditTopicUrl($topic->getId(), $topic); ?>">
+										<img src="<?php echo $this->getSkinUrl('forum/images/page_edit.png') ?>" alt="<?php echo $this->__('Edit') ?>" title="<?php echo $this->__('Edit') ?>" border="0" /></a>
+									<?php if($this->getAllowDelete()): ?>
+									&nbsp;<a href="<?php echo $this->getDeleteTopicUrl($topic->getId()); ?>" onclick="if(confirm('<?php echo $this->__('Are You sure?') ?>')) document.location.href=this.href; return false;"><img src="<?php echo $this->getSkinUrl('forum/images/delete.png') ?>" border="0" alt="<?php echo $this->__('Delete') ?>" title="<?php echo $this->__('Delete') ?>" /></a>
+									<?php endif; ?>
+									<?php if($this->isModerator()): ?>
+										<?php if($topic->getStatus() == 1): ?>
+											&nbsp;<a href="<?php echo $this->getDeactivateTopicUrl($topic->getId()); ?>"><img src="<?php echo $this->getSkinUrl('forum/images/cancel.png') ?>" alt="<?php echo $this->__('Deactivate') ?>" title="<?php echo $this->__('Deactivate') ?>" border="0" /></a>
+										<?php elseif($topic->getStatus() == 0): ?>
+											&nbsp;<a href="<?php echo $this->getActivateTopicUrl($topic->getId()); ?>" ><img src="<?php echo $this->getSkinUrl('forum/images/add.png') ?>" alt="<?php echo $this->__('Activate') ?>" title="<?php echo $this->__('Activate') ?>" border="0" /></a>
+										<?php endif; ?>
+									<?php endif; ?>
+									</nobr>
+								</div>
+							</td>
+							<?php endif; ?>
+                                                        <td  class="forumtd" style="text-align:center;width:79px;"><?php echo $topic->getTotal_posts();?></td>			
+			<td  class="forumtd" style="text-align:center;width:72px;"><?php echo $topic->getTotal_views();?></td>			
+			<td class="forumtd">
+				<?php if($topic->getLatest_topic()): ?>
+					<a id="simple-forum-link-latest-<?php echo $topic->getLatest_topic()->getId() ?>" href="<?php echo $this->getViewUrlLatest( $topic->getLatest_postId(), $topic);?>"><?php echo $topic->getLatest_topic()->getTitle(); ?></a><br>
+					<?php if($topic->getLatest_topic()->getDescription() && trim($topic->getLatest_topic()->getDescription()) != '' && Mage::helper('forum/topic')->getDisplayShortDescriptionField()): ?>
+								<script>
+									var ___tBaloon = new doBaloon($('simple-forum-link-latest-<?php echo $topic->getLatest_topic()->getId() ?>'), false, false, '<?php echo addslashes($topic->getLatest_topic()->getDescription()) ?>');
+
+								</script>
+					<?php endif; ?>
+					<?php echo $this->__('Posted'); ?> :<?php echo $this->getFormatedDate($topic->getLatest_created_time());?><br>
+					<?php echo $this->__('Posted By'); ?> :<?php echo $this->getLatestReply($topic); ?>
+				<?php else: ?>
+					<?php echo $this->__('No Posts posted Yet'); ?>
+				<?php endif; ?>
+				
+			</td>
+						</tr>
+					</table>
+								
+			</td>
+			
+		</tr>
+		<?php $count++; endforeach; ?>
+
+	<?php else: ?>
+		<tr>
+		<td colspan="4">
+			<div style="text-align:center" class="forum-no-data-table">
+				<?php echo $this->__('No Data To Display'); ?>
+			</div>
+		</td>
+	</tr>
+	<?php endif;?>
+	</table>
+<?php echo $this->getToolbarHtml(); ?>
+	<br>
+<table width="100%">
+	<tr>
+		<td>
+			<div class="forum-title" style="width:300px;float:left;border:none;">
+				<?php echo $this->getTitleContent(); ?>
+			</div>
+		
+			<div class="forum-controls" style="width:320px;float:right;margin:5px 0 5px">
+				<?php echo $this->getControls(); ?>
+			</div>
+		
+	</tr>
+</table>
+</div>
+</div>

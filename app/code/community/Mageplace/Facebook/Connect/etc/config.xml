@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplace Facebook Connect
+ *
+ * @category	Mageplace_Facebook
+ * @package	 Mageplace_Facebook_Connect
+ * @copyright   Copyright (c) 2011 Mageplace. (http://www.mageplace.com)
+ * @license	 http://www.mageplace.com/disclaimer.html
+ */
+-->
+<config>
+    <modules>
+        <Mageplace_Facebook_Connect>
+            <version>2.4.0</version>
+        </Mageplace_Facebook_Connect>
+    </modules>
+
+    <global>
+        <fieldsets>
+            <customer_account>
+                <post_to_fb_wall>
+                    <create>1</create>
+                    <update>1</update>
+                </post_to_fb_wall>
+            </customer_account>
+        </fieldsets>
+        <resources>
+            <facebookconnect_setup>
+                <setup>
+                    <module>Mageplace_Facebook_Connect</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </facebookconnect_setup>
+            <facebookconnect_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </facebookconnect_write>
+            <facebookconnect_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </facebookconnect_read>
+        </resources>
+        <blocks>
+            <facebookconnect>
+                <class>Mageplace_Facebook_Connect_Block</class>
+            </facebookconnect>
+        </blocks>
+        <models>
+            <facebookcore>
+                <class>Mageplace_Facebook_Core_Model</class>
+            </facebookcore>
+            <facebookconnect>
+                <class>Mageplace_Facebook_Connect_Model</class>
+            </facebookconnect>
+        </models>
+        <helpers>
+            <facebookconnect>
+                <class>Mageplace_Facebook_Connect_Helper</class>
+            </facebookconnect>
+        </helpers>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <facebookconnect>
+                        <class>facebookconnect/observer</class>
+                        <method>processCoreBlockAbstractToHtmlAfter</method>
+                    </facebookconnect>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <facebookconnect>
+                        <class>facebookconnect/observer</class>
+                        <method>processCoreBlockAbstractToHtmlBefore</method>
+                    </facebookconnect>
+                </observers>
+            </core_block_abstract_to_html_before>
+			
+            <sales_order_save_after>
+                <observers>
+                    <facebookconnect>
+                        <class>facebookconnect/observer</class>
+                        <method>processSalesOrderSaveAfter</method>
+                    </facebookconnect>
+                </observers>
+            </sales_order_save_after>
+        </events>
+        <template>
+            <email>
+                <facebookconnect_create_account_email_template translate="label" module="facebookconnect">
+                    <label>Facebook new account</label>
+                    <file>facebook_account_new.html</file>
+                    <type>html</type>
+                </facebookconnect_create_account_email_template>
+            </email>
+        </template>
+    </global>
+	
+    <frontend>
+        <routers>
+            <facebookconnect>
+                <use>standard</use>
+                <args>
+                    <module>Mageplace_Facebook_Connect</module>
+                    <frontName>facebookconnect</frontName>
+                </args>
+            </facebookconnect>
+        </routers>
+        <translate>
+            <modules>
+                <Mageplace_Facebook_Connect>
+                    <files>
+                        <default>Mageplace_Facebookconnect.csv</default>
+                    </files>
+                </Mageplace_Facebook_Connect>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <facebookconnect>
+                    <file>facebookconnect.xml</file>
+                </facebookconnect>
+            </updates>
+        </layout>
+    </frontend>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mageplace_Facebook_Connect>
+                    <files>
+                        <default>Mageplace_Facebookconnect.csv</default>
+                    </files>
+                </Mageplace_Facebook_Connect>
+            </modules>
+        </translate>
+
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <facebookconnect translate="title" module="facebookconnect">
+                                            <title>Facebook Connect</title>
+                                            <sort_order>100</sort_order>
+                                        </facebookconnect>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <default>
+        <web>
+            <routers>
+                <facebookconnect>
+                    <area>frontend</area>
+                    <class>Mageplace_Facebook_Connect_Controller_Varien_Router_Standard</class>
+                </facebookconnect>
+            </routers>
+        </web>
+        <facebookconnect>
+            <general>
+                <enable_extension>0</enable_extension>
+                <title>Sign in with Facebook</title>
+				<orderstatus>complete</orderstatus>
+				<language>en_US</language>
+                <!--size>medium</size>
+                <max_rows>1</max_rows-->
+            </general>
+            <content>
+                <show_in_login>0</show_in_login>				
+                <show_in_checkout>0</show_in_checkout>				
+                <show_custom>0</show_custom>
+                <show_widget>0</show_widget>
+            </content>
+            <create_account>
+                <enable_notify>0</enable_notify>
+                <email_identity>general</email_identity>
+            </create_account>
+        </facebookconnect>
+    </default>
+</config>

@@ -1,0 +1,23 @@
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'Upload Video On S3 Amazon';?></h4>
+    </div>
+    <fieldset id="grop_fields">
+        <div>
+                <iframe src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>"  width="960px" height="100" style="border:none;">
+                </iframe>
+        </div>
+    </fieldset>
+    </div>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'Upload Video On You Tube';?></h4>
+    </div>
+    <fieldset id="grop_fields">
+<div style="">
+        <iframe src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'youtube/index.php'?>" width="960" height="200" style="border:none;">
+        </iframe>
+</div>
+        </fieldset>
+</div>

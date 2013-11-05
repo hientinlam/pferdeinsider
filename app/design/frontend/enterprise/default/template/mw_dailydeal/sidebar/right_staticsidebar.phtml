@@ -1,0 +1,557 @@
+
+<?php 
+	$_coreHelper = $this->helper('core');
+	$_taxHelper  = $this->helper('tax');
+
+	$dailydeal = Mage::getStoreConfig('dailydeal/general/sidebardeal');
+	$activedeal = Mage::getStoreConfig('dailydeal/general/sidebaractive');
+	$numberactive = (int)Mage::getStoreConfig('dailydeal/general/numberactive') ? (int)Mage::getStoreConfig('dailydeal/general/numberactive') : 3;
+	$title = Mage::getStoreConfig('dailydeal/general/title');
+		$timechange = (int)Mage::getStoreConfig('dailydeal/general/timechange'); 
+	
+?>
+
+<!-- BEGIN $dailydeal == 2 -->
+<?php if ($dailydeal == 2){?>
+<?php 	
+	$_dealCollection = $this->getDeals(); 
+	$_collectionSize = count($_dealCollection);//var_dump($_collectionSize);//die();
+	if ($_collectionSize > 0){		
+		foreach ($_dealCollection as $_deal){
+			//Zend_Debug::dump($_deal->getStartDateTime());continue;//chuyen sang phan tu tiep theo trong vong lap		
+?>
+		<?php 
+			$dealqty = $_deal->getDealQty();
+			$soldqty = $_deal->getSoldQty();
+				$gmtcore = Mage::getSingleton('core/date')->getGmtOffset();//var_dump($gmtcore*1000);die;
+			
+			$beforetime = Mage::getModel('core/date')->timestamp(time())-strtotime($_deal->getStartDateTime());//echo $beforetime;
+			$aftertime = strtotime($_deal->getEndDateTime())- Mage::getModel('core/date')->timestamp(time());//echo $aftertime;
+			if ($dealqty > $soldqty && ($aftertime > 0) && ($beforetime >= 0)){
+				$_product = Mage::getModel('catalog/product')->load($_deal->getProductId());
+		?>
+		<div class="block block-todaydeal" >
+			<div class="title">
+			<?php if ($title == ''){?>
+			<h3 style="color: white;padding-top:5px "><?php echo $this->__('Get it before it&acute;s gone!');?></h3>
+			<?php }else {?>
+			<h3 style="color: white;padding-top:5px "><?php echo $title;?></h3>
+			<?php }?>			
+		</div>
+			<div class="block-content">
+				<ol  class="mini-products-list">
+					<li>
+						<p class="product-name">
+							<a class="product-name" href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_product->getName()?>">
+								<?php echo $_product->getName()?>
+							</a>
+						</p>
+						<div class="product">
+							<a class="product-image" title="<?php echo $_product->getTitle()?>" href="<?php echo $_product->getProductUrl() ?>">
+							<img src="<?php echo $_product->getImageUrl()?>" width="70px" alt="<?php echo $_product->getTitle()?>" /></a>		
+						</div>
+						<div class="product-details">
+							<?php $_regularPrice = $_taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax) ?>
+							<?php $_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice()) ?>
+							<p class="old-price" >
+								<span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>-related">
+									  <span class="price"><?php echo $_coreHelper->currency($_regularPrice,true,false) ?></span>
+								</span>
+							</p>
+							<p class="special-price">
+								<span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+									<?php echo $_coreHelper->currency($_finalPrice,true,false) ?>
+								</span>
+							</p>	
+							<?php  
+								$items = Mage::getModel('sales/order_item')->getCollection();
+								$sum=0;foreach ($items as $item){
+							?>
+							<?php   $p = Mage::getModel('catalog/product')->load($item->getProductId());
+								  if(stripos($p->getSku(),$_product->getSku())===0)
+									  $sum+=$item->getQtyOrdered();
+							?>
+							<?php  }?>
+							
+						</div>
+						<div style="padding-left: 0px;font-size: 11px; float: left">
+				
+						<?php if (($dealqty-$soldqty) > 10){?>
+ 				There are <span style="color: red; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> items</span> available.
+ 				<?php } elseif (($dealqty-$soldqty) <= 10 && ($dealqty-$soldqty) > 1) {?>
+	            Hurry, there are only <span style="color: red; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> items</span> left!
+	            <?php }elseif (($dealqty-$soldqty) == 1){?>
+	            Hurry, there is only <span style="color: red; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> item</span> left!
+	            <?php }?>
+	            </div>
+					</li>
+				</ol>
+				<!-- Countdown Javascript -->
+				<div id="counter" class="counter">
+					<ul class="countdown">	
+						 <li class="first"><div class="countdown_num" id="left_cd_hour-<?php echo $_deal->getDailydealId()?>"></div><div id="hour">Hours</div></li>
+						<li><div class="countdown_num" id="left_cd_min-<?php echo  $_deal->getDailydealId()?>"></div><div id="minute">Minutes</div></li>
+						<li class="last"><div class="countdown_num" id="left_cd_sec-<?php echo  $_deal->getDailydealId()?>"></div><div id="second">Seconds</div></li>
+					</ul>
+					<div class="clear"><span>&nbsp;</span></div>
+				</div>
+				<div id="expired" style="display:none;">
+					The deadline has passed.
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function countDown(y,m,d,h,i,cdhour,cdmin,cdsec) { 
+				/*
+					Countdown Timer©, 2012, Bui Trung Chinh
+					Based on the "Count down until any date script" - By JavaScript Kit (www.javascriptkit.com)			
+					Email: btchinh2906@gmail.com
+					URL: https://www.facebook.com/chuoixanh
+					Licence : Open Source MIT Licence	
+				*/
+				
+				//alert(y);alert(m);alert(d);alert(h);alert(i);
+				//alert(cdhour);alert(cdmin);alert(cdsec);
+				they = y;
+				them = m;
+				thed = d;
+				theh = h;
+				thei = i;	
+				// Offset from GMT
+			    var now = new Date();
+			    var date1 = new Date(now.getFullYear(),0,1,0,0,0,0);
+			    var date2 = new Date(date1.toGMTString().substring(0,date1.toGMTString().lastIndexOf(" ")-1));
+			    var gmt_offset = date1 - date2 ; //alert(gmt_offset);
+				var today=new Date();//alert(Date.parse(today));
+				var realtime = Date.parse(today)-gmt_offset+<?php echo $gmtcore*1000?>;
+				//alert(realtime);
+				futurestring=m+"/"+d+"/"+y;  //alert(Date.parse(futurestring));
+				dd=Date.parse(futurestring)-realtime+h*3600000+i*60000;//alert(dd);
+				if (Math.floor(dd/3600000) <<?php echo $timechange?>){
+
+				dday=Math.floor( dd / 86400000       ); //alert(dday); 
+				dhour=Math.floor(dd /  3600000 %   24 ) + dday*24; //alert(dhour);
+				dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+				dsec=Math.floor( dd /     1000 %   60 ); //alert(dsec);
+				var dhour_string;
+				var dhour_span ='';
+				dhour_string = dhour.toString();
+				if (dhour_string < 10) dhour_string = "0"+dhour_string;
+				for(var i=0; i<dhour_string.length; i++) {
+						dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+				}
+				
+				var dmin_string;
+				var dmin_span ='';
+				dmin_string = dmin.toString();
+				if (dmin_string < 10) dmin_string = "0"+dmin_string;
+				for(var i=0; i<dmin_string.length; i++) {
+						dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+				}
+				
+				var dsec_string;
+				var dsec_span ='';
+				dsec_string = dsec.toString();
+				if (dsec_string < 10) dsec_string = "0"+dsec_string;
+				for(var i=0; i<dsec_string.length; i++) {
+						dsec_span += "<span>"+dsec_string.charAt(i)+"</span>";
+				}
+					
+				if (document.getElementById) { 
+				document.getElementById(cdhour).innerHTML = dhour_span;
+				document.getElementById(cdmin).innerHTML = dmin_span;
+				document.getElementById(cdsec).innerHTML = dsec_span; 
+				}
+			//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+			  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+			//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+				} else {
+					dday=Math.floor( dd / 86400000       ); //alert(dday); 
+					dhour=Math.floor(dd /  3600000 %   24 ); //alert(dhour);
+					dmin=Math.floor( dd /    60000 %   60 ); //alert(dmin);
+					var dday_string;
+					var dday_span ='';
+					dday_string = dday.toString();
+					if (dday_string < 10) dday_string = "0"+dday_string;
+					for(var i=0; i<dday_string.length; i++) {
+							dday_span += "<span>"+dday_string.charAt(i)+"</span>";
+					}		
+					var dhour_string;
+					var dhour_span ='';
+					dhour_string = dhour.toString();
+					if (dhour_string < 10) dhour_string = "0"+dhour_string;
+					for(var i=0; i<dhour_string.length; i++) {
+							dhour_span += "<span>"+dhour_string.charAt(i)+"</span>";
+					}
+					
+					var dmin_string;
+					var dmin_span ='';
+					dmin_string = dmin.toString();
+					if (dmin_string < 10) dmin_string = "0"+dmin_string;
+					for(var i=0; i<dmin_string.length; i++) {
+							dmin_span += "<span>"+dmin_string.charAt(i)+"</span>";
+					}
+					
+			
+						
+					if (document.getElementById) { 
+					document.getElementById(cdhour).innerHTML = dday_span;//alert(document.getElementById('hour').innerHTML);
+					document.getElementById('hour').innerHTML = 'Days';
+					
+					
+					document.getElementById(cdmin).innerHTML = dhour_span;
+					document.getElementById('minute').innerHTML = 'Hours';
+
+					document.getElementById(cdsec).innerHTML = dmin_span;					
+					document.getElementById('second').innerHTML = 'Minutes';
+					}
+					if (document.getElementById('hour-sym') ){
+						document.getElementById('hour-sym').innerHTML = 'Days';
+						document.getElementById('minute-sym').innerHTML = 'Hours';
+						document.getElementById('second-sym').innerHTML = 'Minutes'; 
+
+					}
+					//cach dat bien ko cho vao chuoi~ dung cho multi countdown
+					  SD=window.setTimeout("countDown("+they+","+them+","+thed+","+theh+","+thei+",'"+cdhour+"','"+cdmin+"','"+cdsec+"');", 1000);
+					//if (min == '00' && sec == '00') { sec = "00"; window.clearTimeout(SD); }
+				}
+			}
+			
+			function addLoadEvent(func) {
+			  var oldonload = window.onload;
+			  if (typeof window.onload != 'function') {
+			    window.onload = func;
+			  } else {
+			    window.onload = function() {
+			      if (oldonload) {
+			        oldonload();
+			      }
+			      func();
+			    }
+			  }
+			}
+			
+			addLoadEvent(function() {
+				 countDown(<?php echo date('Y',strtotime($_deal->getEndDateTime()));?>, 
+							<?php echo date('m',strtotime($_deal->getEndDateTime()));?>, 
+							<?php echo date('d',strtotime($_deal->getEndDateTime()));?>,
+						  	<?php echo date('H',strtotime($_deal->getEndDateTime()));?>,
+							<?php echo date('i',strtotime($_deal->getEndDateTime()));?>,
+							  "left_cd_hour-<?php echo $_deal->getDailydealId()?>",
+							  "left_cd_min-<?php echo  $_deal->getDailydealId()?>",
+							  "left_cd_sec-<?php echo  $_deal->getDailydealId()?>");
+			});
+		</script>     
+		<?php break;?>
+	<?php }/*if (($aftertime > 0) && ($beforetime >= 0)){*/?>
+	<?php }/*foreach ($_dealCollection as $_deal){*/?>
+	<?php }/*if ($_collectionSize > 0){*/?>
+<?php }/*if ($dailydeal == 1)*/?>
+<!-- END $dailydeal == 1 -->
+
+<!-- BEGIN - Show ACTIVE deals -->
+<?php if ($activedeal == 2){?>
+
+	
+		<?php 
+			$_activedealsCollection = $this->getActivedeals(); 
+			$_collectionSize = count($_activedealsCollection);//var_dump($_collectionSize);//die();
+			if ($_collectionSize > 0){	
+				$count=0;
+		?>
+		<div class="block block-deals" >
+		<div class="block-title">
+		<strong><span><?php echo $this->__('Active deals');?></span></strong>
+	</div>
+	<div class="block-content">
+		<ol id="recently-viewed-items" class="mini-products-list">
+		<?php
+			
+			foreach ($_activedealsCollection as $_activedeal){//Zend_Debug::dump($_activedeal->getStartDateTime());continue;//chuyen sang phan tu tiep theo trong vong lap
+		?>
+		<?php 
+			$dealqty = $_activedeal->getDealQty();
+			$soldqty = $_activedeal->getSoldQty();
+			$_product = Mage::getModel('catalog/product')->load($_activedeal->getProductId());
+		
+		?>
+		<?php if ($dealqty>$soldqty  && $count != $numberactive){//echo 'time';?>
+		
+			<li class="item">
+				<a href="<?php echo $_product->getProductUrl() ?>" class="product-image" style="margin-right: 7px; width: 60px;" title="<?php echo $_product->getTitle()?>">
+					<img src="<?php echo $_product->getImageUrl()?>" width="60px" height="60px"/>
+				</a>					
+				<div class="product-details" style="margin-left:69px;">
+					<p class="product-name" style="margin-top: -5px;">
+						<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_product->getName()?>">
+							<?php echo $_product->getName()?>
+						</a>
+					</p>
+					<div class="price-box" style="margin: 0 0 0 0;">
+				    <?php $_regularPrice = $_taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax) ?>		
+					<?php $_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice()) ?>
+					<p class="old-price" style="padding-left: 0px;">
+						<span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>-related">
+							  <span class="price" style="font-size: 12px;"><?php echo $_coreHelper->currency($_regularPrice,true,false) ?></span>
+						</span>
+					</p>
+					<p class="special-price" style="padding: 0px;">
+		                <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>" style="font-size: 12px;">
+		                    <?php echo $_coreHelper->currency($_finalPrice,true,false) ?>
+		                </span>
+	            	</p>	
+	            	</div>
+	            	</div>
+	            	<div style="padding-left: 0px;font-size: 11px; float: left">
+	            <?php if (($dealqty-$soldqty) > 10){?>
+ 				There are <span style="color: red; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> items</span> available.
+ 				<?php } elseif (($dealqty-$soldqty) <= 10 && ($dealqty-$soldqty) > 1) {?>
+	            Hurry, there are only <span style="color: red; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> items</span> left!
+	            <?php }elseif (($dealqty-$soldqty) == 1){?>
+	            Hurry, there is only <span style="color: red; font-size: 12px; font-weight: bold;"><?php echo $dealqty-$soldqty;?> item</span> left!
+	            <?php }?>	
+	        	</div>
+			</li>
+		<?php $count++;?>
+	<?php }/*if (($aftertime > 0) && ($beforetime >= 0)){*/?>
+<?php }/*foreach ($_activedealsCollection as $_activedeal){*/?>
+		</ol>
+		<script type="text/javascript">decorateList('recently-viewed-items');</script>
+		<div class="actions">
+			<a style="float: right;" href="<?php echo $this->getUrl('').'daily-deals'?>">View all</a>			
+		</div>
+	
+			</div>
+</div>
+<?php }/*if ($_collectionSize > 0){*/?>
+
+<?php }/*if ($activedeal == 2){*/?>
+	<!-- END - Show ACTIVE deal -->
+<!--  anh san pham, ten san pham, gia cu, gia khuyen mai -->
+
+
+<?php 	
+$calendar = Mage::getStoreConfig('dailydeal/general/calendar');
+if ($calendar == 2){
+	$arraydays = $this->getWeeklydeal();//Zend_Debug::dump($arraydays);die();
+?>
+<!--  anh san pham, ten san pham, gia cu, gia khuyen mai -->
+<!--Chu y la load 2 lan file open.js se gay ra xung dot-->
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('mw_dailydeal/js/tooltip/opentip.js')?>">
+//this.list.findAll(function(t) {return (t.options.group == groupName);}).invoke('doHide');
+</script>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('mw_dailydeal/css/calendar.css')?>" type="text/css" media="all"/>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('mw_dailydeal/css/tooltip/opentip.css')?>" type="text/css" media="all"/>
+
+
+	
+	<script type="text/javascript">
+	//alert(Element.idCounter);
+
+/*	Cac ham nay su dung cho muc dich chinh sua tooltip, ko nen xoa
+	function hiddendeals(cellid){//alert(Element.idCounter);
+		
+				for (k = 0; k< 7; k++){
+			var idAno = document.getElementById('anonymous_element_'+k); 
+			if (idAno != null){
+//				Dung de remove luon id, de cho bo nho dem cua trang web ko chua qua n tag
+//				document.body.removeChild(idAno);
+//				Doi attibute cua 1 tag				
+				idAno.removeClassName('ot-hidden').addClassName('ot-completely-hidden');
+//				Doi ID cua 1  tag
+				idAno.id = 'deals-cellid'+cellid;
+			} else continue;  			
+		}//alert('sau khi break');
+		if (document.getElementById('deals-cellid'+cellid)){
+		var idNew = document.getElementById('deals-cellid'+cellid);
+		idNew.removeClassName('ot-hidden').addClassName('ot-completely-hidden');
+		}
+	}
+
+	function none(){
+		strhtml = '';
+		document.getElementById('blockcalendar').innerHTML = null;
+	}
+	*/
+	var anonymous = [];
+	function hiddendeals(){//alert(Element.idCounter);
+//		console.log('fgdgd');
+		for (k = 0; k< 7; k++){
+	var idAno = document.getElementById('anonymous_element_'+k); 
+	if (idAno != null){
+//		Dung de remove luon id, de cho bo nho dem cua trang web ko chua qua n tag
+//		document.body.removeChild(idAno);
+//		Doi attibute cua 1 tag
+		idAno.removeClassName('ot-completely-visible').addClassName('ot-completely-hidden');
+	 } else continue;  			
+}//alert('sau khi break');
+	}
+
+//	function showdeals(){//alert(this.Element.idCounter);
+//		//alert(anonymous);
+//		//		for (k = 0; k< Element.idCounter; k++){
+//			var idAno = document.getElementById('anonymous_element_'+anonymous); 
+//			if (idAno != null) //alert(idAno.value);}
+//				idAno.removeClassName('ot-completely-hidden').addClassName('ot-completely-visible');
+////		}
+//	}
+	
+		</script>
+<div id="blockcalendar" class="block block-deals" style="border: 1px solid;" >
+
+<table class="doctable table"  >
+	<thead >
+		<tr >
+	<h1  style="background-color: #9999CC; width: 100%; font-size: 15px;text-align: center;"><?php echo $this->__('Deals of Week')?></h1>
+		</tr>
+		
+	</thead>
+	<tbody class="tbody">
+	<tr>
+		<?php 
+			$temp = array();		
+			$i = 0;
+			$j = 0;
+			$m = date('m',Mage::getModel('core/date')->timestamp(time()));
+			$d = date('d',Mage::getModel('core/date')->timestamp(time()));
+			$Y = date('Y',Mage::getModel('core/date')->timestamp(time()));
+			while ($i<4){
+				$tomorrowshow = date('d-m',mktime(0,0,0,$m,$d+$i,$Y));
+				$textual = date('D',mktime(0,0,0,$m,$d+$i,$Y));
+				$tomorrow = date('Y-m-d',mktime(0,0,0,$m,$d+$i,$Y));
+		?>
+		
+		<?php if (in_array($tomorrow,$arraydays)){ $temp[$j] = $i;$j++;}?>
+
+				
+		<td style="<?php if (in_array($tomorrow,$arraydays)) {
+								echo 'background-color: #A7F1F4; font-weight: bold; border: 2px solid white; ';
+							}else { 
+								echo 'color: grey; border: 2px solid white; ';}?>" 
+			<?php if (in_array($tomorrow,$arraydays)) echo 'class="select_deal"';?>
+			>
+		<span id="cell-<?php echo $i;?>" ><?php echo $tomorrowshow.' '.$textual;?></span></td>
+	
+		<?php 
+			$i++;
+			}
+		?>
+
+	</tr>
+	<tr>
+		<?php 			
+			while ($i<7){
+				$tomorrowshow = date('d-m',mktime(0,0,0,date('m'),date('d')+$i,date("Y")));
+				$textual = date('D',mktime(0,0,0,date('m'),date('d')+$i,date("Y")));
+				$tomorrow = date('Y-m-d',mktime(0,0,0,$m,$d+$i,$Y));
+		?>
+	<?php if (in_array($tomorrow,$arraydays)){ $temp[$j] = $i;$j++;}?>
+		<td id="<?php echo $i;?>" style="<?php if (in_array($tomorrow,$arraydays)) {echo 'background-color: #A7F1F4; font-weight: bold; border: 2px solid white; ';} else { echo 'color: grey; border: 2px solid white; ';}?>" 
+			<?php if (in_array($tomorrow,$arraydays)) echo 'class="select_deal"'?>
+			>
+					<span id="cell-<?php echo $i;?>" ><?php echo $tomorrowshow.' '.$textual;?></span></td>			
+		<?php 
+			$i++;
+			}//var_dump($temp);die;
+		?>	
+		<td id="cell_more" style="border: 2px solid white; ">
+		<a style="float: right; text-align: center" href="<?php echo $this->getUrl('').'daily-deals'?>">More</a>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+</div>
+	
+	<script type="text/javascript">
+
+
+//	window.onclick = hiddendeals;
+
+	<?php 
+	
+	for ($k = 0; $k < count($temp); $k++)
+	{
+		$daybycell =  date('Y-m-d',mktime(0,0,0,$m,$d+$temp[$k],$Y));
+	?>
+listminicart('<?php echo $temp[$k];?>','<?php echo $daybycell?>');
+	<?php 	
+	}
+	?>
+	//hideOn: 'click', an di roi moi cho show deal dc, 
+	//neu dung su kien window.onclick thi bi xung dot voi su kien nay
+	Opentip.styles.grouped = {
+			stem: false,
+			target: true,
+			tipJoint: ['center', 'top'],
+			hideTrigger: ['closeButton','trigger'],
+//			showOn: 'mouseover',
+			hideOn: 'click',			
+			group: 'myGroudfp'
+		}
+
+	
+	function listminicart(cellid,tomorrow){ //alert(tomorrow);-
+		
+		var urlpath = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'dailydeal/deal/ajaxdeal?currenttime='?>'+tomorrow; //alert(urlpath);
+//		var strhtml = [];
+
+		new Ajax.Request(urlpath,{
+			method: "GET",
+			onSuccess:	function(resp){ //alert(tomorrow);
+				//resp.responseText : tra lai 1 chuoi
+				//resp.responseText.evalJSON() : tra lai 1 mang
+				var response = resp.responseText.evalJSON();				
+					//alert(response[0]);
+				strhtml = '<div class="block block-deals" style="border: none;" >'+
+					'<div class="block-content"><ol id="recently-viewed-items" class="mini-products-list">';			
+					//document.getElementById('cell-'+tomorrow).style.color = red;
+					$i = 0;
+					while (($i < response[0].length) && ($i < <?php echo $numberactive?>) ){//alert(response[0][$i]);
+						strhtml += '<li class="item ';
+						if ($i%2==0){
+						strhtml += 'odd';
+						}
+						strhtml += '" style="padding: 5px 0px 5px 0px;">'+
+									'<a class="product-image" style="margin: 0px 3px 0px 3px; width: 35%;float:left;" href="'+response[0][$i]+'" >'+
+										'<img src="'+response[2][$i]+'" width="66px" height="60px"/>'+
+									'</a>'+
+									'<div class="product-details" style="float:right;width:60%;margin-left:0px;">'+
+										'<p class="product-name" style="margin-top: -5px;">'+
+											'<a  href="'+response[0][$i]+'">'+response[1][$i]+'</a>'+
+										'</p>'+
+										'<div class="price-box" style="margin: 0 0 0 0;">'+
+											'<p class="old-price" style="padding-left: 0px;">'+
+												'<span class="regular-price-related">'+
+													'<span class="price_regular" style="font-size: 12px;">'+response[3][$i]+'</span>'+
+												'</span>'+
+											'</p>'+
+											'<p class="special-price"'+
+												'<span class="price">'+
+													'<span class="price_special">'+response[4][$i]+'</span>'+
+												'</span>'+	
+											'</p>'+
+										'</div>'+									
+									'</div>'+
+								'</li>';
+
+					$i++;
+					}
+					strhtml += '</ol></div></div>';
+					//alert(tomorrow);
+					//alert(cellid);
+					$('cell-'+cellid).addTip(strhtml, {style: 'grouped'});//alert('black dragon');
+					
+//					neu td ko co id thi dung phuong thuc nay
+				//	$('blockcalendar').select('td').each(function(td) { td.addTip('Test', { style: 'grouped' }); });
+				}
+		 });
+	}
+		
+	</script>
+<?php }/*if ($calendar == 1)*/?>
+<!--
+onMouseover="showdeals('<?php echo $i;?>')"
+			onMouseout="<?php if (in_array($tomorrow,$arraydays)) {?>hiddendeals('<?php echo $i;?>')<?php }?>"					
+-->

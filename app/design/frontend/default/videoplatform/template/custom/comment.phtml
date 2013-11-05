@@ -1,0 +1,102 @@
+
+<?php 
+$login = Mage::getSingleton( 'customer/session' )->isLoggedIn(); //Check if User is Logged In
+if($login)
+{
+     $customer_id = Mage::getSingleton( 'customer/session')->getCustomerId();
+     $current_product = Mage::registry('current_product');
+     $product_id=$current_product->getEntityId();
+     $commentmodel=Mage::getModel('comment/comment')->getCollection()->getData();
+     ?>
+<div id="maindiv">
+     <ul id="mylist" class="comment_ul" style="float:left;margin-top: -25px;">
+<?php
+     foreach( $commentmodel as $commentdata){
+    if($commentdata['product_id']==$product_id)
+    {
+    $avatar = Mage::getModel('userprofile/avatars')->setStoreData(1)->loadByCustomerId($commentdata['customer_id']);
+        if($avatar!=NULL)
+        {
+            if($avatar->getValue()!=NULL){ $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/'.$commentdata['customer_id'].'/'.$avatar->getValue();}
+            else{$ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg';        
+            }
+        }
+    else
+    {
+    $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg'; 
+    }
+        ?>
+   
+         <li class="comment_li" style="">
+           <div>
+            <div class="comment_img" style="">
+                  <img src="<?php echo $ava_src;?>" height="75" width="75" alt="" /></a>
+            </div>
+             
+            <div>
+            <div style="" class="comment_text">
+                   <?php echo $commentdata['comment']; ?>
+            </div>
+             <div class="posted_date" style=""><?php echo 'Posted Date'.$commentdata['posted_date']; ?></div>
+            </div>
+          </div>
+        </li>
+   
+<?php  } } ?>
+     </ul>    
+</div>
+ <form id="comment-form-validate" method="post" action=""  />
+        <div class="fieldset">
+            <input type="hidden" value="<?php echo $customer_id;?>" name="customer_id" id="customer_id"/>
+            <input type="hidden" value="<?php echo $product_id;?>" name="product_id" id="product_id"/>
+            <input type="hidden" value="<?php echo Mage::getBaseUrl();?>" name="base_url" id="base_url"/>
+            <input type="hidden" value="<?php echo date('d/m/Y');?>" name="posted_date" id="posted_date"/>
+            <ul class="form-list">
+                <li class="fields" style="width:350px;">
+                    <div id="photo" style="float:left;">
+                        <?php
+                        $avatar = Mage::getModel('userprofile/avatars')->setStoreData(1)->loadByCustomerId($customer_id);
+                        if($avatar!=NULL)
+                        {
+                            if($avatar->getValue()!=NULL){ $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/'.$customer_id.'/'.$avatar->getValue();}
+                            else{$ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg';        
+                            }
+                        }
+                        else
+                        {
+                        $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg'; 
+                        }?>
+                        <img src="<?php echo $ava_src;?>" height="75" width="75" alt="" /></a>
+                    <input type="hidden" value="<?php echo $ava_src ?>" name="imageid" id="imageid"/>
+                    </div>
+                         <div class="" style="float:right;height:135px;">
+                                 <label class="required" for="firstname"><em>*</em>Kommentare</label>
+                                 <div class="input-box">
+                                     <textarea id="comment_section" name="comment_section" style="height:50px;width:500px;"></textarea>
+                                 </div>
+                        </div>
+                   
+                </li>
+            </ul>
+         </div>
+ 
+   <div class="buttons-set" style="width:598px;">
+        <button style="background: none repeat scroll 0 0 #333333;margin-top:-45px;color: #FFFFFF;font-size: 14px;height: 30px;width:100px;" class="button" title="Submit" type="button" onclick="submitcomment()">
+            <span><span>Submit</span></span>
+        </button>
+  </div>
+  <div id="user-form-loade" style="display:none;float:right;margin-top:-45px;width: 530px;"><img  src="<?php echo $this->getSkinUrl()?>images/loader.png" /></div>
+                                                                   
+</form>
+    <script type="text/javascript">
+    //&lt;![CDATA[
+        var dataForm = new VarienForm('comment-form-validate', true);
+         
+    //]]&gt;
+    </script>
+       <script type="text/javascript">
+   
+         </script>
+<?php } else { ?>
+         <div>Bitte logge Dich ein um einen Kommentar zu hinterlassen. Bitte hier klicken um Dich einzuloggen <a href="<?php echo Mage::getBaseUrl().'customer/account'?>">Login</a></div>
+<?php } ?>

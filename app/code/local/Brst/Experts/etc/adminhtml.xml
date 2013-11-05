@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <!--
+        This item will be created in the Admin menu under Sales
+        - If you want another section, reference the appropriate adminhtml.xml file in app/code/core/Mage/Modulename/etc
+        - For example, we found out this was 'sales' by referencing the config/menu node of app/code/core/Mage/Sales/etc/adminhtml.xml
+        -->
+        <sales>
+            <children>
+                <!-- Here, I like to use the namespacename_modulename_controllername naming convention -->
+                <brst_experts_amount translate="title" module="brst_experts">
+                    <!-- This is how the menu text will be displayed -->
+                    <title>Experts Sales Report</title>
+                    <!-- This is the URL of what we want the menu item to link to -->
+                    <action>adminhtml/amount</action>
+                </brst_experts_amount>
+            </children>
+        </sales>
+    </menu>
+     
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <brst_experts translate="title" module="brst_experts">
+                                        <title>brst_experts</title>
+                                        <sort_order>100</sort_order>
+                                    </brst_experts>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

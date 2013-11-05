@@ -1,0 +1,242 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @var $this Mage_Customer_Block_Form_Register
+ */
+?>
+
+
+<?php
+if ($this->helper('customer')->isLoggedIn()) {
+   
+} else {
+
+/*if(isset($_POST))
+{
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+} */
+ ?>
+ <?php $Data = Mage::getSingleton('customer/session')->getinvalidemail();
+ ?>
+<div class="account-create">
+    <div class="page-title">
+        <h1>Create User Account</h1>
+    </div>
+    
+      <?php
+     if($Data!=""){
+ ?>
+
+    <ul class="messages">
+        <li class="error-msg">
+            <ul>
+                <li>
+                 <span><?php echo $Data; Mage::getSingleton('customer/session')->setinvalidemail('');?></span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+<?php } ?>
+    <form id="merchant-form-validate" method="post" action="<?php echo $this->getUrl()?>/customer/account/createpost" />
+        <div class="fieldset">
+            <input type="hidden" value="" name="success_url"/>
+            <input type="hidden" value="" name="error_url"/>
+            <input type="hidden" value="merchant" name="customer_type"/>
+            <h2 class="legend">Personal Information</h2>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="customer-name">
+                         <div class="field name-firstname">
+                             <label class="required" for="firstname"><em>*</em>First Name</label>
+                                 <div class="input-box">
+                                     <input type="text" class="input-text required-entry validate-alpha" title="First Name" value="" name="firstname" id="firstname">
+                                 </div>
+                        </div>
+                    <div class="field name-lastname">
+                        <label class="required" for="lastname"><em>*</em>Last Name</label>
+                        <div class="input-box">
+                            <input type="text" class="input-text required-entry validate-alpha" title="Last Name" value="" name="lastname" id="lastname">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                   <?php  $collection = Mage::getModel('directory/country')->getCollection(); ?>
+                <li>
+                  <div class="customer-name">
+                    <div class="field name-firstname">
+                       <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                        <div class="input-box">
+                           <input type="text" name="email" id="email_address" value="" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
+                        </div>
+                    </div>
+                    <div class="field">
+                      <label for="Nick name" class="required">Nick name</label>
+                        <div class="input-box">
+                             <input type="text" class="input-text" title="Nick Name" value="" name="nickname" id="lastname">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                <li>
+                     <div class="field name-firstname">
+                       <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                        <div class="input-box">
+                           <select class="validate-select" name="country" title="country" id="country"  >
+                            <option value="" selected="selected">Please select an option.</option>
+                          <?php    foreach ($collection as $country) {  ?>
+                            <option value="<?php echo $country->getId() ?>"><?php echo $country->getName() ?></option>
+                            <?php } ?>
+                        </select>
+                        </div>
+                     </div>
+                </li>
+                <li>
+                   <div class="">
+                       <div class="field">
+                            <label class="required" for="password"><em>*</em>Password</label>
+                            <div class="input-box">
+                                <input type="password" class="input-text required-entry validate-password" title="Password" id="password" name="password">
+                            </div>
+                       </div>
+                    <div class="field">
+                        <label class="required" for="confirmation"><em>*</em>Confirm Password</label>
+                        <div class="input-box">
+                            <input type="password" class="input-text required-entry validate-cpassword" id="confirmation" title="Confirm Password" name="confirmation">
+                        </div>
+                    </div>
+                </div>
+                </li>
+                <li>
+                <div class="">
+                       <div class="field">
+                        <label class="" for="horse owners">Are you horse owners</label>
+                            <input style="margin-left: 10px" type="radio" name="radio1" value="yes"/>Yes <input type="radio" value="no" name="radio1"/>No
+                       </div>
+                    <div class="field">
+                        <label class="" for="type">They are</label>
+                        <input style="margin-left: 10px" type="radio" name="radio2" value="Amateur"/>Amateur <input type="radio" name="radio2" value="Professionals"/>Professionals
+                    </div>
+                </div>
+                </li>
+                 <li>
+                   <div class="">
+                       <div class="field">
+                            <label class="required" for="gender">I am</label>
+                            <div class="input-box">
+                                <select style="width:150px;" name="gender" class="validate-select">
+                                    <option value="" selected="selected" >--Select--</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                               </select>
+                            </div>
+                       </div>
+                    <div class="field">
+                        <label class="required" for="dob">Date of Birth</label>
+                       <div class="input-box">
+                           <?php
+                           //year to start with
+                                $startdate = 1960;
+                          //year to end with - this is set to current year. You can change to specific year
+                                $enddate = date("Y");
+                                $years = range ($startdate,$enddate);
+
+                                 $startday = 1;
+                                $endday = 31;
+                                $days = range ($startday,$endday);
+                           ?>
+                           <select style="width:80px;" name="year" class="input-text required-entry validate-name">
+                                <option>--Year--</option>
+                                <?php
+                                //print years
+                                foreach($years as $year)
+                                {
+                                  echo '<option value='.$year.'>'.$year.'</option> <br />';
+                                }
+                                ?>
+                             </select>
+                             <select style="width:80px;" name="month" class="input-text required-entry validate-name">
+                                 <option>--Month--</option>
+                                  <option value="1">January</option>
+                                   <option value="2">February</option>
+                                    <option value="3">March</option>
+                                     <option value="4">April</option>
+                                      <option value="5">May</option>
+                                       <option value="6">June</option>
+                                        <option value="7">July</option>
+                                         <option value="8">August</option>
+                                          <option value="9">September</option>
+                                           <option value="10">October</option>
+                                            <option value="11">November</option>
+                                             <option value="12">December</option>
+                             </select>
+                             <select style="width:80px;" name='day' class="input-text required-entry validate-name">
+                                   <option>--Day--</option>
+                                   <?php
+                                        foreach($days as $day)
+                                        {
+                                             echo '<option value='.$day.'>'.$day.'</option> <br />';
+                                         }
+                                   ?>
+                            </select>
+                       </div> 
+                    </div>
+                </div>
+                </li>
+                <li class="control">
+                     
+                    <div class="input-box">
+                        <input type="checkbox" name="is_affialiate" title="<?php echo $this->__('Request to be an Affialiate') ?>" value="1" id="is_affialiate" class="checkbox" />
+                    </div>
+                    <label for="is_Affialiate"><?php echo $this->__('Request to be an Affialiate') ?></label>
+                </li>
+                <li class="control">
+                    <div class="input-box">
+                        <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed" class="checkbox" />
+                    </div>
+                    <label for="is_subscribed"><?php echo $this->__('Sign Up for Newsletter') ?></label>
+               </li>
+	</ul>
+    </div>
+   <div class="buttons-set">
+        <button class="button" title="Submit" type="submit" ><span><span>Submit</span></span></button>
+  </div>
+</form>
+    <script type="text/javascript">
+    //&lt;![CDATA[
+        var dataForm = new VarienForm('merchant-form-validate', true);
+         
+    //]]&gt;
+    </script>
+</div>
+<?php }?>
+

@@ -1,0 +1,283 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<script type="text/javascript">
+    function login()
+    {
+        if(document.getElementById('loginsection')=='block')
+            {
+                document.getElementById('loginsection')='none';
+            }
+    }
+     jQuery(document).ready(function() {
+   jQuery(".imagediv").click(function() {
+    // .position() uses position relative to the offset parent, 
+    // so it supports position: relative parent elements
+    var pos = jQuery(this).position();
+
+    // .outerWidth() takes into account border and padding.
+    var width =jQuery(this).outerWidth();
+
+    //show the menu directly over the placeholder
+   jQuery("#loginsection").css({
+        position: "relative",
+        top: "-30px",
+        left: "-205px"
+        
+    }).slideToggle(800);
+});
+  jQuery(".loginlink").click(function() {
+    // .position() uses position relative to the offset parent, 
+    // so it supports position: relative parent elements
+    var pos = jQuery(this).position();
+
+    // .outerWidth() takes into account border and padding.
+    var width =jQuery(this).outerWidth();
+
+    //show the menu directly over the placeholder
+   jQuery("#loginsection").css({
+        position: "relative",
+        top: "-30px",
+        left: "-205px"
+        
+    }).slideToggle(800);
+});
+	
+     });
+	
+    </script>
+<!--<div class="header-container">-->
+    <div class="header">
+         <?php  $login = Mage::getSingleton( 'customer/session' )->isLoggedIn(); ?>
+    <div class="header_top_right">
+         <div class="" style="padding-top: 10px;width:114px; padding-left:20px;text-align: center;float:left;">
+                <?php if(!$login): ?>
+                <a style="text-decoration: none !important;color:#000000;padding-right:20px;border-right:1px solid #DFDFDF" href="<?php echo Mage::getBaseUrl().'register/index/member';?>">Anmelden</a>
+                <?php  else : ?>
+                 <a style="text-decoration:none; padding-right:20px;border-right:1px solid #DFDFDF; display: inline-block;text-align: left;text-decoration: none;width: 110px;" href="<?php echo Mage::getBaseUrl().'customer/account/';?>">Mein Account</a>
+                 <?php endif; ?>
+            </div>
+          <div class="drop">
+              <?php if(!$login) : ?>
+                 <img id="imagediv" class="imagediv"  src="<?php echo $this->getSkinUrl('images/drop_down.png'); ?>"/>
+                 <?php endif; ?>
+                 <div style="display:none;width:250px;border:1px solid #B6B6B6;border-radius:20px 20px 0px 20px;z-index:9999;box-shadow:-3px 3px 10px #888;background:#F0F0F0;padding:15px;height:240px;" id="loginsection">
+                   <div class="col-2 registered-users">
+                <div class="content">
+                   <form id="login-form-header" method="post" action="<?php echo Mage::getBaseUrl() ?>customer/account/loginPost/">
+                    <ul class="form-list">
+                        <li>
+                         <div class="input-box">
+                                <input  onclick="if (this.defaultValue==this.value) this.value=''" onblur="if (this.value=='') this.value=this.defaultValue" style="border: 1px solid #B6B6B6;border-radius:3px; height: 25px; margin-top: 15px; font-size:14px;width: 200px;font-style:italic;" type="text" title="Email Address" class="input-text required-entry validate-email" id="email-header" value="Email" name="login[username]">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="input-box">
+                                <input   onclick="if (this.defaultValue==this.value) this.value=''" onblur="if (this.value=='') this.value=this.defaultValue" style="border: 1px solid #B6B6B6;border-radius:3px; height: 25px;font-style:italic;font-size:14px; margin-top: 15px; width: 200px;" type="password" title="Password" id="pass-header" class="input-text required-entry validate-password" value="Password" name="login[password]">
+                            </div>
+                        </li>
+                  </ul>
+                    <div class="buttons-set" style="font-size:12px;">
+                        <div>noch kein Mitglied?</div>
+                    <a class="f-left" href="<?php echo Mage::getBaseUrl() ?>register/index/member">Jetzt einen Account<br />anlegen!</a>
+                    <button id="send2" style=" background: none repeat scroll 0 0 #8FD400;border: medium none;color: #FFFFFF;cursor: pointer;float: right;font-family: Arial;font-size: 14px;height: 30px;line-height: 20px;margin-top: -15px;text-align: center;width: 100px;" name="send" title="Login" class="button" type="submit"><span><span>Login</span></span></button>
+                    <div style="clear: both; height: 10px"></div>
+                    <?php
+                        if ($block = $this->getLayout()->getBlock('facebookconnect_button')) {
+                            echo $block->toHtml();
+                        }
+                    ?>
+                </div>
+                   </form>
+             </div>
+            </div>
+                     <div class="header_top_right" style="width:150px !important;box-shadow:-1px 5px 6px #888;padding-top:10px;border-top:none !important;border:1px solid #B6B6B6;border-radius:0px 0px 20px 20px;position:relative;top:25px;right:-16px;">
+                         <div class="drop" style="margin-left:15px;">
+                             <img id="imagediv" class="imagediv" src="<?php echo $this->getSkinUrl('images/droparrow.png'); ?>"/>
+                         </div>
+                         <div class="login" style="width: 70px !important;">
+                           <?php if($login) : ?>
+                            <a style="padding-right:10px;border-right:1px solid #DFDFDF;width:45px;" href="<?php echo Mage::getBaseUrl().'customer/account/logout';?>">Log Out</a>
+                            <?php  else : ?>
+                             <a  class="loginlink" style="padding-right:10px;border-right:1px solid #DFDFDF;" href="javascript:void(0)">Login</a>
+                            <?php endif; ?>
+                         </div>  
+                            <div  class="cart" >
+                               <a  style="text-decoration:none;" href="<?php echo Mage::getBaseUrl().'checkout/cart/';?>" > <img src="<?php echo $this->getSkinUrl('images/cart.png'); ?>"/> </a>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+            <div class="login">
+               <?php if($login) : ?>
+                <a style="padding-right:25px;border-right:1px solid #DFDFDF;" href="<?php echo Mage::getBaseUrl().'customer/account/logout';?>">Log Out</a>
+                <?php  else : ?>
+                 <a class="loginlink" style="padding-right:20px;border-right:1px solid #DFDFDF;" href="javascript:void(0)">Login</a>
+                <?php endif; ?>
+            </div>
+            <div  class="cart">
+                <a  style="text-decoration:none;" href="<?php echo Mage::getBaseUrl().'checkout/cart/';?>" > 
+                    <span> 
+                        Warenkorb
+                      <!--  Total items:
+                       
+                            <a class="items" href="#"><?php  //echo $totalItems = Mage::getModel('checkout/cart')->getQuote()->getItemsCount(); ?></a>
+                            Amout:
+                            <span class="price"><?php //echo "$".$subTotal = Mage::getModel('checkout/cart')->getQuote()->getSubtotal(); ?></span>-->
+                    </span>
+                <img src="<?php echo $this->getSkinUrl('images/cart.png'); ?>"/></a>
+            </div>
+        
+        </div>
+        
+    
+
+       
+        
+    <div class="header_bottom">
+    <div class="header_bottom_logo">
+           
+        <?php if ($this->getIsHomePage()):?>
+        <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        <?php else:?>
+        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <?php endif?>
+    </div>
+        <div class="headersearch">
+           
+         <?php echo $this->getChildHtml('topSearch') ?>
+             <span style="float:right;padding-top:72px;left:35px;position:relative;"><a style="font-size:12px;text-decoration:none;"  href="<?php echo Mage::getBaseUrl().'catalogsearch/advanced'?>">Erweiterte Suche</a></span>
+        </div>
+      
+    </div>
+ </div>
+<div class="pferde_bg">
+                    <div class="pferde">
+                      Pferde Wirklich Verstehen...
+                    </div>
+                </div>
+ <?php  echo $this->getChildHtml('topMenu') ?>
+<?php 
+ 
+if(Mage::getSingleton('cms/page')->getIdentifier() == 'home'  && Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms'){ ?>
+
+<div class="sliderdata">
+      <div class="slider-wrapper theme-default">
+            <div id="slider" class="nivoSlider">
+               <img src="<?php echo $this->getSkinUrl('images/slider1.png')?>" alt="" />
+              <img src="<?php echo $this->getSkinUrl('images/zz.png')?>" alt="" />
+             <img src="<?php echo $this->getSkinUrl('images/slider1.png')?>" alt="" />
+              <img src="<?php echo $this->getSkinUrl('images/zz.png')?>" alt="" />
+            </div>
+            <div id="htmlcaption" class="nivo-html-caption">
+                <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>. 
+            </div>
+      </div>
+      <script type="text/javascript">
+
+	jQuery(document).ready( function() {
+	
+		// initiate the nivo slideshow
+		jQuery('#slider').nivoSlider({
+					prevText: '', // Prev directionNav text
+					nextText: '',  // Next directionNav text
+					pauseTime: 3000,
+					effect: 'fold'
+				});
+	
+	
+		// add mouseover events to the previous- and next-buttons of the slideshow
+		// to define a specific animation to each of them
+		jQuery('#slider .nivo-nextNav').mouseover( function() {
+			jQuery('#slider img').attr("data-transition","slideInFromRight");
+		});
+		jQuery('#slider .nivo-prevNav').mouseover( function() {
+			jQuery('#slider img').attr("data-transition","slideInFromLeft");
+		});
+		// remove the data-transition attribute on mouseout
+		jQuery('#slider .nivo-prevNav, #slider .nivo-nextNav').mouseout( function() {
+			jQuery('#slider img').attr("data-transition", "");
+		});
+	});
+    </script>          
+ 
+  <div class="sliderText"  style="float:right;width:320px;">
+          <div class="pferde_right">
+                <div class="expert" style="font-size:27px;">
+                 FRAG DIE EXPERTEN!
+                </div>
+                <div class="loreal_text">
+                    "Lorem ipsum dolor sit
+                    amet, consectetur
+                    adipiscing elit."
+                </div>
+                <div class="video">
+                    <div class="watch2" style="width:203px; padding-left:15px; line-height:30px;">
+                        Video ansehen<span><img src="<?php echo $this->getSkinUrl('images/next.png') ?>"></span>
+                    </div>
+                </div>
+          </div>
+      </div>
+   <?php } ?>
+</div>
+
+
+        
+        
+        
+        
+        
+        
+        
+        <?php //if ($this->getIsHomePage()):?>
+       <!-- <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        <?php// else:?>
+        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <?php //endif?>
+      <!--  <div class="quick-access">
+            <?php echo $this->getChildHtml('topSearch') ?>
+            <p class="welcome-msg"><?php echo $this->getWelcome() ?> <?php echo $this->getAdditionalHtml() ?></p>
+             <?php  $login= Mage::getSingleton('customer/session')->isLoggedIn();
+                  
+                  if(!$login) {?>
+          <a style="color:#EBBC58;margin-top: -2px;" href='<?php echo Mage::getBaseurl() ?>register/index/member'>Create Member</a>
+            <a style="padding-right:5px;color:#EBBC58;margin-top: -2px;" href='<?php echo Mage::getBaseurl() ?>register/index/index'>Create User</a>
+             <?php } ?>
+            <?php //echo $this->getChildHtml('topLinks');?>
+           
+            <?php //echo $this->getChildHtml('store_language') ?>
+        </div>-->
+        <?php //echo $this->getChildHtml('topContainer'); ?>
+  
+<?php //echo $this->getChildHtml('topMenu') ?>
+<script type="text/javascript">
+//<![CDATA[
+	 var loginFormHeader = new VarienForm('login-form-header', true); 
+	 //]]>
+    </script>

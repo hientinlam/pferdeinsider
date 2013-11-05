@@ -1,0 +1,200 @@
+
+   <?php 
+   
+      $data= $this->getRequest()->getServer('HTTP_REFERER');
+      $customer=Mage::getModel('customer/session')->getCustomer();
+      $customerId=$customer->getId();
+      $campaign = Mage::registry('current_campaign');
+      $campaignId=$campaign->getId();
+      $affiliate = Mage::registry('current_affiliate');
+      $affiliateId=$affiliate->getId();
+   ?>
+<!--<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $collection = $this->getCollection();
+      
+?>
+<div class="page-title">
+    <h1><?php echo $this->__($this->getTitle()) ?></h1>
+</div>
+<?php //echo $this->getToolbarHtml(); ?>
+<?php if($collection->getSize()): ?>
+
+	<?php if($this->getMode()!='grid'): ?>
+	
+	<?php $_iterator = 0; ?>
+    <ol class="products-list" id="products-list">
+    <?php foreach ($collection as $category): 
+    	$category = Mage::getModel('catalog/product')->load($category->getId()); ?>
+        
+        <li class="item<?php if( ++$_iterator == sizeof($collection) ): ?> last<?php endif; ?>">
+            <?php // Product Image ?>
+            <a href="<?php echo $category->getUrl() ?>" target="_blank"  class="product-image"><img src="<?php echo $category->getImageUrl() ?>" width="135" height="135" alt="<?php echo $this->stripTags($category->getName()); ?>" /></a>
+            <?php // Product description ?>
+            <div class="product-shop">
+                <div class="f-fix">
+                    <?php $_productNameStripped = $this->stripTags($category->getName(), null, true); ?>
+                    <h2 class="product-name"><a href="<?php echo $category->getUrl() ?>" target="_blank"><?php echo $category->getName(); ?></a></h2>
+                    
+                    
+                    <div class="desc std">
+                        <?php echo $category->getDescription(); ?>
+                    </div>
+                    <?php if($category->getChildrenCount()){ ?>
+                    <div>
+                    	<a href='<?php echo $this->getUrl('*/*/*',array('category_id'=>$category->getId()))?>'>View Sub Category</a>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </li>
+    <?php endforeach; ?>
+    </ol>
+    <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+	<?php else: ?>
+
+    <?php // Grid Mode ?>
+
+    <?php $_collectionSize = $collection->count() ?>
+    <?php 
+    	$_columnCount = $this->getColumnCount();
+    	if(!$_columnCount){
+    		$_columnCount = 3;
+    	} 
+    ?>
+    <?php $i=0; foreach ($collection as $category):
+          $category = Mage::getModel('catalog/product')->load($category->getId());
+    ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
+            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+                
+                <a href="<?php echo $category->getProductUrl() ?>"  target="_blank"  title="<?php echo $this->stripTags($category->getName()); ?>" class="product-image"><img src="<?php echo $category->getImageUrl() ?>" width="135" height="135" alt="<?php echo $this->stripTags($category->getName()) ?>" /></a>
+                <h2 class="product-name"><a href="<?php echo $category->getProductUrl() ?>" target="_blank"  title="<?php echo $category->getUrl() ?>"><?php echo $category->getName() ?></a></h2>
+                <h2 class="product-name"><?php echo $category->getPrice();?></h2>
+                
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif ?>
+        <?php endforeach ?>
+        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+    <?php endif; ?>
+
+<?php //echo $this->getToolbarHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('The collection is empty.'); ?></p>
+<?php endif ?>
+
+    -->
+
+<script type="text/javascript">
+    
+    function submitembedcode()
+         {
+              jQuery("#user-form-loader").show();
+             var embedcode=document.getElementById('getembedcode').value;
+             var custid=document.getElementById('customerid').value;
+             var affiliateId=document.getElementById('affiliateId').value;
+             var campaignId=document.getElementById('campaignId').value;
+             var inputs = document.getElementsByTagName('input');
+             var checkboxes = [];
+             var values="";
+                for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == 'checkbox') { 
+                    if(inputs[i].checked == true)
+                    {
+                        checkboxes.push(inputs[i]);  
+                        values+=inputs[i].value +',';
+                     }
+                    }
+                }
+            
+            
+             var defaulturl=document.getElementById('defaulturl').value;
+             var action="";
+             var newaction="";
+             
+            
+            jQuery.ajax({
+                            url:defaulturl+"affiliate/customer_affiliate/embedcode",
+                            type:"post",
+                            dataType:"json",
+                            data:({
+                                     product_id:values,
+                                     custid:custid,
+                                     embed_code:embedcode,
+                                     affiliate_Id:affiliateId,
+                                     campaign_Id:campaignId
+                                     
+                                    
+                                 }),
+                                success:function(data)
+                                {
+                                    if(data.success=='success')
+                                        {
+                                           if(jQuery('#showdiv').css('display') == 'none'){ 
+                                               jQuery('#showdiv').show(); 
+                                            }
+                                              jQuery("#user-form-loader").hide();
+                                              
+                                         var showiframe ='<iframe frameborder="0" width="1000" height="500"  src="http://54.228.195.42/magento/index.php/embeded/'+embedcode+'" name="embedcode" id="embedcode"></iframe>'; 
+                                         jQuery('#showdiv').html('');
+                                        jQuery('html,body').animate({scrollTop: jQuery("#showdiv").offset().top}, 1000);
+                                         jQuery('#showdiv').html(showiframe);
+                                          }
+                                        
+                                }
+                        });
+         }
+    </script>
+   <?php   if($data!='http://54.228.195.42/magento/affiliate/customer_affiliate/view/status/1/' )  { ?>
+    <div class="campaings fieldset">
+         <div class="affialiatetitle">
+        <h2 class=""><?php echo $this->__("All Products"); ?>
+         <div style="height: 30px;float:right;width:100px;">
+              <button style="background:#333333;padding:5px;color:#FFFFFF;float:right;" id="embedcode" type="button" class="button" name="embedcode" style="float:right;margin-bottom:10px;" title="<?php echo $this->__("Embed Code"); ?>" onClick="submitembedcode()">
+                 <span><span style="float:right;"><?php echo $this->__("Embed Code"); ?></span></span>
+              </button>
+           </div>
+        </h2>
+         </div>
+           <div>
+               <input type="hidden" value="<?php echo Mage::getBaseUrl();?>" id="defaulturl"/>
+                <input type="hidden" value="<?php echo $customerId;?>" id="customerid"/>
+                <input type="hidden" value="<?php echo $affiliateId;?>" id="affiliateId"/>
+                <input type="hidden" value="<?php echo $campaignId;?>" id="campaignId"/>
+                
+           <input type="hidden" value="<?php echo substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyz'), 0, 5); ?>" id="getembedcode" name="getembedcode" />
+            <?php 
+            /*$count=1;
+            foreach ($collection as $category): 
+    	         $category = Mage::getModel('catalog/product')->load($category->getId());*/
+            
+            ?>
+            <!-- <input type='checkbox' name="collect[]"  value="<?php echo $category->getId()?>" id="checkbox"/>
+             <span class=""><a style="color:#333333 !important;text-decoration: none;" href="<?php echo $category->getProductUrl() ?>" target="_blank"><?php echo $category->getName() ?></a></span></br>
+         -->    
+            <?php
+          //  $count++; endforeach ?>
+             <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('affiliate-recent-products')->toHtml();
+                     echo $this->getLayout()->createBlock('cms/block')->setBlockId('affiliate-popular-products')->toHtml();
+             echo $this->getLayout()->createBlock('cms/block')->setBlockId('affiliate-toprated-products')->toHtml();
+            
+             ?>
+           </div>
+           <div id="user-form-loader" style="display:none; margin-right: 5px; margin-top: -65px;float:right;"><img style="height: 65px;"src="<?php echo $this->getSkinUrl()?>images/loadingr.gif" /></div>
+           <div style="height: 30px;">
+              <button style="background:#333333;padding:5px;color:#FFFFFF;float:right;"id="embedcode" type="button" class="button" name="embedcode" style="float:right;margin-bottom:10px;" title="<?php echo $this->__("Embed Code"); ?>" onClick="submitembedcode()">
+                 <span><span style="float:right;"><?php echo $this->__("Embed Code"); ?></span></span>
+              </button>
+           </div>
+        
+    </div>
+    <div style="text-align:center;">
+    <textarea id="showdiv" style="width:500px;height:75px;">
+
+      
+    </textarea>
+        </div>
+    <?php } ?>

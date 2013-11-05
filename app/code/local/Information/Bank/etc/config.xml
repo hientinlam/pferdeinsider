@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<config>
+	<global>
+            <modules>
+                    <information_bank>
+                            <version>0.1.0</version>
+                    </information_bank>
+            </modules>
+
+            <blocks>
+                <bank>
+                    <rewrite>
+                     <bank>Information_Bank_Block_Bank</bank>
+                    </rewrite>
+                </bank>
+             </blocks>
+             
+          
+       
+    
+        <models>
+                    <bank>
+                         <class>Information_Bank_Model</class>
+                         <resourceModel>bank_mysql4</resourceModel>
+                     </bank>
+                    <bank_mysql4>
+                         <class>Information_Bank_Model_Mysql4</class>
+                         <entities>
+                             <bank>
+                               <table>brst_bankinformation</table>
+                             </bank>
+                          </entities>
+                    </bank_mysql4>
+                    </models>
+                        <!-- allow the plugin to read and write -->
+                    <resources>
+                            <!-- connection to write -->
+                            <bank_write>
+                                <connection>
+                                    <use>core_write</use>
+                                </connection>
+                            </bank_write>
+
+                           <bank_read>
+                              <connection>
+                                 <use>core_read</use>
+                              </connection>
+                           </bank_read>
+                    </resources>      
+        
+	
+        </global>
+	   <frontend>
+                <routers>
+                        <bank>
+                                <use>standard</use>
+                                <args>
+                                      <module>Information_Bank</module>
+                                      <frontName>bank</frontName>
+                                </args>
+                        </bank>
+                   
+                </routers>
+		<layout>
+			<updates>
+				<bank>
+		   		      <file>bank.xml</file>
+				</bank>
+			</updates>
+       		</layout>
+        </frontend>
+</config>
+

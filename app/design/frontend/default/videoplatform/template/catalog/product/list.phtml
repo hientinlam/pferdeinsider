@@ -1,0 +1,304 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+$attributeCode = 'ustream_video';
+// build and filter the product collection
+?>
+<script type="text/javascript">
+    function searching()
+    {
+        var type=document.getElementById('typevalue').value;
+        var price=document.getElementById('pricevalue').value;
+        var post=document.getElementById('postvalue').value;
+        if(document.getElementById('typevalue').value.length > 0 && document.getElementById('pricevalue').value.length==0)
+            {
+                    document.getElementById('sortform').action='http://54.228.195.42/magento/index.php/products.html?type='+type;
+            }
+        else if(document.getElementById('typevalue').value.length > 0 && document.getElementById('pricevalue').value.length >0){
+            document.getElementById('sortform').action='http://54.228.195.42/magento/index.php/products.html?type='+type+'&price='+price;
+        }
+         else if(document.getElementById('postvalue').value.length > 0 && document.getElementById('postvalue').value.length >0)
+            { document.getElementById('sortform').action='http://54.228.195.42/magento/index.php/products.html?post='+post;
+                }
+        document.getElementById('sortform').submit();
+    }
+    </script>
+
+<?php
+    $_productCollection=$this->getLoadedProductCollection();
+    $_helper = $this->helper('catalog/output');
+    $typevalue=$this->getRequest()->getParam('type');
+     $pricevalue=$this->getRequest()->getParam('price');
+     $postvalue=$this->getRequest()->getParam('post');
+?>
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('ZU dieser Auswahl gibt es keine Produkte') ?></p>
+<?php else: ?>
+<div class="category-products">
+    <div class="cattoolbar1"  style="margin-bottom:10px;">
+    
+    <!-- Use this layout for filtering remove the one below -->
+    <div id="sortNav">
+      <form method="post" action="" id="sortform">
+        <label style="padding-right:10px;">Sort By:</label>
+        <select style="width:150px;" id="typevalue">
+          <option value="">Alle Produktarten</option>
+          <option <?php if($typevalue==8){ echo 'selected=selected'; } ?> value="8">Audio</option>
+          <option <?php if($typevalue==60){ echo 'selected=selected'; } ?> value="60">Deals</option>
+          <option <?php if($typevalue==10){ echo 'selected=selected'; } ?> value="10">Ebook</option>
+          <option <?php if($typevalue==9){ echo 'selected=selected'; } ?> value="9">Photo</option>
+          <option <?php if($typevalue==7){ echo 'selected=selected'; } ?> value="7">Video</option>
+        </select>
+        <select style="width:145px;" id="pricevalue">
+          <option value="">Beliebiger Preis</option>
+          <option <?php if($pricevalue=='1-50'){ echo 'selected=selected'; } ?> value="1-50">€1 - €50</option>
+          <option <?php if($pricevalue=='51-100'){ echo 'selected=selected'; } ?> value="51-100">€51 - €100</option>
+          <option <?php if($pricevalue=='101-200'){ echo 'selected=selected'; } ?> value="100-200">€101 - €200</option>
+          <option <?php if($pricevalue=='201'){ echo 'selected=selected'; } ?> value="200">€201 und mehr</option>
+        </select>
+        <select style="width:130px;" id="postvalue">
+          <option>Beliebiges Datum</option>
+          <option <?php if($postvalue=='recent'){ echo 'selected=selected'; } ?> value="recent">Letzte Posts</option>
+          <option <?php if($postvalue=='old'){ echo 'selected=selected'; } ?> value="old">Alte Posts</option>
+        </select>
+        <input type="submit" class="goBtn" value="Los" onclick="searching()"/>
+        
+     <!-- <div style="float:right">
+        <label style="padding-right:10px;">Show</label>
+        <select style="width:70px;">
+          <option>9</option>
+          <option>15</option>
+          <option>30</option>
+          <option>All</option>
+        </select>
+        <label style="padding-left:10px; padding-right:0;">1-9 of 285</label>
+        </div> -->
+      </form>
+	</div>
+	<div class="clear"></div>
+	<!--<div style="float:left;">[Remove the pager below]</div>-->
+   <!-- <div id="navPage">
+      <ul>
+        <li><a href="">&laquo;</a></li>
+        <li class="currentPage">1</li>
+        <li><a href="">2</a></li>
+        <li><a href="">3</a></li>
+        <li><a href="">4</a></li>
+        <li><a href="">5</a></li>
+        <li><a href="">&raquo;</a></li>
+      </ul>
+    </div> -->
+    <div class="clear"></div>
+    <!-- end of filtering -->
+    <div class="listpagetoolbar">
+    <?php echo $this->getToolbarHtml() ?>
+        </div>
+    </div>
+    <?php // List mode ?>
+    <?php if($this->getMode()!='grid'): ?>
+    <?php $_iterator = 0; ?>
+    <ol class="products-list" id="products-list">
+    <?php foreach ($_productCollection as $_product): ?>
+     <?php endforeach; ?>
+    </ol>
+    
+    <script type="text/javascript"><?php decorateList('products-list', 'none-recursive'); ?></script>
+
+    <?php else: ?>
+
+<?php // Grid Mode ?>
+<?php $_collectionSize = $_productCollection->count() ?>
+<?php $_columnCount = 3; ?>
+<?php $i=0; $countdata=0; foreach ($_productCollection as $_product): ?>
+<?php if ($i++%$_columnCount==0): ?>
+        <div class="listgrid">
+             <ul class="products-grid">
+    <?php endif ?>
+                <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+                    <?php
+                        $Id= $_product->getId();
+                        $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+                        $products = Mage::getModel('catalog/product')->load($Id);
+                        $type=$products['type_id'];
+                        $ustreamvideo=$products['ustream_video'];
+                        $enddate= explode(' ',$products[end_date]);
+                        $end_date=$enddate[0];
+                        $productmaterial=$products['product_material'];
+                        // echo "<pre>";print_r($products->getData());die('ahjsa');
+                           foreach ($_myprodsamples as $_sample):
+                                 $video= $_sample['sample_url'];
+                                $video1= $_sample['link_url'];
+                            endforeach;
+                            $vdata=explode("v=",$video);
+                            if($productmaterial=='8' &&  $video1!=NULL):
+                                $audioclass='productname_audio';
+                                $clas='audiovideoclass';
+                            elseif($productmaterial=='7' &&  $vdata['1']!=NULL ):
+                                 $audioclass='productname_video';
+                                  $clas='audiovideoclass';
+                           elseif($productmaterial=='7' &&  $vdata['1']==NULL ):
+                                 $audioclass='product-name';
+                                  $clas='';
+                            else:
+                                $clas='';
+                            endif;
+                            
+                              
+                            if($vdata['1']!=NULL && $type=='downloadable'&& $productmaterial=='7'): ?>
+                    <div class="videosclick3" onclick="thevid=document.getElementById('thevideo<?php echo $countdata ?>'); thevid.style.display='block';document.getElementById('viewplayer2<?php echo $countdata ?>').src = document.getElementById('viewplayer2<?php echo $countdata ?>').src.replace('autoplay=0','autoplay=1'); this.style.display='none'">
+ 
+                        <?php if($products->getImageUrl() !=NULL){ ?>
+                                  <img style="margin:18px 18px 12px 15px" src="<?php echo $this->helper('catalog/image')->init($products, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(290,190); ?>"  style="cursor:pointer" />
+                         <?php } else { ?>
+                                  <img style="margin:18px 18px 12px 15px" src="http://img.youtube.com/vi/<?php echo $vdata['1']?>/2.jpg"  width="290" height="190" style="cursor:pointer" />
+                         <?php  }  ?>
+                                 <a href="javascript:void(0)" ></a>
+                                  <span style="top: -202px !important" class="videotag">
+                                <?php if($productmaterial=='7'): ?>
+                                    <img src="<?php echo $this->getSkinUrl('images/img_video.png')?>"/>
+                               <?php  endif; ?> 
+                            </span>
+                           </div>
+                             <div id="thevideo<?php echo $countdata ?>" style="display:none"> 
+                          <?php   echo  '<iframe id="viewplayer2'.$countdata.'" style="margin:15px;padding-left:5px;" title="YouTube video player" class="youtube-player" type="text/html" width="290" height="190"  src="https://www.youtube.com/embed/'.$vdata['1'].'?autoplay=0" frameborder="0" allowFullScreen></iframe>'; ?>
+                            <span style="top: -202px !important" class="videotag">
+                                <?php if($productmaterial=='7'): ?>
+                                    <img src="<?php echo $this->getSkinUrl('images/img_video.png')?>"/>
+                               <?php  endif; ?> 
+                            </span>
+                             </div>
+                            
+                         <?php   elseif($productmaterial==8 && $video1!=NULL ): ?>
+                       <?php 
+                      if($products['image'] !='no_selection')
+                      {
+                           $img=$this->helper('catalog/image')->init($products, 'image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(290,190);
+                      }
+                      else if($products['image'] =='no_selection')
+                      {
+                           $img=$this->getSkinUrl('images/poster.jpg');
+                      }
+               ?>
+                         <script type="text/javascript" src="<?php echo $this->getSkinUrl('jwplayer/jwplayer.js'); ?>"></script>
+                         <script type="text/javascript" src="<?php echo $this->getSkinUrl('jwplayer/jwplayer.html5.js'); ?>"></script>
+                         <?php 
+                              if($products->getImageUrl() !=NULL && $products['image'] !='no_selection')
+                              {
+                                   $img=$this->helper('catalog/image')->init($products, 'image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(290,190);
+                              }
+                              else
+                              {
+                                   $img=$this->getSkinUrl('images/poster.jpg');
+                              }
+                         ?>
+                         <div style="padding:15px !important;">
+                            <div id="myElementlist<?php echo $countdata ?>" class="jwwrap" class="listgrid">Loading the player...</div></div>
+                            
+                         <script type="text/javascript">
+                                jwplayer("myElementlist<?php echo $countdata ?>").setup({
+                                    image:'<?php echo $img ?>',
+                                    'width': '290',
+                                   'height': '190',
+                                flashplayer : '<?php echo $this->getSkinUrl('jwplayer/jwplayer.flash.swf'); ?>',
+                                file: "<?php echo $video1 ?>"
+                              });
+                        </script>
+                          <span style="" class="audiotag">
+                                <?php if($productmaterial=='8'): ?>
+                                    <img src="<?php echo $this->getSkinUrl('images/img_audio.png')?>"/>
+                               <?php  endif; ?> 
+                            </span>
+
+                <?php   else:?>
+                             <div>
+                                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+                                    <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(290,190); ?>"  alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a> 
+                                <span style="  float: right;margin-left:256px;margin-top: -205px;position: absolute;">
+                                <?php if($productmaterial=='7'): ?>
+                                <img src="<?php echo $this->getSkinUrl('images/img_video.png')?>"/>
+                                <?php elseif($productmaterial=='8'): ?>
+                                <img src="<?php echo $this->getSkinUrl('images/img_audio.png')?>"/>
+                                <?php elseif($productmaterial=='10'):?>
+                                <img src="<?php echo $this->getSkinUrl('images/img_ebook.png')?>"/>
+                                <?php else: ?>
+                                <img src="<?php echo $this->getSkinUrl('images/img_photo.png')?>"/>
+                                <?php endif; ?>
+                                </span>
+                            </div>
+                    <?php endif; ?>
+
+                        <div class="<?php echo $clas;?>">
+                                <h2 class="product-name">
+                                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php  echo  substr($_helper->productAttribute($_product, $_product->getName(), 'name'), 0, 25) ?></a>
+                                <div class="size">1 session: <?php echo $end_date ?></div>
+                                </h2>
+                                <?php echo $this->getPriceHtml($_product, true) ?>
+                            </div>
+                            <div class="actions">
+                             <?php  ?>
+                            <?php if($_product['is_salable']): ?>
+                            <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('JETZT KAUFEN') ?></span></span></button>
+                            <?php else: ?>
+                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                            <?php endif; ?>
+                            </div>
+                </li>
+    <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+    </ul>
+</div>
+<?php endif ;  $countdata++; ?>
+<?php endforeach ?>
+<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+<?php endif; ?>
+
+<!-- Use only pagination on bottom part -->
+ <!--<div class="clear" style="height:20px;"></div>
+<div id="navPage">
+     <ul>
+        <li><a href="">&laquo;</a></li>
+        <li class="currentPage">1</li>
+        <li><a href="">2</a></li>
+        <li><a href="">3</a></li>
+        <li><a href="">4</a></li>
+        <li><a href="">5</a></li>
+        <li><a href="">&raquo;</a></li>
+      </ul> 
+    </div>
+<div class="clear" style="height:20px;"></div>-->
+<!--[Remove toolbar below] -->
+<!-- end of bottom pagination -->
+
+<div class="listpagebottomtoolbar" style="margin-top:25px;float:left;width:960px;">
+<?php echo $this->getToolbarHtml() ?>
+</div>
+</div>
+<?php endif; ?>
