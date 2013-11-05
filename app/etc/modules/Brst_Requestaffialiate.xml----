@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-    <modules>
-        <Brst_Requestaffialiate>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Brst_Requestaffialiate>
-    </modules>
-</config>
