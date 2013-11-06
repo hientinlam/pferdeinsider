@@ -151,6 +151,33 @@
                         </minimum_period>
                     </fields>
                 </withdrawals>
+                <productview translate="label">
+                    <label>Affiliate link on product detail page</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <campaignid>
+                            <label>Campaign id</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-digits validate-not-negative-number</validate>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </campaignid>
+                        <trafficsource>
+                            <label>Traffic source</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </trafficsource>
+                    </fields>
+                </productview>
             </groups>
         </awaffiliate>
     </sections>

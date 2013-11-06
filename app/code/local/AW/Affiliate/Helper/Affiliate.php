@@ -215,4 +215,62 @@ class AW_Affiliate_Helper_Affiliate extends Mage_Core_Helper_Abstract
         $url .= implode('&', $queryParamz);
         return $url;
     }
+
+    public function generateAffiliateLinkForDefaultCampaign($baseUrl)
+    {
+        if(!$affiliate = $this->getAffiliateLogged()) {
+            return '';
+        }
+
+        $defaultCampaignId = Mage::getStoreConfig('awaffiliate/productview/campaignid');
+        $trafficGenerateSource = Mage::getStoreConfig('awaffiliate/productview/trafficsource'); //'default campaign'
+
+        $campaign = Mage::getModel('awaffiliate/campaign')->load($defaultCampaignId);
+        if(!$campaign->getId()) {
+            Mage::log('Default campaign id not existed: ' . $defaultCampaignId);
+            return '';
+        }
+
+        $collection = Mage::getModel('awaffiliate/traffic_source')->getCollection();
+        $collection->addFieldToFilter('main_table.traffic_name', array("eq" => $trafficGenerateSource));
+        $collection->addFieldToFilter('main_table.affiliate_id', array("eq" => $affiliate->getId()));
+        $collection->setPageSize(1);
+
+        if (!$collection->getSize()) {
+            $trafficItem = Mage::getModel('awaffiliate/traffic_source');
+            $trafficItem->setData(array(
+                'affiliate_id' => $affiliate->getId(),
+                'traffic_name' => $trafficGenerateSource
+            ));
+            $trafficItem->save();
+            $trafficId = $trafficItem->getId();
+        } else {
+            $trafficId = $collection->getFirstItem()->getId();
+        }
+
+        return $this->generateAffiliateLink($baseUrl, array(
+            AW_Affiliate_Helper_Affiliate::CAMPAIGN_REQUEST_KEY => $defaultCampaignId,
+            AW_Affiliate_Helper_Affiliate::AFFILIATE_REQUEST_KEY => $affiliate->getId(),
+            AW_Affiliate_Helper_Affiliate::AFFILIATE_TRAFFIC_SOURCE => $trafficId
+        ));
+    }
+
+    public function getAffiliateLogged()
+    {
+        if(!Mage::getSingleton('customer/session')->isLoggedIn()) {
+            return false;
+        }
+
+        $customerId = Mage::getSingleton('customer/session')->getId();
+        $affiliate = Mage::getModel('awaffiliate/affiliate');
+
+        if ($customerId) {
+            $affiliate->loadByCustomerId($customerId);
+        }
+        if(!$affiliate->getId() || $affiliate->getStatus() != 'active') {
+            return false;
+        }
+
+        return $affiliate;
+    }
 }

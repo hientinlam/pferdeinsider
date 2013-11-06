@@ -349,6 +349,10 @@
                 <minimum_amount>0</minimum_amount>
                 <minimum_period>0</minimum_period>
             </withdrawals>
+            <productview>
+                <campaignid>2</campaignid>
+                <trafficsource>default campaign</trafficsource>
+            </productview>
         </awaffiliate>
     </default>
 </config>
