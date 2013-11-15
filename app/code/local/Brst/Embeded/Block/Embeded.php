@@ -26,8 +26,8 @@ class Brst_Embeded_Block_Embeded extends Mage_Core_Block_Template
                     //$attributes = Mage::getSingleton('catalog/config')->getProductAttributes();
                     //$collection->addAttributeToSelect($attributes);
                     $collection->addAttributeToSelect('*')
-                               ->addAttributeToFilter('name',array('like' => $searchdata.'%'));
-                    
+                               ->addAttributeToFilter('name',array('like' => '%' .$searchdata. '%'));
+
                     $this->setCollection($collection);
                 }
                 else
