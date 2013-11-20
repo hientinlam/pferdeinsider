@@ -77,7 +77,7 @@
                                 <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
                                 <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
                             <?php elseif($_link->getLabel()!='Affiliate Program' && $_link->getLabel()!='Einnahmen über Webseite' && $_link->getLabel()!='Meine Einnahmen' && $_link->getLabel()!='Einnahmen über Affiliate Partner' ): ?>
-                                  <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                                <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
                             <?php endif; ?>
                             <?php endif; ?>
                                 <?php }?>

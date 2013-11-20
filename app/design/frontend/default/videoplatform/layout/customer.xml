@@ -239,11 +239,12 @@ Customer account pages, rendered for all tabs in dashboard
             <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
                 <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
+                <action method="addLink" translate="label" module="customer"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
                 <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
                 <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
                 <action method="addLink" translate="label" module="customer"><name>brst_createproduct</name><path>createproduct/index/index</path><label>Produkt erstellen</label></action>
                 <action method="addLink" translate="label" module="customer"><name>create_product</name><path>createproduct/index/showproduct/</path><label>Meine Produkte</label></action>
-                    <action method="addLink" translate="label" module="customer"><name>expertcalculation</name><path>allmembers/index/expertcalculation/</path><label>Meine Einnahmen</label></action> 
+                <action method="addLink" translate="label" module="customer"><name>expertcalculation</name><path>allmembers/index/expertcalculation/</path><label>Meine Einnahmen</label></action>
           
                 <action method="addLink" translate="label" module="customer">
                     <name>allmembers</name>
