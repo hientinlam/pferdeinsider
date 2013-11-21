@@ -1,123 +1,137 @@
 <?xml version="1.0"?>
 <config>
-	<global>
-            <modules>
-                    <deal_register>
-                            <version>0.1.0</version>
+    <global>
+        <modules>
+            <deal_register>
+                <version>0.1.0</version>
+            </deal_register>
+        </modules>
+
+        <blocks>
+            <register>
+                <rewrite>
+                    <register>Deal_Register_Block_Register</register>
+                </rewrite>
+            </register>
+        </blocks>
+        <helpers>
+            <register>
+                <class>Deal_Register_Helper</class>
+            </register>
+        </helpers>
+
+        <!--  <models>
+        <register>
+
+            <class>Deal_Register_Model</class>
+
+            <resourceModel>register_mysql4</resourceModel>
+        </register>
+
+
+                        <class>Deal_Register_Model_Mysql4</class>
+                        <entities>
+                            <tbl_brstcustomer>
+                                <table>tbl_brstcustomer</table>
+                            </tbl_brstcustomer>
+                        </entities>
+
                     </deal_register>
-            </modules>
+        </models>-->
 
-            <blocks>
-                <register>
-                    <rewrite>
-                     <register>Deal_Register_Block_Register</register>
-                    </rewrite>
-                </register>
-             </blocks>
-             
-            <!--  <models>
-			<register>
-				
-				<class>Deal_Register_Model</class>
-				
-				<resourceModel>register_mysql4</resourceModel>
-			</register>
-			
-			
-                            <class>Deal_Register_Model_Mysql4</class>
-                            <entities>
-                                <tbl_brstcustomer>
-                                    <table>tbl_brstcustomer</table>
-                                </tbl_brstcustomer>
-                            </entities>
+        <!-- Setup db read & write connection for Mymod module -->
+        <!--  <resources>
 
-                        </deal_register>
-            </models>-->
-		
-            <!-- Setup db read & write connection for Mymod module -->
-	<!--  <resources>
-			
-			<register_write>
-				<connection>
-					<use>core_write</use>
-				</connection>
-			</register_write>
-			
-			<register_read>
-				<connection>
-					<use>core_read</use>
-				</connection>
-			</register_read>
-		</resources>-->
-		<!-- -/- -->
-         
-         <!--<rewrite>
-               <deal_register_account>
-                   <from><![CDATA[#^/customer/account/#]]></from>
-                   <to>/register/account</to>
-               </deal_register_account>
-        </rewrite> -->
-        
-       
-    
+                <register_write>
+                    <connection>
+                        <use>core_write</use>
+                    </connection>
+                </register_write>
+
+                <register_read>
+                    <connection>
+                        <use>core_read</use>
+                    </connection>
+                </register_read>
+            </resources>-->
+        <!-- -/- -->
+
+        <!--<rewrite>
+              <deal_register_account>
+                  <from><![CDATA[#^/customer/account/#]]></from>
+                  <to>/register/account</to>
+              </deal_register_account>
+       </rewrite> -->
+
+
         <models>
+            <register>
+                <class>Deal_Register_Model</class>
+                <resourceModel>register_mysql4</resourceModel>
+            </register>
+            <register_mysql4>
+                <class>Deal_Register_Model_Mysql4</class>
+                <entities>
                     <register>
-                         <class>Deal_Register_Model</class>
-                         <resourceModel>register_mysql4</resourceModel>
-                     </register>
-                    <register_mysql4>
-                         <class>Deal_Register_Model_Mysql4</class>
-                         <entities>
-                             <register>
-                               <table>tbl_brstcustomer</table>
-                             </register>
-                          </entities>
-                    </register_mysql4>
-                    </models>
-                        <!-- allow the plugin to read and write -->
-                    <resources>
-                            <!-- connection to write -->
-                            <register_write>
-                                <connection>
-                                    <use>core_write</use>
-                                </connection>
-                            </register_write>
+                        <table>tbl_brstcustomer</table>
+                    </register>
+                </entities>
+            </register_mysql4>
+        </models>
+        <!-- allow the plugin to read and write -->
+        <resources>
+            <!-- connection to write -->
+            <register_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </register_write>
 
-                           <register_read>
-                              <connection>
-                                 <use>core_read</use>
-                              </connection>
-                           </register_read>
-                    </resources>      
-        
-	
-        </global>
-	   <frontend>
-                <routers>
-                        <register>
-                                <use>standard</use>
-                                <args>
-                                      <module>Deal_Register</module>
-                                      <frontName>register</frontName>
-                                </args>
-                        </register>
-                   
-                        <customer>
-                                <use>standard</use>
-                                <args>
-                                    <modules>
-                                        <Deal_Register before="Mage_Customer">Deal_Register</Deal_Register><!-- Tell Magento to call our custom module before the Mage/Checkout module -->
-                                      </modules> 
-                               </args>
-                        </customer> 
-                </routers>
-		<layout>
-			<updates>
-				<register>
-		   		      <file>register.xml</file>
-				</register>
-			</updates>
-       		</layout>
-        </frontend>
+            <register_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </register_read>
+        </resources>
+
+
+    </global>
+    <frontend>
+        <routers>
+            <register>
+                <use>standard</use>
+                <args>
+                    <module>Deal_Register</module>
+                    <frontName>register</frontName>
+                </args>
+            </register>
+
+            <customer>
+                <use>standard</use>
+                <args>
+                    <modules>
+                        <Deal_Register before="Mage_Customer">Deal_Register</Deal_Register>
+                        <!-- Tell Magento to call our custom module before the Mage/Checkout module -->
+                    </modules>
+                </args>
+            </customer>
+        </routers>
+        <layout>
+            <updates>
+                <register>
+                    <file>register.xml</file>
+                </register>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Deal_Register>
+                    <files>
+                        <default>Deal_Register.csv</default>
+                    </files>
+                </Deal_Register>
+            </modules>
+        </translate>
+    </frontend>
 </config>
 

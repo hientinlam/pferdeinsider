@@ -15,7 +15,7 @@
                             <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
                                 <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
+                                <action method="addLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
                                
                                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
                                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
@@ -60,7 +60,7 @@
                         <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
                                 <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
+                                <action method="addLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
                                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
                                  <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
@@ -109,7 +109,7 @@
                             <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
                                 <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
+                                <action method="addLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>create_product</name><path>comment/index/index/</path><label>Produkt erstellen</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
@@ -204,7 +204,7 @@
                             <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
                                 <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
+                                <action method="addLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
                                 <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
 
