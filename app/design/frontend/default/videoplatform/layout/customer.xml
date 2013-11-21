@@ -251,12 +251,11 @@ Customer account pages, rendered for all tabs in dashboard
                     <path>allmembers/index/earnings/</path>
                     <label>Einnahmen über Webseite</label>
                 </action> 
-                    <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action> 
-                         
-               <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
-               <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
-               <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
-                
+                <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action>
+                <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+                <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
+                <action method="addLink" translate="label" module="allmembers"><name>member_videos</name><path>allmembers/index/videos</path><label>Subscriptions</label></action>
+
             </block>
             <block type="checkout/cart_sidebar" name="cart_sidebar" template="checkout/cart/sidebar.phtml">
                 <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>

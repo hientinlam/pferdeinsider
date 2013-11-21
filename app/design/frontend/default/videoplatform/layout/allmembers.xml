@@ -61,9 +61,7 @@
                 
             <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
 -->
-                <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
-               
-
+                <action method="addLink" translate="label" module="allmembers"><name>member_videos</name><path>allmembers/index/videos</path><label>Subscriptions</label></action>
                 <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Billing Agreements</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
@@ -113,9 +111,6 @@
                 </action> 
                 <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action>
             
-                <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
-               
-
                 <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Billing Agreements</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
@@ -168,9 +163,6 @@
                 </action> 
                     <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action> 
             
-             <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
-               
-
                 <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Zahlungsvereinbarungen</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
@@ -229,10 +221,6 @@
                 <action method="addLink" translate="label" module="customer"><name>create_product</name><path>createproduct/index/showproduct/</path><label>Meine Produkte</label></action>
                <action method="addLink" translate="label" module="customer"><name>expertcalculation</name><path>allmembers/index/expertcalculation/</path><label>Meine Einnahmen</label></action> 
                 <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action> 
-            
-             <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
-               
-
                 <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Zahlungsvereinbarungen</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
                 <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>

@@ -96,6 +96,82 @@ foreach($adminmodel as $admininfo)
             </div>
             <?php } ?>
             <!-- end -->
+
+            <?php
+            $id = $this->getRequest()->getParam('name');
+            $customer = Mage::getSingleton('customer/session')->getCustomer();
+            $user = Mage::getModel('admin/user')->getCollection()->getData();
+            foreach ($user as $userinfo) {
+                if ($userinfo['username'] == $id) {
+                    break;
+                }
+            }
+            $attributecode = 'member_list';
+            $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributecode);
+            if ($attribute->usesSource()) {
+                $attribute_options = $attribute->getSource()->getAllOptions(false);
+            }
+            foreach ($attribute_options as $optiondata) {
+                if ($optiondata['label'] == $id) {
+
+                    $expertnameid = $optiondata['value'];
+
+                }
+            }
+            $custemail = $userinfo['email'];
+            $customerdata = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($custemail);
+            $custid = $customerdata['entity_id'];
+            $membersubscriber = Mage::getModel('allmembers/allmembers')->getCollection()->getData();
+            foreach ($membersubscriber as $memberinfo) {
+                if ($memberinfo['customer_id'] == $customer->getId() && $memberinfo['member_id'] == $expertnameid) {
+                    $userid = $memberinfo['customer_id'];
+                    $memberid = $memberinfo['member_id'];
+                    $status = $memberinfo['status'];
+                    $subscribeId = $memberinfo['id'];
+
+                    break;
+                }
+            }
+            $resource = Mage::getSingleton('core/resource');
+            $connection = $resource->getConnection('core_read');
+            $query = "select * from tbl_brstcustomer where customer_id = $custid";
+            $result = $connection->query($query);
+            $custdata = $result->fetch($select);
+            //echo "<pre>";print_r($custdata);die('ahah');
+
+            ?>
+            <?php /* Subscribe button -- start */ ?>
+            <div id="subscribemember" style="float:left;padding-top:20px;">
+                <form id="merchant-form-validate" method="post" action="<?php echo $this->getUrl()?>allmembers/index/subscribe">
+                    <input type="hidden" name="customerid" value="<?php echo $customer->getId();?>"/>
+                    <input type="hidden" name="id" value="<?php echo $subscribeId;?>"/>
+                    <input type="hidden" name="customeremail" value="<?php echo $customer->getEmail();?>"/>
+                    <input type="hidden" name="memberid" value="<?php echo  $expertnameid;?>"/>
+                    <?php
+                    $login = Mage::getSingleton( 'customer/session' )->isLoggedIn();
+                    $customerdetail=Mage::getSingleton( 'customer/session' )->getCustomer();
+                    $groupId=$customerdetail->getGroupId();
+                    if(!$login) {
+                        ?>
+                        <div><?php echo $this->__("Please <a href='%s'>login</a> to subscribe to a member", Mage::getBaseUrl().'customer/account'); ?></div>
+                    <?php
+                    }
+                    if($login && $status==0 && $groupId==1) { ?>
+                        <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
+                            <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px; margin-left: 0;"  class="button" title="Submit" type="submit" name="subscribe" ><span><span><?php echo $this->__("Subscribe"); ?></span></span></button>
+                        </div>
+                    <?php
+                    } elseif ($login && $memberid==$expertnameid && $status==1 && $groupId==1) {
+                        ?>
+                        <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
+                            <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px; margin-left: 0;" class="button"  type="button" name="unsubscribe" onclick="changeaction()"><span><span><?php echo $this->__("Unsubscribe"); ?></span></span></button>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </form>
+            </div>
+            <?php /* Subscribe button -- end */ ?>
         </div>
         <div class="left_subscribe_bg">
               <?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?>
@@ -152,53 +228,6 @@ foreach($adminmodel as $admininfo)
                          </ul>
                      </div>
                </div>
-    <?php
-               $id=  $this->getRequest()->getParam('name');
-               $customer= Mage::getSingleton( 'customer/session' )->getCustomer();
-               $user = Mage::getModel('admin/user')->getCollection()->getData();
-               foreach($user as $userinfo)
-                  {
-                      if($userinfo['username']==$id)
-                      {
-                          break;
-                      }
-                  }
-                 $attributecode = 'member_list';                  
-                $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product',$attributecode);
-                if ($attribute->usesSource()) {
-                    $attribute_options = $attribute->getSource()->getAllOptions(false);
-                }
-                foreach($attribute_options as $optiondata)
-                {
-                    if($optiondata['label']== $id) {
-                       
-                   $expertnameid=$optiondata['value']; 
-                 
-                    }
-                }
-                $custemail=$userinfo['email'];
-                $customerdata=Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($custemail);
-                $custid=$customerdata['entity_id'];
-                $membersubscriber=Mage::getModel('allmembers/allmembers')->getCollection()->getData();
-                foreach($membersubscriber as $memberinfo){
-                    if($memberinfo['customer_id']== $customer->getId() && $memberinfo['member_id']==$expertnameid )
-                    {
-                        $userid=$memberinfo['customer_id'];
-                        $memberid=$memberinfo['member_id'];
-                        $status=$memberinfo['status'];
-                        $subscribeId=$memberinfo['id'];
-                     
-                        break;
-                    }
-                }
-                $resource = Mage::getSingleton('core/resource');
-                $connection= $resource->getConnection('core_read');			
-                $query="select * from tbl_brstcustomer where customer_id = $custid";
-                $result=$connection->query($query);
-                $custdata = $result->fetch($select); 
-                //echo "<pre>";print_r($custdata);die('ahah');
-                      
-    ?>
     <script type="text/javascript">
     function changeaction()
     {
@@ -594,17 +623,10 @@ if(($this->getRequest()->getParam('p') > 1 ))
       
  </div>       
       </div>
-  <div id="subscribemember" style="display:none;float:left;padding-top:20px;">
-      <form id="merchant-form-validate" method="post" action="<?php echo $this->getUrl()?>allmembers/index/subscribe" />
-         <input type="hidden" name="customerid" value="<?php echo $customer->getId();?>"/>
-         <input type="hidden" name="id" value="<?php echo $subscribeId;?>"/>
-         <input type="hidden" name="customeremail" value="<?php echo $customer->getEmail();?>"/>
-         <input type="hidden" name="memberid" value="<?php echo  $expertnameid;?>"/>
-         <br />
          [Show list of packaged courses instead of member info]
          <br />
-         <div class="page-title">
-             <h1>Member Information</h1>
+        <div class="page-title">
+         <h1>Member Information</h1>
         </div>
         <div class="fieldset" style="margin:0px;">
            <ul class="form-list">
@@ -661,31 +683,6 @@ if(($this->getRequest()->getParam('p') > 1 ))
                 </li>
             </ul>
       </div>
-    <?php 
-     $login = Mage::getSingleton( 'customer/session' )->isLoggedIn();
-     $customerdetail=Mage::getSingleton( 'customer/session' )->getCustomer();
-      $groupId=$customerdetail->getGroupId();
-     if(!$login)
-     {
-         ?>
-         <div> Please <a href="<?php echo Mage::getBaseUrl().'customer/account'?>">login</a> to subscribe member</div>
-         
-         
-         <?php
-     }
-   if($login && $status==0 && $groupId==1)  {?>
-      <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
-        <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px;"  class="button" title="Submit" type="submit" name="subscribe" ><span><span>Subscribe</span></span></button>
-  </div>
-    <?php }
-    else if($login && $memberid==$expertnameid && $status==1 && $groupId==1){?>
-        <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
-        <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px;" class="button"  type="button" name="unsubscribe" onclick="changeaction()"><span><span>Unsubscribe</span></span></button>
-  </div>
- <?php   }
-?>
-</form>
-  </div>
 
        <?php // die('helo');  ?>
 

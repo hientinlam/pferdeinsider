@@ -170,7 +170,6 @@
                                <action method="addLink" translate="label" module="customer"><name>allmembers</name><path>allmembers/index/earnings/</path><label>Einnahmen über Webseite</label></action> 
                     <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action> 
              <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
                               <!--  <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
                               -->  <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
 
@@ -219,7 +218,6 @@
                                <action method="addLink" translate="label" module="customer"><name>allmembers</name><path>allmembers/index/earnings/</path><label>Einnahmen über Webseite</label></action> 
                     <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action> 
               <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>member_videos</name><path>allmembers/index/videos</path><label>Produkt erstellen</label></action>
                               <!--  <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
                               -->  
                                 <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
