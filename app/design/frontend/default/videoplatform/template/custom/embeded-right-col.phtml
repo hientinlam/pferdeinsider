@@ -64,7 +64,7 @@
         foreach ($relatedProductIds as $relatedProductId)
         {
             $relatedProduct = Mage::getModel('catalog/product')->load($relatedProductId);
-            $relatedProducturl = $relatedProduct->getProductUrl() . "?" . Mage::registry('join_id');
+            $relatedProducturl = $relatedProduct->getProductUrl() . "?" . Mage::getSingleton('core/session')->getAffilicateUrl();
     ?>
         <li class="" style="list-style:none;background:#F0F0F0;padding:5px;margin-bottom:10px;">
 
