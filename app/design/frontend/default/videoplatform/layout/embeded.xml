@@ -1,15 +1,49 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
     
-    <embeded_index_index>
+    <EMBEDED_CODE>
         <reference name="root">
 			<action method="setTemplate"><template>page/empty.phtml</template></action>
        	 </reference>
-        <reference name="content">
-            <block type="embeded/embeded"  name="product_list" template="custom/embeded.phtml"></block>
-           <!--  <block type="embeded/embeded" name="product_list" template="custom/embededcode.phtml"></block> -->
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>jwplayer/jwplayer.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>jwplayer/jwplayer.html5.js</name></action>
         </reference>
-    </embeded_index_index>
+        <reference name="content">
+            <block type="embeded/embeded"  name="product_list" template="custom/embeded.phtml">
+                <block type="core/text_list" name="embeded-products-lists">
+                    <block type="embeded/embeded" name="affiliate-products-list-recent" template="custom/embeded_product_list.phtml">
+                        <action method="generateRecentProductsList"/>
+                    </block>
+                    <block type="embeded/embeded" name="affiliate-products-list-popular" template="custom/embeded_product_list.phtml">
+                        <action method="generatePopularProductsList"/>
+                    </block>
+                    <block type="embeded/embeded" name="affiliate-products-list-toprated" template="custom/embeded_product_list.phtml">
+                        <action method="generateTopratedProductsList"/>
+                    </block>
+                </block>
+                <block type="embeded/embeded" name="embeded-right-col" template="custom/embeded-right-col.phtml" />
+            </block>
+        </reference>
+    </EMBEDED_CODE>
+
+    <EMBEDED_SEARCH>
+        <reference name="root">
+			<action method="setTemplate"><template>page/empty.phtml</template></action>
+       	 </reference>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>jwplayer/jwplayer.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>jwplayer/jwplayer.html5.js</name></action>
+        </reference>
+        <reference name="content">
+            <block type="embeded/embeded"  name="product_list" template="custom/embeded.phtml">
+                <block type="core/text_list" name="embeded-products-lists">
+                    <block type="embeded/embeded" name="affiliate-products-search-result" template="custom/embeded_product_list.phtml" />
+                </block>
+                <block type="embeded/embeded" name="embeded-right-col" template="custom/embeded-right-col.phtml" />
+            </block>
+        </reference>
+    </EMBEDED_SEARCH>
    
      <embeded_index_code>
          <reference name="root">

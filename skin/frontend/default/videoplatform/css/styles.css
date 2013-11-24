@@ -1256,7 +1256,7 @@ span.loreal{color:#333333 !important;font-size: 14px;padding-left:0px !important
 .listgrid1  .products-grid .availability { line-height:21px;letter-spacing:-1px; }
 .listgrid1  .products-grid .actions { float:right;position: relative;right:12px;top: -28px;}
 .listgrid1  .products-grid .actions button btn-cart span span{font-family: Arial;font-size: 14px !important;}
-.listgrid1  .products-grid li.item.last { border-bottom:0; }
+.listgrid1  .products-grid li.item.last { border-bottom:0; margin-right: 0;}
 .category-products .listgrid1  .products-grid li.item.last { border-bottom:0;margin-right:0px !important; }
 .listgrid1  .col2-left-layout .products-grid,
 .listgrid1  .col2-right-layout .products-grid { width:960px; margin:0 auto; }

@@ -325,7 +325,12 @@ class AW_Affiliate_Customer_AffiliateController extends Mage_Core_Controller_Fro
 
     public function embedCodeAction()
     {
-        $ins_id = serialize($_POST['collect']);
+        if(empty($_POST['collect'])) {
+            $ins_id = serialize(array());
+        } else {
+            $ins_id = serialize($_POST['collect']);
+        }
+
         $embedcode = $_POST['embed_code'];
         $custid = $_POST['custid'];
         $campaign_Id = $_POST['campaign_Id'];

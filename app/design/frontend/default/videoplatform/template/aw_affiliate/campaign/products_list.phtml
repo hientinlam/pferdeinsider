@@ -16,7 +16,6 @@ $_helper = $this->helper('catalog/output');
 </div>
 <div class="category-products affiliate-campaign">
     <?php // Grid Mode
-        $countdata=0;
         $_collectionSize = count($_productCollection);
         $count = 0;
         $_columnCount = 3;
@@ -44,9 +43,10 @@ $_helper = $this->helper('catalog/output');
             $customer = Mage::getModel("customer/customer")->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($memberemailid);
             $_productId= $_product->getId();
         ?>
-            <li class="item<?php if(($countdata) % $_columnCount == 0): ?> first<?php elseif(($countdata+1) % $_columnCount == 0): ?> last<?php endif; ?>">
+            <li class="item<?php if(($count) % $_columnCount == 0): ?> first<?php elseif(($count+1) % $_columnCount == 0): ?> last<?php endif; ?>">
                 <input type='checkbox' name="collect[<?php echo $this->getListType() ?>][]"  value="<?php echo $_productId ?>"/>
                 <?php
+                    $countdata = '-' . $this->getListType() . '-' . $count;
                     $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($_productId);
                     $_productObj = Mage::getModel('catalog/product')->load($_productId);
                     $type = $_productObj['type_id'];
@@ -112,7 +112,6 @@ $_helper = $this->helper('catalog/output');
                     </a>
                 </h2>
             </li>
-        <?php $countdata++; endforeach; ?>
+        <?php $count++; endforeach; ?>
     </ul>
-    <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
 </div>

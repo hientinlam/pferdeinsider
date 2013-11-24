@@ -1,0 +1,95 @@
+<?php
+    $_productIds = $this->getProductCollection();
+?>
+<?php if(!empty($_productIds)): ?>
+<div class="recent_courses_bg" style="margin-bottom:10px;">
+    <div class="recent_courses_left">
+        <?php echo $this->getListTitle() ?>
+    </div>
+</div>
+<div class="listgrid1">
+    <ul class="products-grid" style="width:745px;">
+        <?php
+            $count = 0;
+            $_columnCount = 3;
+            $_affiliateUrl = Mage::getSingleton('core/session')->getAffilicateUrl();
+            foreach($_productIds as $prodid) {
+                if(is_object($prodid)) {
+                    $prodid = $prodid->getId();
+                }
+                $_productObj = Mage::getModel('catalog/product')->load($prodid);
+                $ProductUrl = $_productObj->getProductUrl() . "?" . $_affiliateUrl;
+                $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($prodid);
+                $type = $_productObj['type_id'];
+                $ustreamvideo = $_productObj['ustream_video'];
+                $productmaterial = $_productObj['product_material'];
+                $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+                $video = '';
+                $video1 = '';
+                foreach ($_myprodsamples as $_sample) {
+                    $video = $_sample['sample_url'];
+                    $video1 = $_sample['link_url'];
+                }
+                $vdata = explode("v=", $video);
+
+                $countdata = '-' . $this->getListType() . '-' . $count;
+                ?>
+                <li style="float:left;" class="item<?php if($count % $_columnCount == 0): ?> first<?php elseif(($count + 1) % $_columnCount == 0): ?> last<?php endif; ?>">
+                    <?php if(!empty($vdata['1']) && $type == 'downloadable' && $productmaterial=='7'): ?>
+                        <div class="videosclick3" onclick="thevid=document.getElementById('thevideo<?php echo $countdata ?>'); thevid.style.display='block';document.getElementById('viewplayer2<?php echo $countdata ?>').src = document.getElementById('viewplayer2<?php echo $countdata ?>').src.replace('autoplay=0','autoplay=1'); this.style.display='none'">
+                            <?php if($_productObj->getImageUrl() !=NULL && $_productObj['image']!='no_selection'): ?>
+                                <img style="margin:15px;padding-left:5px;" src="<?php echo $this->helper('catalog/image')->init($_productObj, 'small_image')->keepAspectRatio(false)->keepFrame(false)->resize(195,180) ?>" style="cursor:pointer" />
+                            <?php else: ?>
+                                <img style="margin:15px;padding-left:5px;" src="http://img.youtube.com/vi/<?php echo $vdata['1']?>/2.jpg"  width="195" height="180" style="cursor:pointer" />
+                            <?php endif;  ?>
+                        </div>
+                        <div id="thevideo<?php echo $countdata ?>" style="display:none">
+                            <?php   echo  '<iframe id="viewplayer2'.$countdata.'" style="margin:15px;padding-left:5px;" title="YouTube video player" class="youtube-player" type="text/html" width="195" height="180"  src="https://www.youtube.com/embed/'.$vdata['1'].'?autoplay=0" frameborder="0" allowFullScreen></iframe>'; ?>
+                        </div>
+
+                    <?php elseif($productmaterial == 8 && !empty($video1)): ?>
+                        <?php
+                            if($_productObj['image'] !='no_selection') {
+                                $img=$this->helper('catalog/image')->init($_productObj, 'image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(290,190);
+                            }
+                            elseif($_productObj['image'] =='no_selection') {
+                                $img=$this->getSkinUrl('images/poster.jpg');
+                            }
+                        ?>
+                        <div style="padding:15px !important;">
+                            <div id="myElementlist<?php echo $countdata ?>" class="jwwrap" class="listgrid">Loading the player...</div>
+                        </div>
+                        <script type="text/javascript">
+                            jwplayer("myElementlist<?php echo $countdata ?>").setup({
+                                image:'<?php echo $img ?>',
+                                'width': '195',
+                                'height': '180',
+                                flashplayer : '<?php echo $this->getSkinUrl('jwplayer/jwplayer.flash.swf'); ?>',
+                                file: "<?php echo $video1 ?>"
+                            });
+                        </script>
+                    <?php else: ?>
+                        <div>
+                            <a href="<?php echo $ProductUrl ?>" title="<?php echo $this->stripTags($this->getImageLabel($_productObj, 'small_image'), null, true) ?>" class="product-image">
+                                <img src="<?php echo $this->helper('catalog/image')->init($_productObj, 'small_image')->keepAspectRatio(false)->keepFrame(false)->resize(195,180) ?>"  alt="<?php echo $this->stripTags($this->getImageLabel($_productObj, 'small_image'), null, true) ?>" />
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                    <h2 class="product-name"><a href="<?php echo $ProductUrl; ?>" target="_blank"  title="<?php echo $_productObj->getUrl() ?>"><?php echo $_productObj->getName() ?></a></h2>
+                    <div class="price-box">
+                        <span id="product-price-150" class="regular-price">
+                             <span class="price"><?php echo $curencySymbol . number_format( $_productObj->getPrice(),2);?></span>
+                         </span>
+                    </div>
+                    <div class="actions">
+                        <?php if($_productObj['is_salable']): ?>
+                            <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php  echo $ProductUrl ?>')"><span><span><?php echo $this->__('BUY NOW') ?></span></span></button>
+                        <?php else: ?>
+                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                        <?php endif; ?>
+                    </div>
+                </li>
+        <?php $count++;} //foreach($_productIds as $_productId) ?>
+    </ul>
+</div>
+<?php endif; //if(!empty($_productIds)):?>
