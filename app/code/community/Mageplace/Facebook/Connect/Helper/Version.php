@@ -25,12 +25,11 @@ class Mageplace_Facebook_Connect_Helper_Version extends Mage_Core_Helper_Abstrac
 			} elseif(file_exists('LICENSE_PRO.html')) {
 				$edition = self::PRO_EDITION;
 			} else {
-				try {
-					if(class_exists('Enterprise_Cms_Helper_Data')) {
-						$edition = self::ENTERPRISE_EDITION;
-					}
-				} catch(Exception $e) {	}
-				
+//				try {
+//					if(class_exists('Enterprise_Cms_Helper_Data')) {
+//						$edition = self::ENTERPRISE_EDITION;
+//					}
+//				} catch(Exception $e) {	}
 				$edition = self::COMMUNITY_EDITION;
 			}			
 		}

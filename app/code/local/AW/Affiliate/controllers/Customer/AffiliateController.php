@@ -322,23 +322,26 @@ class AW_Affiliate_Customer_AffiliateController extends Mage_Core_Controller_Fro
     {
         return (bool)count($this->_getSession()->getMessages()->getItemsByType('error'));
     }
-    public function EmbedCodeAction()
+
+    public function embedCodeAction()
     {
-           $ins_id=$_POST['product_id'];
-           $embedcode=$_POST['embed_code'];
-           $custid=$_POST['custid'];
-           $campaign_Id=$_POST['campaign_Id'];
-           $affiliate_Id=$_POST['affiliate_Id'];
-          
-           $response1 = new Varien_Object();
-           $response1->setError(0);
-            if ($response1->getError() == 0) {
+        $ins_id = serialize($_POST['collect']);
+        $embedcode = $_POST['embed_code'];
+        $custid = $_POST['custid'];
+        $campaign_Id = $_POST['campaign_Id'];
+        $affiliate_Id = $_POST['affiliate_Id'];
+
+        $response1 = new Varien_Object();
+        $response1->setError(0);
+        if ($response1->getError() == 0)
+        {
             $collection = Mage::getModel('awaffiliate/traffic_source')->getCollection();
             $collection->addFieldToFilter('main_table.traffic_name', array("eq" => $affiliate_Id));
             $collection->addFieldToFilter('main_table.affiliate_id', array("eq" => $affiliate_Id));
             $collection->setPageSize(1);
 
-            if (!$collection->getSize()) {
+            if (!$collection->getSize())
+            {
                 $trafficItem = Mage::getModel('awaffiliate/traffic_source');
                 $trafficItem->setData(array(
                     'affiliate_id' => $affiliate_Id,
@@ -346,50 +349,55 @@ class AW_Affiliate_Customer_AffiliateController extends Mage_Core_Controller_Fro
                 ));
                 $trafficItem->save();
                 $trafficId = $trafficItem->getId();
-            } else {
+            }
+            else
+            {
                 $trafficId = $collection->getFirstItem()->getId();
             }
         }
-           $paramz = array(
-                AW_Affiliate_Helper_Affiliate::CAMPAIGN_REQUEST_KEY => $campaign_Id,
-                AW_Affiliate_Helper_Affiliate::AFFILIATE_REQUEST_KEY => $affiliate_Id,
-                AW_Affiliate_Helper_Affiliate::AFFILIATE_TRAFFIC_SOURCE => $trafficId
-             );
-           $resultUrl1 = Mage::helper('awaffiliate/affiliate')->createAffiliateLink($paramz);
-           $response1->setData('result', $resultUrl1);
-           $this->getResponse();
-           $joinId= $resultUrl1;
-           
-           
-           $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-           $query="insert into tbl_embedcode(customer_id,product_id,embed_code,join_id) values('$custid','$ins_id','$embedcode','$joinId')";
-           $result=$connection->query($query);
-           $id=$connection->lastInsertId();
-           
-           if($id)
-            {
-                     $res['success']='success';
-                     $res['id']=$id;
-                     echo json_encode($res);
-                     exit;
+        $paramz = array(
+            AW_Affiliate_Helper_Affiliate::CAMPAIGN_REQUEST_KEY => $campaign_Id,
+            AW_Affiliate_Helper_Affiliate::AFFILIATE_REQUEST_KEY => $affiliate_Id,
+            AW_Affiliate_Helper_Affiliate::AFFILIATE_TRAFFIC_SOURCE => $trafficId
+        );
+        $resultUrl1 = Mage::helper('awaffiliate/affiliate')->createAffiliateLink($paramz);
+        $response1->setData('result', $resultUrl1);
+        $this->getResponse();
+        $joinId = $resultUrl1;
 
-            }
+
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $query = "insert into tbl_embedcode(customer_id,product_id,embed_code,join_id) values('$custid','$ins_id','$embedcode','$joinId')";
+        $result = $connection->query($query);
+        $id = $connection->lastInsertId();
+
+        if ($id)
+        {
+            $res['success'] = 'success';
+            $res['id'] = $id;
+            echo json_encode($res);
+            exit;
+
         }
-        public function CodeAction()
-         {
-           
-           $campaign_Id=$_POST['campaign_Id'];
-           $affiliate_Id=$_POST['affiliate_Id'];
-           $baseUrl=$_POST['current_url'];
-           $response1 = new Varien_Object();
-           $response1->setError(0);
-            if ($response1->getError() == 0) {
+    }
+
+    public function CodeAction()
+    {
+
+        $campaign_Id = $_POST['campaign_Id'];
+        $affiliate_Id = $_POST['affiliate_Id'];
+        $baseUrl = $_POST['current_url'];
+        $response1 = new Varien_Object();
+        $response1->setError(0);
+        if ($response1->getError() == 0)
+        {
             $collection = Mage::getModel('awaffiliate/traffic_source')->getCollection();
             $collection->addFieldToFilter('main_table.traffic_name', array("eq" => $affiliate_Id));
             $collection->addFieldToFilter('main_table.affiliate_id', array("eq" => $affiliate_Id));
             $collection->setPageSize(1);
 
-            if (!$collection->getSize()) {
+            if (!$collection->getSize())
+            {
                 $trafficItem = Mage::getModel('awaffiliate/traffic_source');
                 $trafficItem->setData(array(
                     'affiliate_id' => $affiliate_Id,
@@ -397,29 +405,29 @@ class AW_Affiliate_Customer_AffiliateController extends Mage_Core_Controller_Fro
                 ));
                 $trafficItem->save();
                 $trafficId = $trafficItem->getId();
-            } else {
+            }
+            else
+            {
                 $trafficId = $collection->getFirstItem()->getId();
             }
         }
-           $params = array(
-                AW_Affiliate_Helper_Affiliate::CAMPAIGN_REQUEST_KEY => $campaign_Id,
-                AW_Affiliate_Helper_Affiliate::AFFILIATE_REQUEST_KEY => $affiliate_Id,
-                AW_Affiliate_Helper_Affiliate::AFFILIATE_TRAFFIC_SOURCE => $trafficId
-             );
-           $resultUrl1 = Mage::helper('awaffiliate/affiliate')->generateAffiliateLink($baseUrl, $params);
-           $response1->setData('result', $resultUrl1);
-           $this->getResponse();
-           $joinId= $resultUrl1;
-          
-           if($joinId)
-            {
-                     $res['success']='success';
-                     $res['id']=$joinId;
-                     echo json_encode($res);
-                     exit;
+        $params = array(
+            AW_Affiliate_Helper_Affiliate::CAMPAIGN_REQUEST_KEY => $campaign_Id,
+            AW_Affiliate_Helper_Affiliate::AFFILIATE_REQUEST_KEY => $affiliate_Id,
+            AW_Affiliate_Helper_Affiliate::AFFILIATE_TRAFFIC_SOURCE => $trafficId
+        );
+        $resultUrl1 = Mage::helper('awaffiliate/affiliate')->generateAffiliateLink($baseUrl, $params);
+        $response1->setData('result', $resultUrl1);
+        $this->getResponse();
+        $joinId = $resultUrl1;
 
-            }
+        if ($joinId)
+        {
+            $res['success'] = 'success';
+            $res['id'] = $joinId;
+            echo json_encode($res);
+            exit;
+
         }
- 
-       
+    }
 }

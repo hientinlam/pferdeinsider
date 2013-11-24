@@ -40,6 +40,8 @@
             <action method="addCss"><stylesheet>aw_affiliate/css/customer_account.css</stylesheet></action>
             <action method="addCss"><stylesheet>aw_affiliate/css/customer_campaign.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>aw_affiliate/js/campaign.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>jwplayer/jwplayer.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>jwplayer/jwplayer.html5.js</name></action>
         </reference>
         <reference name="content">
             <block type="core/template" name="awaffiliate.customer.account.head"  as="awaffiliate_customer_account_head" template="aw_affiliate/campaign/head.phtml"/>
@@ -47,8 +49,19 @@
                 <block type="awaffiliate/customer_summary" name="awaffiliate.customer.account.summary" as="awaffiliate_customer_account_summary" />
             </block>
             <block type="awaffiliate/campaign_link" name="awaffilaite.customer.campaign.link" as="awaffiliate_customer_campaign_link"/>
-             <block type="awaffiliate/campaign_embeded" name="awaffiliate.customer.campaign.embeded" as="awaffiliate_customer_campaign_embeded" template="aw_affiliate/campaign/embeded.phtml"/>
-           
+            <block type="awaffiliate/campaign_embeded" name="awaffiliate.customer.campaign.embeded" as="awaffiliate_customer_campaign_embeded" template="aw_affiliate/campaign/embeded.phtml">
+                <block type="core/text_list" name="affiliate-products-lists">
+                    <block type="awaffiliate/campaign_embeded" name="affiliate-products-list-recent" template="aw_affiliate/campaign/products_list.phtml">
+                        <action method="generateRecentProductsList" />
+                    </block>
+                    <block type="awaffiliate/campaign_embeded" name="affiliate-products-list-popular" template="aw_affiliate/campaign/products_list.phtml">
+                        <action method="generatePopularProductsList" />
+                    </block>
+                    <block type="awaffiliate/campaign_embeded" name="affiliate-products-list-toprated" template="aw_affiliate/campaign/products_list.phtml">
+                        <action method="generateTopratedProductsList" />
+                    </block>
+                </block>
+            </block>
             <block type="awaffiliate/customer_backlink" name="awaffiliate.customer.account.link.back" template="aw_affiliate/customer/backlink.phtml">
                 <action method="setBackLink"><link>affiliate/customer_affiliate/view</link></action>
             </block>

@@ -1220,29 +1220,29 @@ span.loreal{color:#333333 !important;font-size: 14px;padding-left:0px !important
 .homepage .products-grid .productname_video .viewpage a{color:#8fd400 !important;font-family: Verdana!important;font-size: 13px!important;padding:0px !important; line-height: 25px;}
 
 
-.homepage1 .viewpage{width:108px;height:25px;float:right;background: #000000;border-radius:10px 10px 0px 0px;margin-right:20px;margin-top: 5px; text-align: center;}
-.homepage1 .viewpage a{color:#8fd400 !important;font-family: Verdana!important;font-size: 13px!important;padding:0px !important; line-height: 25px;text-decoration:underline !important;}
-.homepage1 .viewpage a:hover{text-decoration:none;}
-.homepage1 .products-grid {  float: left;height: auto;margin-top: 20px !important; width: 100%;}
-.homepage1 .products-grid li.item { float:left;background-image: url("../images/promote.png"); height:250px; margin-right: 20px;width:235px;}
-.homepage1 .products-grid .product-image { display:block; margin:15px;    padding-left: 5px;}
-.homepage1 .products-grid .productname_audio{ background-image: url("../images/productname_bg.png");width:195px;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px 15px;;position: relative;top:-65px;float:left;}
-.homepage1 .products-grid .productname_audio a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;width: auto; }
-.homepage1 .products-grid .productname_video{ background-image: url("../images/productname_bg.png") ;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px 20px;position: relative;top:-60x;float:left;}
-.homepage1 .products-grid .productname_video a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;;width: auto; }
+.affiliate-campaign .viewpage{width:108px;height:25px;float:right;background: #000000;border-radius:10px 10px 0px 0px;margin-right:20px;margin-top: 5px; text-align: center;}
+.affiliate-campaign .viewpage a{color:#8fd400 !important;font-family: Verdana!important;font-size: 13px!important;padding:0px !important; line-height: 25px;text-decoration:underline !important;}
+.affiliate-campaign .viewpage a:hover{text-decoration:none;}
+.affiliate-campaign .products-grid {  float: left;height: auto;margin-top: 20px !important; width: 100%;}
+.affiliate-campaign .products-grid li.item { float:left;background-image: url("../images/promote.png"); height:250px; margin-right: 20px;width:235px;}
+.affiliate-campaign .products-grid .product-image { display:block; margin:15px;    padding-left: 5px;}
+.affiliate-campaign .products-grid .productname_audio{ background-image: url("../images/productname_bg.png");width:195px;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px 15px;;position: relative;top:-65px;float:left;}
+.affiliate-campaign .products-grid .productname_audio a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;width: auto; }
+.affiliate-campaign .products-grid .productname_video{ background-image: url("../images/productname_bg.png") ;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px 20px;position: relative;top:-60x;float:left;}
+.affiliate-campaign .products-grid .productname_video a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;;width: auto; }
 .videotag{float: right; position: relative;right:15px;top:-208px;}
 .audiotag{float: right; position: relative;right:15px;top:-205px ;}
-.homepage1 .products-grid .productname_audio .expertname{font-size:14px;padding-left:25px;float:left; font-style:italic;color:#9E0B0F;width:157px\9;width:147px;}
-.homepage1 .products-grid .product-name { background-image: url("../images/productname_bg.png");width:195px;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px 20px;position: relative;top: -65px;float:left;}
-.homepage1 .expertname{font-size:14px;padding-left:26px;float:left; font-style:italic;color:#9E0B0F;width:150px;}
-.homepage1 .products-grid .product-name a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;width: auto; }
-.homepage1 .products-grid .price-box { margin:5px 0; }
-.homepage1 .products-grid .availability { line-height:21px; }
-.homepage1 .products-grid .actions { position:absolute; bottom:12px; }
-.homepage1 .col2-left-layout .products-grid,
-.homepage1 .col2-right-layout .products-grid {margin:0 auto; }
-.homepage1 .products-grid li.item.last { border-bottom:0;margin-right:0px !important; }
-.homepage1 .col1-layout .products-grid {width:100%;  }
+.affiliate-campaign .products-grid .productname_audio .expertname{font-size:14px;padding-left:25px;float:left; font-style:italic;color:#9E0B0F;width:157px\9;width:147px;}
+.affiliate-campaign .products-grid .product-name { background-image: url("../images/productname_bg.png");width:195px;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px 20px;position: relative;top: -65px;float:left;}
+.affiliate-campaign .expertname{font-size:14px;padding-left:26px;float:left; font-style:italic;color:#9E0B0F;width:150px;}
+.affiliate-campaign .products-grid .product-name a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;width: auto; }
+.affiliate-campaign .products-grid .price-box { margin:5px 0; }
+.affiliate-campaign .products-grid .availability { line-height:21px; }
+.affiliate-campaign .products-grid .actions { position:absolute; bottom:12px; }
+.affiliate-campaign .col2-left-layout .products-grid,
+.affiliate-campaign .col2-right-layout .products-grid {margin:0 auto; }
+.affiliate-campaign .products-grid li.item.last { border-bottom:0;margin-right:0px !important; }
+.affiliate-campaign .col1-layout .products-grid {width:100%;  }
 
 
 .listgrid1  .products-grid .product-name .size{color: #666666;font-size: 10px !important;}

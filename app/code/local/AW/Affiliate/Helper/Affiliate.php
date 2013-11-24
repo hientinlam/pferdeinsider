@@ -212,7 +212,7 @@ class AW_Affiliate_Helper_Affiliate extends Mage_Core_Helper_Abstract
             self::AFFILIATE_REQUEST_KEY . '=' . Mage::helper('core')->urlEncode($afid),
             self::AFFILIATE_TRAFFIC_SOURCE . '=' . Mage::helper('core')->urlEncode($ats)
         );
-        $url .= implode('&', $queryParamz);
+        $url = implode('&', $queryParamz);
         return $url;
     }
 

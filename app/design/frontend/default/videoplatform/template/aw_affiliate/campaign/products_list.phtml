@@ -1,0 +1,118 @@
+<?php
+
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+$_productCollection = $this->getProductCollection();
+
+$_helper = $this->helper('catalog/output');
+?>
+<div class="recent_courses_bg">
+    <div class="recent_courses_left">
+        <?php echo $this->getListTitle() ?>
+    </div>
+</div>
+<div class="category-products affiliate-campaign">
+    <?php // Grid Mode
+        $countdata=0;
+        $_collectionSize = count($_productCollection);
+        $count = 0;
+        $_columnCount = 3;
+        $i=0;
+    ?>
+    <ul class="products-grid">
+    <?php foreach ($_productCollection as $_product): ?>
+        <?php
+            $expertid =$_product['member_list'];
+            $attr = $_product->getResource()->getAttribute("member_list");
+            if ($attr->usesSource()) {
+                $expertname = $attr->getSource()->getOptionText($expertid);
+            }
+            $user = Mage::getModel('admin/user')->getCollection()->getData();
+
+            foreach($user as $userinfo) {
+                $adminusername = explode('-',$userinfo['username']);
+                if($adminusername[0] == $expertname)
+                {
+                    $memberemailid = $userinfo['email'];
+                    break;
+                }
+            }
+
+            $customer = Mage::getModel("customer/customer")->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($memberemailid);
+            $_productId= $_product->getId();
+        ?>
+            <li class="item<?php if(($countdata) % $_columnCount == 0): ?> first<?php elseif(($countdata+1) % $_columnCount == 0): ?> last<?php endif; ?>">
+                <input type='checkbox' name="collect[<?php echo $this->getListType() ?>][]"  value="<?php echo $_productId ?>"/>
+                <?php
+                    $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($_productId);
+                    $_productObj = Mage::getModel('catalog/product')->load($_productId);
+                    $type = $_productObj['type_id'];
+                    $ustreamvideo = $_productObj['ustream_video'];
+                    $productmaterial=$_productObj['product_material'];
+                    $video = '';
+                    $video1 = '';
+                    foreach ($_myprodsamples as $_sample) {
+                        $video= $_sample['sample_url'];
+                        $video1= $_sample['link_url'];
+                    }
+                    $vdata=explode("v=",$video);
+                    if($productmaterial=='8' &&  $video1!=NULL):
+                        $audioclass='productname_audio';
+                    elseif($productmaterial=='7' && $vdata['1']!=NULL ):
+                        $audioclass='productname_video';
+                    else:
+                        $audioclass='product-name';
+                    endif;
+
+                    if(!empty($vdata['1']) && $type == 'downloadable' && $productmaterial=='7'):
+                ?>
+                        <div class="videosclick3" onclick="thevid=document.getElementById('thevideo<?php echo $countdata ?>'); thevid.style.display='block';document.getElementById('viewplayer2<?php echo $countdata ?>').src = document.getElementById('viewplayer2<?php echo $countdata ?>').src.replace('autoplay=0','autoplay=1'); this.style.display='none'; document.getElementById('productname_video').style.top='-117px';">
+                            <?php if($_productObj->getImageUrl() != NULL && $_productObj['image'] != 'no_selection'): ?>
+                                <img style="margin:15px;padding-left:5px;" src="<?php echo $this->helper('catalog/image')->init($_productObj, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(195,180); ?>" width="195" height="180" style="cursor:pointer" />
+                            <?php else:?>
+                                <img style="margin:15px;padding-left:5px;" src="http://img.youtube.com/vi/<?php echo $vdata['1']?>/2.jpg"  width="195" height="180" style="cursor:pointer" />
+                            <?php endif; ?>
+                        </div>
+                        <div id="thevideo<?php echo $countdata ?>" style="display:none">
+                            <?php   echo  '<iframe id="viewplayer2'.$countdata.'" style="margin:15px;padding-left:5px;" title="YouTube video player" class="youtube-player" type="text/html" width="195" height="180"  src="https://www.youtube.com/embed/'.$vdata['1'].'?autoplay=0" frameborder="0" allowFullScreen></iframe>'; ?>
+                        </div>
+
+                <?php elseif($productmaterial == 8 && $video1 != NULL ):
+                    if($_productObj['image'] !='no_selection') {
+                        $img=$this->helper('catalog/image')->init($_productObj, 'image')->keepAspectRatio(false)->keepFrame(false)->resize(195,180);
+                    }
+                    else if($_productObj['image'] =='no_selection') {
+                        $img=$this->getSkinUrl('images/poster.jpg');
+                    }
+                    ?>
+                    <div style="padding:15px !important;">
+                        <div class="jwwrap" id="myElementlist<?php echo $countdata ?>" class="listgrid">Loading the player...</div></div>
+                        <script type="text/javascript">
+                            jwplayer("myElementlist<?php echo $countdata ?>").setup({
+                                image:'<?php echo $img ?>',
+                                'width': '195',
+                                'height': '180',
+                                flashplayer : '<?php echo $this->getSkinUrl('jwplayer/jwplayer.flash.swf'); ?>',
+                                file: "<?php echo $video1 ?>"
+                            });
+                        </script>
+
+                <?php else: ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+                        <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->keepAspectRatio(false)->keepFrame(false)->resize(195,180) ?>" width="195" height="180" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+                    </a>
+                <?php endif;  ?>
+
+                <h2 id="productname_video" class="<?php echo $audioclass; ?>">
+                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                        <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
+                    </a>
+                </h2>
+            </li>
+        <?php $countdata++; endforeach; ?>
+    </ul>
+    <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+</div>
