@@ -29,158 +29,299 @@
 
 class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
 {
+    const XML_PATH_RATIO_PFERDE = 'brst_experts/earnings_ratio/pferde';
+    const XML_PATH_RATIO_AFF_NEW = 'brst_experts/earnings_ratio/affiliate_newcustomer';
+    const XML_PATH_RATIO_AFF_SPECIAL = 'brst_experts/earnings_ratio/affiliate_special';
+    const XML_PATH_RATIO_AFF_REPEAT = 'brst_experts/earnings_ratio/affiliate_repeatcustomer';
+
+    const XML_PATH_TAX_RATE_SMALL_BUSINESS = 'brst_experts/tax_rate/small_business';
+    const XML_PATH_TAX_RATE_BIG_BUSINESS = 'brst_experts/tax_rate/big_business';
+
     public function _construct()
     {
         $this->_init('awaffiliate/transaction_profit');
     }
 
-    public function createTransaction($isaffiliate=Null,$oid=Null)
+    public function createTransaction($order = null)
+    {
+        $isDirectPurchase = true;
+
+        if ($this->_isValidForCreation()) {
+            $order = $this->getLinkedEntityOrder();
+            $isDirectPurchase = false;
+        }
+
+        /* @var $order Mage_Sales_Model_Order */
+        if ($order == null || !$order->getId()) {
+            Mage::throwException($this->__('Not valid for creating transaction'));
+        }
+
+        // Check whether customer is new (only has this order)
+        $orderCollection = Mage::getModel('sales/order')->getCollection()
+            ->addFieldToFilter('customer_id', $order->getCustomerId())
+            ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+        $isNewCustomer = ($orderCollection->count() == 1); //This order only.
+
+        foreach ($order->getAllItems() as $orderItem) {
+            /* @var $orderItem Mage_Sales_Model_Order_Item */
+            $product = $orderItem->getProduct();
+            $expertModel = $this->_getExpertModel($product);
+            $affiliateModel = $this->_getAffiliateModel($isDirectPurchase);
+            $customerModel = $this->_getCustomerModel($order->getCustomerId());
+
+            $this->_saveToDiscountTable($customerModel, $product);
+            $this->_saveToPaymentTable();
+            $this->_saveToAmountTable();
+        }
+    }
+
+    protected function _saveToDiscountTable(Mage_Customer_Model_Customer $expertModel, Mage_Catalog_Model_Product $product)
+    {
+        $modelToSave = Mage::getModel('brst_calculate/discount')->setId(null) //New blank model
+            ->setMemberId($expertModel->getId())
+            ->setMemberName($this->_getExpertName($product))
+            ->setTotalOrder(0)
+            ->setGrossEarned(0)
+            ->setAmountEarned(0)
+            ->setTaxPaid(0)
+            ->setAdminAmount(0)
+            ->setBalance(0)
+            ;
+
+        $modelCollection = Mage::getModel('brst_calculate/discount')->getCollection()->addFieldToFilter('member_id', $expertModel->getId());
+        if($modelCollection->count() > 0) { // Has previous data
+            foreach($modelCollection as $model) {
+                $modelToSave = $model;
+                break;
+            }
+        }
+
+        $modelToSave->setTotalOrder(intval($modelToSave->getTotalOrder()) + 1)
+            ->setGrossEarned()
+            ->setAmountEarned(0)
+            ->setTaxPaid(0)
+            ->setAdminAmount(0)
+            ->setBalance(0)
+        ;
+
+
+
+    }
+
+    protected function _saveToPaymentTable()
+    {
+
+    }
+
+    protected function _saveToAmountTable()
+    {
+
+    }
+
+    protected function _getAdminShareRatio()
+    {
+        return $this->_getConfigPercentage(self::XML_PATH_RATIO_PFERDE);
+    }
+
+    protected function _getAffiliateEarningTypeAndRatio(Mage_Catalog_Model_Product $product, $isNewCustomer = false, $isDirectPurchase = false)
+    {
+        if($isDirectPurchase) {
+            return array(
+                'type' => 'direct',
+                'ratio' => 0
+            );
+        }
+
+        //TODO: Use YesNo source model to remove hardcoded value
+        if($product->getSpecialProduct() == '48') { // Special product
+            return array(
+                'type' => 'special',
+                'ratio' => $this->_getConfigPercentage(self::XML_PATH_RATIO_AFF_SPECIAL)
+            );
+        }
+
+        if($isNewCustomer) {
+            return array(
+                'type' => 'new',
+                'ratio' => $this->_getConfigPercentage(self::XML_PATH_RATIO_AFF_NEW)
+            );
+        }
+
+        return array(
+            'type' => 'repeat',
+            'ratio' => $this->_getConfigPercentage(self::XML_PATH_RATIO_AFF_REPEAT)
+        );
+    }
+
+    protected function _getExpertTaxRate(Mage_Customer_Model_Customer $expertModel)
+    {
+        $bankModelCollection = Mage::getModel('bank/bank')->getCollection()->addFieldToFilter('customer_id', $expertModel->getId());
+        if($bankModelCollection->count() == 0) {
+            Mage::throwException($this->__('There is no bank information for expert id = %s', $expertModel->getId()));
+        }
+
+        foreach($bankModelCollection as $bankModel) {
+            if($bankModel->getBusinesstype() == null || $bankModel->getBusinesstype() == 'small') {
+                return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_SMALL_BUSINESS);
+            } else {
+                return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_BIG_BUSINESS);
+            }
+        }
+    }
+
+    protected function _getConfigPercentage($configPath)
+    {
+        return floatval(Mage::getStoreConfig($configPath))/100;
+    }
+
+    protected function _getExpertModel(Mage_Catalog_Model_Product $product)
+    {
+        //TODO: Should improve the way we filter expert, should be id. Filter by name is bad.
+        $expertName = $this->_getExpertName($product);
+        $adminUserCollection = Mage::getModel('admin/user')->getCollection()->addFieldToFilter('username', $expertName);
+        if($adminUserCollection->count() == 0) {
+            Mage::throwException($this->__('There is no expert with name: %s', $expertName));
+        }
+
+        foreach($adminUserCollection as $adminUser) {
+            $expertModel = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($adminUser->getEmail());
+            if(!$expertModel->getId()) {
+                Mage::throwException($this->__('There is no expert with email: %s', $adminUser->getEmail()));
+            }
+
+            //TODO: Should cache expertModel per product.
+            return $expertModel;
+        }
+    }
+
+    protected function _getExpertName(Mage_Catalog_Model_Product $product)
+    {
+        //TODO: Change the source model for member_list attribute: experts are customers having groupId of 4 (Member)
+        return $product->getResource()->getAttribute('member_list')->getFrontend()->getValue($product);
+    }
+
+    protected function _getAffiliateModel($directPurchase)
+    {
+        $affiliateModel = Mage::getModel('awaffiliate/affiliate');
+        if($directPurchase) {
+            $originalAffiliate = $this->_getOriginalAffiliatePurchaseFrom();
+            if($originalAffiliate && $originalAffiliate->getId()) { // Repeat customer, original affiliate will get the share
+                $affiliateModel = $originalAffiliate;
+            } else { // Completely new customer, only Expert get the share
+                //TODO: set zero amount for affiliate
+            }
+        } else { // Purchase via affiliate link
+            $affiliateModel->load($this->getAffiliateId());
+            if(!$affiliateModel->getId()) {
+                Mage::throwException($this->__('Affiliate not existed. Id = %s', $this->getAffiliateId()));
+            }
+        }
+
+        return $affiliateModel;
+    }
+
+    protected function _getOriginalAffiliatePurchaseFrom()
+    {
+        //TODO: Implement.
+    }
+
+    protected function _getCustomerModel($customerId)
+    {
+        $customerModel = Mage::getModel('customer/customer')->load($customerId);
+        if(!$customerModel->getId()) {
+            Mage::throwException($this->__('Customer does not exist. Id = %s', $customerId));
+        }
+
+        return $customerModel;
+    }
+
+
+
+
+    public function createTransaction1($isaffiliate=Null,$oid=Null)
     {
        
         if ($this->_isValidForCreation()) {
-          // die('hello valid for creattion');
-            /** @var $campaign AW_Affiliate_Model_Campaign */
-            $campaign = $this->getCampaign();
-            
-            $affiliate = $this->getAffiliate();
-            $profitModel = $campaign->getProfitModel();
+            $affiliatedetail =  Mage::getModel('awaffiliate/affiliate')->load($this->getAffiliateId())->getData();
 
-            if (!$this->_canBeApplied($profitModel)) return $this;
-
-            $rate = $profitModel->getRateForAffiliate($affiliate);
-            if (is_null($rate)) {
-                Mage::throwException($this->__('Rate cannot be calculated'));
-            }
-            $this->setData('rate', $rate);
-
-            $attractedAmount = $this->_getAttractedAmount();
-            if (is_null($attractedAmount)) {
-                Mage::throwException($this->__('Attracted amount cannot be calculated'));
-            }
-            $this->setData('attracted_amount', $attractedAmount);
-
-            $amount = $campaign->getProfitModel()->getAmountForAffiliate($affiliate, $attractedAmount);
-            $this->setData('amount', $amount);
-            
-            $currencyCode = $this->_getCurrencyCode();
-            if (is_null($currencyCode)) {
-                Mage::throwException($this->__('Currency undefined'));
-            }
-            $this->setData('currency_code', $currencyCode);
-            $this->save();
-            
-            /*
-            * Save Data in brst_calculate_discount table
-            */
-            
-            $transactionModel = Mage::getModel('awaffiliate/transaction_profit')->load($this->getId());
-            $customdiscount=Mage::getModel('brst_calculate/discount');
-         
-            $affiliatedetail =  Mage::getModel('awaffiliate/affiliate')->load($transactionModel->getAffiliateId())->getData();
-            $customerModel = Mage::getModel('customer/customer')->load($affiliatedetail['customer_id']);
-            $clientmodel=Mage::getModel('awaffiliate/client')->load($transactionModel->getClientId())->getData();
-            $customerModel1 = Mage::getModel('customer/customer')->load($clientmodel['customer_id']);
-            
-            $customdiscount->setorder_id($transactionModel->getLinkedEntityId());
-            $customdiscount->setcustomer_id($clientmodel['customer_id']);
-            $customdiscount->setcustomer_name($customerModel1->getFirstname());
-            $customdiscount->setaffiliate_name($customerModel->getFirstname());
-            $customdiscount->setaffiliate_id($transactionModel->getAffiliateId());
-            $customdiscount->setcommission($transactionModel->getAmount());
-            $customdiscount->setattracted_amount($transactionModel->getAttractedAmount());
-            $memberamount=$transactionModel->getAttractedAmount()-$transactionModel->getAmount();
-            $adminamount = $memberamount * 20/100;
-            $memebertotalamount = ($memberamount - $adminamount);
-            $customdiscount->setmember_amount($memebertotalamount);
-            $customdiscount->setadmin_amount($adminamount);
-            $customdiscount->setcreated_at($transactionModel->getCreatedAt());
-            
             /* For experts collection */
-            $orderid = $transactionModel->getLinkedEntityId();
-            $order = Mage::getModel('sales/order')->loadByIncrementId($orderid);
-            $items = $order->getAllItems();
-            foreach ($items as $itemId => $item)
+            /* @var $order Mage_Sales_Model_Order */
+            $order = $this->getLinkedEntityOrder();
+            $orderItemCollection = $order->getAllItems();
+            foreach ($orderItemCollection as $orderItem)
             {
-                $name[] = $item->getName();
-                $unitPrice[]=$item->getPrice();
-                $sku[]=$item->getSku();
-                $ids[]=$item->getProductId();
-                $qty[]=$item->getQtyToInvoice();
-                $created_date[] = substr($item->getCreatedAt(), 0, 10);
-            }
-            foreach($ids as $key=>$id)
-            {
-                $id=$ids[$key];
-                $item_name=$name[$key];
-                $product_price=$unitPrice[$key];
-                $admin_price = $product_price * 20/100;
-                $total_discount = $admin_price + $rate;
-                $expert_price = ($product_price - $total_discount);
-                
-                $_product = Mage::getModel('catalog/product')->load($id);
+//                $name[] = $item->getName();
+//                $unitPrice[]=$item->getPrice();
+//                $sku[]=$item->getSku();
+//                $ids[]=$item->getProductId();
+//                $qty[]=$item->getQtyToInvoice();
+//                $created_date[] = substr($item->getCreatedAt(), 0, 10);
+//            }
+//            foreach($ids as $key=>$id)
+//            {
+                /* @var $orderItem Mage_Sales_Model_Order_Item */
+//                $id = $orderItem->getProductId();
+                $item_name = $orderItem->getName();
+                $product_price = $orderItem->getPrice();
+
+                $_product = Mage::getModel('catalog/product')->load($orderItem->getProductId());
                 $specialproduct=$_product['special_product'];
                 $expertname = $_product->getResource()->getAttribute('member_list')->getFrontend()->getValue($_product);
-                $adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
+                $adminmodel = Mage::getModel('admin/user')->getCollection()->getData();
                 foreach($adminmodel as $admininfo)
                     {
                         if($admininfo['username']==$expertname)
                         {
-                           $expertemail=$admininfo['email'];
+                           $expertemail = $admininfo['email'];
                            $expertinfo = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($expertemail);
-                           $expertid=$expertinfo['entity_id'];
+                           $expertid = $expertinfo['entity_id'];
                            break;
                         }
                     }
                 
                 /** Get affiliate data **/
-                $affiliatedata =  Mage::getModel('awaffiliate/affiliate')->load($transactionModel->getAffiliateId())->getData();
-                $customerdata = Mage::getModel('customer/customer')->load($affiliatedetail['customer_id']);
-                $created_at=date('d/m/Y');
-                $clientdata=Mage::getModel('awaffiliate/client');
-                foreach($clientdata as $clientinfo)
-                {
-                    if($clientinfo['customer_id']==$order->getCustomerId())
-                    {
-                        $affiliateId=$clientinfo['affiliate_id'];
-                    }
-                }
-                
+                $customerEntity = Mage::getModel('customer/customer')->load($affiliatedetail['customer_id']);
+                $created_at = date('d/m/Y');
+
                 /** Get order collection of a current customer **/
-                $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
-                $orderData=$orderCollection->getData();
-                $product_id=$orderData[0]['entity_id'];
-                
+
+                // HiepHM: check whether customer is new (only has this order)
+                $orderCollection = Mage::getModel('sales/order')->getCollection()
+                    ->addFieldToFilter('customer_id', $order->getCustomerId())
+                    ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
+                $isNewCustomer = ($orderCollection->count() == 1); //HiepHM: This order only.
+
                 /** calculate shareratio for admin **/
-                $configdata=Mage::getStoreConfig('brst_experts/specific');
-                $specialshareratio='40';
-                $specificshareratio=Mage::getStoreConfig('brst_experts/specific/specific');
-                $globalshareratio=Mage::getStoreConfig('brst_experts/global/global');
+                $configdata = Mage::getStoreConfig('brst_experts/specific');
+                $specialShareRatio = '40';
+                $specificShareRatio = Mage::getStoreConfig('brst_experts/specific/specific');
+                $globalShareRatio = Mage::getStoreConfig('brst_experts/global/global');
                 
-                foreach ($configdata as $key => $value) {
+                foreach ($configdata as $value) {
                      if($expertname==$value && $specialproduct=='48')
                       {
-                          if($specialshareratio > $specificshareratio)
+                          if($specialShareRatio > $specificShareRatio)
                           {
                               $sharetype='special';
-                              $shareratioadmin=$specialshareratio;
+                              $shareratioadmin=$specialShareRatio;
                               $adminshareratiovalue=$product_price*$shareratioadmin/100;
                           }
                           else
                           {
                               $sharetype='specific';
-                              $shareratioadmin=$specificshareratio;
+                              $shareratioadmin=$specificShareRatio;
                               $adminshareratiovalue=$product_price*$shareratioadmin/100;
                           }
                       }
                       else if($expertname==$value)
                       {
                           $sharetype='specific';
-                          $shareratioadmin=$specificshareratio;
+                          $shareratioadmin=$specificShareRatio;
                           $adminshareratiovalue=$product_price*$shareratioadmin/100;
                       }
                       else{
                            $sharetype='global';
-                          $shareratioadmin=$globalshareratio;
+                          $shareratioadmin=$globalShareRatio;
                           $adminshareratiovalue=$product_price*$shareratioadmin/100;
                       }
                 }
@@ -189,18 +330,23 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                 if($specialproduct=='48'){
                     $affiliateratio='40';
                 }
-                else if($product_id==''){
+                else if($isNewCustomer){
                     $affiliateratio='20';
                 }
                 else{
                     $affiliateratio='10';
                 }
-                $affiliatepay=$product_price*$affiliateratio/100;
+                $affiliatepay=$product_price*$affiliateratio/100; // HiepHM: must calcualte base on deduced total
                
                 $expertratio=100-$shareratioadmin;
                 $expertprice=$product_price-$affiliatepay;
+
+
+
+
+
                 /** Tax apply or not */
-                $customerModel1 = Mage::getModel('customer/session')->getCustomer()->getCustometId();
+//                $customerModel1 = Mage::getModel('customer/session')->getCustomer()->getCustometId();
                 $bankdetail=Mage::getModel('bank/bank')->getCollection()->getData();
                 foreach($bankdetail as $bankdata)
                  {
@@ -346,13 +492,13 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                 /* end for member payment */
                 /*** Insert data into into table 'brst_experts_amount' **/
                 $expertmodel = Mage::getModel('brst_experts/amount');
-                $expertmodel->setorder_id($orderid);
+                $expertmodel->setorder_id($order->getIncrementId());
                 $expertmodel->setproduct_id($item_name);
                 $expertmodel->setexpert_name($expertname);
                 $expertmodel->setexpert_ratio($expertratio);
                 $expertmodel->setshare_ratio($shareratioadmin);
                 $expertmodel->setshare_type($sharetype);
-                $expertmodel->setaffiliate_name($customerdata->getFirstname());
+                $expertmodel->setaffiliate_name($customerEntity->getFirstname());
                 $expertmodel->setaffiliate_ratio($affiliateratio);
                 $expertmodel->settax($taxratio);
                 $expertmodel->setgross_price($product_price);
@@ -363,15 +509,15 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                 $expertmodel->setcreated_at($created_at);
                 $expertmodel->setordertimestamp(time());
                 $expertmodel->setcustomer_id($order->getCustomerId());
-                $expertmodel->setaffiliate_id($customerdata->getId());
+                $expertmodel->setaffiliate_id($customerEntity->getId());
               
                //echo "<pre>";print_r($expertmodel);die('helo');
                 $expertmodel->save();
                //  echo "<pre>";print_r($expertmodel);die('helo');
                 /* insert every item of order into table 'brst_member_orders' */
-                $connection=Mage::getSingleton("core/resource")->getConnection("core_write");
-                $qry="insert into brst_member_orders(member_id,member_name,product_amount,invoice_date) values ('$expertid','$expertname','$product_price','$created_at')";
-                $connection->query($qry);
+//                $connection=Mage::getSingleton("core/resource")->getConnection("core_write");
+//                $qry="insert into brst_member_orders(member_id,member_name,product_amount,invoice_date) values ('$expertid','$expertname','$product_price','$created_at')";
+//                $connection->query($qry);
             }
             //$customdiscount->save();
         }
@@ -386,7 +532,7 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
             /*** Get order collection of a current customer**/
             $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
             $orderData=$orderCollection->getData();
-            $product_id=$orderData[0]['entity_id'];
+            $orderId=$orderData[0]['entity_id'];
            // echo "<pre>";print_r($orderData);die('helo');
             
             $countorder=count($clientinfo);
@@ -395,16 +541,16 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                 $affiliateId=$clientinfo[0]['affiliate_id'];
               // die('djgdfgdfgfdgdfgdfs');
                 $affiliatedata =  Mage::getModel('awaffiliate/affiliate')->load($affiliateId)->getData();
-                $customerdata = Mage::getModel('customer/customer')->load($affiliatedata['customer_id']);
-                $items = $order->getAllItems();
-                foreach ($items as $itemId => $item)
+                $customerEntity = Mage::getModel('customer/customer')->load($affiliatedata['customer_id']);
+                $orderItemCollection = $order->getAllItems();
+                foreach ($orderItemCollection as $itemId => $orderItem)
                 {
-                    $name[] = $item->getName();
-                    $unitPrice[]=$item->getPrice();
-                    $sku[]=$item->getSku();
-                    $ids[]=$item->getProductId();
-                    $qty[]=$item->getQtyToInvoice();
-                    $created_date[] = substr($item->getCreatedAt(), 0, 10);
+                    $name[] = $orderItem->getName();
+                    $unitPrice[]=$orderItem->getPrice();
+                    $sku[]=$orderItem->getSku();
+                    $ids[]=$orderItem->getProductId();
+                    $qty[]=$orderItem->getQtyToInvoice();
+                    $created_date[] = substr($orderItem->getCreatedAt(), 0, 10);
                 }
                 foreach($ids as $key=>$id)
                 {
@@ -413,8 +559,8 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                     $item_name=$name[$key];
                     $product_price=$unitPrice[$key];
                     $admin_price = $product_price * 20/100;
-                    $total_discount = $admin_price + $rate;
-                    $expert_price = ($product_price - $total_discount);
+//                    $total_discount = $admin_price + $rate;
+//                    $expert_price = ($product_price - $total_discount);
                     
                     $_product = Mage::getModel('catalog/product')->load($id);
                     $specialproduct=$_product['special_product'];
@@ -440,23 +586,23 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                     
                     /** calculate shareratio for admin  **/
                     $configdata=Mage::getStoreConfig('brst_experts/specific');
-                    $specialshareratio='40';
-                    $specificshareratio=Mage::getStoreConfig('brst_experts/specific/specific');
-                    $globalshareratio=Mage::getStoreConfig('brst_experts/global/global');
+                    $specialShareRatio='40';
+                    $specificShareRatio=Mage::getStoreConfig('brst_experts/specific/specific');
+                    $globalShareRatio=Mage::getStoreConfig('brst_experts/global/global');
 
                     foreach ($configdata as $key => $value) {
                          if($expertname==$value && $specialproduct=='48')
                           {
-                              if($specialshareratio > $specificshareratio)
+                              if($specialShareRatio > $specificShareRatio)
                               {
                                   $sharetype='special';
-                                  $shareratioadmin=$specialshareratio;
+                                  $shareratioadmin=$specialShareRatio;
                                   $adminshareratiovalue=$product_price*$shareratioadmin/100;
                               }
                               else
                               {
                                   $sharetype='specific';
-                                  $shareratioadmin=$specificshareratio;
+                                  $shareratioadmin=$specificShareRatio;
                                   $adminshareratiovalue=$product_price*$shareratioadmin/100;
                               }
 
@@ -464,12 +610,12 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                           else if($expertname==$value)
                           {
                               $sharetype='specific';
-                              $shareratioadmin=$specificshareratio;
+                              $shareratioadmin=$specificShareRatio;
                               $adminshareratiovalue=$product_price*$shareratioadmin/100;
                           }
                           else{
                                $sharetype='global';
-                              $shareratioadmin=$globalshareratio;
+                              $shareratioadmin=$globalShareRatio;
                               $adminshareratiovalue=$product_price*$shareratioadmin/100;
                           }
                     }
@@ -478,7 +624,7 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                         if($specialproduct=='48'){
                             $affiliateratio='40';
                         }
-                        else if($product_id==''){
+                        else if($orderId==''){
                             $affiliateratio='20';
                         }
                         else{
@@ -633,7 +779,7 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                     $expertmodel->setexpert_ratio($expertratio);
                     $expertmodel->setshare_ratio($shareratioadmin);
                     $expertmodel->setshare_type($sharetype);
-                    $expertmodel->setaffiliate_name($customerdata->getFirstname());
+                    $expertmodel->setaffiliate_name($customerEntity->getFirstname());
                     $expertmodel->setaffiliate_ratio($affiliateratio);
                     $expertmodel->settax($taxratio);
                     $expertmodel->setgross_price($product_price);
@@ -644,7 +790,7 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                     $expertmodel->setcreated_at($created_at);
                     $expertmodel->setordertimestamp(time());
                     $expertmodel->setcustomer_id($order->getCustomerId());
-                    $expertmodel->setaffiliate_id($customerdata->getId());
+                    $expertmodel->setaffiliate_id($customerEntity->getId());
                     $expertmodel->save();
                     
                     /* insert every item of order into table 'brst_member_orders' */
@@ -657,21 +803,22 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
            {
             $order = Mage::getModel('sales/order')->loadByIncrementId($oid);
             $clientdata=Mage::getModel('awaffiliate/client')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
-            $clientinfo=$clientdata->getData(); }
+            $clientinfo=$clientdata->getData();
+           }
             if($countorder==0)
             {
                 $affiliateId='';
                 $affiliatedata =  Mage::getModel('awaffiliate/affiliate')->load($affiliateId)->getData();
-                $customerdata = Mage::getModel('customer/customer')->load($affiliatedata['customer_id']);
-                $items = $order->getAllItems();
-                foreach ($items as $itemId => $item)
+                $customerEntity = Mage::getModel('customer/customer')->load($affiliatedata['customer_id']);
+                $orderItemCollection = $order->getAllItems();
+                foreach ($orderItemCollection as $itemId => $orderItem)
                 {
-                    $name[] = $item->getName();
-                    $unitPrice[]=$item->getPrice();
-                    $sku[]=$item->getSku();
-                    $ids[]=$item->getProductId();
-                    $qty[]=$item->getQtyToInvoice();
-                    $created_date[] = substr($item->getCreatedAt(), 0, 10);
+                    $name[] = $orderItem->getName();
+                    $unitPrice[]=$orderItem->getPrice();
+                    $sku[]=$orderItem->getSku();
+                    $ids[]=$orderItem->getProductId();
+                    $qty[]=$orderItem->getQtyToInvoice();
+                    $created_date[] = substr($orderItem->getCreatedAt(), 0, 10);
                 }
                 foreach($ids as $key=>$id)
                 {
@@ -681,8 +828,8 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                     $item_name=$name[$key];
                     $product_price=$unitPrice[$key];
                     $admin_price = $product_price * 20/100;
-                    $total_discount = $admin_price + $rate;
-                    $expert_price = ($product_price - $total_discount);
+//                    $total_discount = $admin_price + $rate;
+//                    $expert_price = ($product_price - $total_discount);
                     
                     $_product = Mage::getModel('catalog/product')->load($id);
                   
@@ -707,27 +854,27 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                     /*** Get order collection of a current customer**/
                     $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
                     $orderData=$orderCollection->getData();
-                    $product_id=$orderData[0]['entity_id'];
+                    $orderId=$orderData[0]['entity_id'];
                     
                     /** calculate shareratio for admin  **/
                     $configdata=Mage::getStoreConfig('brst_experts/specific');
-                    $specialshareratio='40';
-                    $specificshareratio=Mage::getStoreConfig('brst_experts/specific/specific');
-                    $globalshareratio=Mage::getStoreConfig('brst_experts/global/global');
+                    $specialShareRatio='40';
+                    $specificShareRatio=Mage::getStoreConfig('brst_experts/specific/specific');
+                    $globalShareRatio=Mage::getStoreConfig('brst_experts/global/global');
 
                     foreach ($configdata as $key => $value) {
                          if($expertname==$value && $specialproduct=='48')
                           {
-                              if($specialshareratio > $specificshareratio)
+                              if($specialShareRatio > $specificShareRatio)
                               {
                                   $sharetype='special';
-                                  $shareratioadmin=$specialshareratio;
+                                  $shareratioadmin=$specialShareRatio;
                                   $adminshareratiovalue=$product_price*$shareratioadmin/100;
                               }
                               else
                               {
                                   $sharetype='specific';
-                                  $shareratioadmin=$specificshareratio;
+                                  $shareratioadmin=$specificShareRatio;
                                   $adminshareratiovalue=$product_price*$shareratioadmin/100;
                               }
 
@@ -735,12 +882,12 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                           else if($expertname==$value)
                           {
                               $sharetype='specific';
-                              $shareratioadmin=$specificshareratio;
+                              $shareratioadmin=$specificShareRatio;
                               $adminshareratiovalue=$product_price*$shareratioadmin/100;
                           }
                           else{
                                $sharetype='global';
-                              $shareratioadmin=$globalshareratio;
+                              $shareratioadmin=$globalShareRatio;
                               $adminshareratiovalue=$product_price*$shareratioadmin/100;
                           }
                     }
@@ -749,7 +896,7 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
                         if($specialproduct=='48'){
                             $affiliateratio='0';
                         }
-                        else if($product_id==''){
+                        else if($orderId==''){
                             $affiliateratio='0';
                         }
                         else{

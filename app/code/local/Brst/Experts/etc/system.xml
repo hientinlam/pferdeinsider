@@ -1,91 +1,101 @@
 <?xml version="1.0"?>
 <config>
-    <tabs>
+    <sections>
         <brst_experts translate="label" module="brst_experts">
-            <label>Share Ratio</label>
-            <sort_order>100</sort_order>
-        </brst_experts>
-    </tabs>
-   <sections>
-        <brst_experts translate="label" module="brst_experts">
-            <label>Share Ratio</label>
-            <tab>brst_experts</tab>
+            <label>Pferde Configurations</label>
+            <tab>general</tab>
             <frontend_type>text</frontend_type>
-            <sort_order>100</sort_order>
+            <sort_order>1000</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
-           
-                <special translate="label">
-                    <label>Special Product Ratio</label>
+                <earnings_ratio translate="label">
+                    <label>Earnings Ratio</label>
+                    <comment>
+                        <![CDATA[ <b>Input in percentage, e.g 10 for 10%</b> ]]>
+                    </comment>
                     <frontend_type>text</frontend_type>
                     <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                         <special translate="label">
-                            <label>Special Product Ratio</label>
+                        <pferde translate="label">
+                            <label>Paid to Pferde Ratio</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>300</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </special>
-                     </fields>
-                </special>
-                   <specific translate="label">
-                    <label>Specific Ratio </label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>100</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                      <member translate="label">
-                            <label>Member List</label>
-                            <frontend_type>multiselect</frontend_type>
-                          <source_model>brst_experts/source_member_list</source_model>
-                            <sort_order>300</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </member>
-                        
-                        <specific translate="label">
-                            <label>Specific Member Ratio</label>
-                            <frontend_type>text</frontend_type>
-                           
-                            <sort_order>300</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </specific>
-                        
-                        
-                    </fields>
-                </specific>
-                     <global translate="label">
-                    <label>Global Ratio</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>100</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                         <global translate="label">
-                            <label>Global Ratio</label>
-                            <frontend_type>text</frontend_type>
-                       
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </global>
+                            <validate>validate-digits</validate>
+                        </pferde>
+                        <affiliate_newcustomer translate="label">
+                            <label><![CDATA[
+                            Paid to Affiliate Ratio <br/>(New Customer)
+                            ]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                        </affiliate_newcustomer>
+                        <affiliate_special translate="label">
+                            <label><![CDATA[
+                            Paid to Affiliate Ratio <br/>(Special Product)
+                            ]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>300</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                        </affiliate_special>
+                        <affiliate_repeatcustomer translate="label">
+                            <label><![CDATA[
+                            Paid to Affiliate Ratio <br/>(Repeat Customer)
+                            ]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                        </affiliate_repeatcustomer>
                     </fields>
-                </global>
-             
+                </earnings_ratio>
+                <tax_rate>
+                    <label>Tax Rate</label>
+                    <comment>
+                        <![CDATA[ <b>Input in percentage, e.g 10 for 10%</b> ]]>
+                    </comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <small_business>
+                            <label>Small business owner</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                        </small_business>
+                        <big_business>
+                            <label>Big business owner</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                        </big_business>
+                    </fields>
+                </tax_rate>
             </groups>
         </brst_experts>
     </sections>

@@ -162,9 +162,8 @@ class AW_Affiliate_Model_Observer
         $historyCollection->addLinkedItemIdFilter($invoice->getOrder()->getId());
         if ($historyCollection->getSize() == 0) {
           
-              $orderid=$order->getIncrementId();
               $trex = Mage::getModel('awaffiliate/transaction_profit');
-              $trex->createTransaction('customer',$orderid);
+              $trex->createTransaction($order);
            }
          
              
