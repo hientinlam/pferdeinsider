@@ -156,12 +156,12 @@ foreach($adminmodel as $admininfo)
                         <div><?php echo $this->__("Please <a href='%s'>login</a> to subscribe to a member", Mage::getBaseUrl().'customer/account'); ?></div>
                     <?php
                     }
-                    if($login && $status==0 && $groupId==1) { ?>
+                    if($login && $status==0) { ?>
                         <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
                             <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px; margin-left: 0;"  class="button" title="Submit" type="submit" name="subscribe" ><span><span><?php echo $this->__("Subscribe"); ?></span></span></button>
                         </div>
                     <?php
-                    } elseif ($login && $memberid==$expertnameid && $status==1 && $groupId==1) {
+                    } elseif ($login && $memberid==$expertnameid && $status==1) {
                         ?>
                         <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
                             <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px; margin-left: 0;" class="button"  type="button" name="unsubscribe" onclick="changeaction()"><span><span><?php echo $this->__("Unsubscribe"); ?></span></span></button>
