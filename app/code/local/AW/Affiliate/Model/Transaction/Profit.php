@@ -37,9 +37,12 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
     const XML_PATH_TAX_RATE_SMALL_BUSINESS = 'brst_experts/tax_rate/small_business';
     const XML_PATH_TAX_RATE_BIG_BUSINESS = 'brst_experts/tax_rate/big_business';
 
+    protected $_helper;
+
     public function _construct()
     {
         $this->_init('awaffiliate/transaction_profit');
+        $this->_helper = Mage::helper('awaffiliate');
     }
 
     public function createTransaction($order = null)
@@ -53,30 +56,61 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
 
         /* @var $order Mage_Sales_Model_Order */
         if ($order == null || !$order->getId()) {
-            Mage::throwException($this->__('Not valid for creating transaction'));
+            Mage::throwException($this->_helper->$this->_helper->__('Not valid for creating transaction'));
         }
 
         // Check whether customer is new (only has this order)
         $orderCollection = Mage::getModel('sales/order')->getCollection()
             ->addFieldToFilter('customer_id', $order->getCustomerId())
             ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
-        $isNewCustomer = ($orderCollection->count() == 1); //This order only.
+        $isNewCustomer = ($orderCollection->count() == 0); // Never complete any order
+
+        $customerModel = $this->_getCustomerModel($order->getCustomerId());
+        $affiliateModel = $this->_getAffiliateModel($customerModel, $isDirectPurchase);
+        if($affiliateModel->getId()) { // Ensure the original affiliate (if exist) get the share
+            $isDirectPurchase = false;
+        }
 
         foreach ($order->getAllItems() as $orderItem) {
             /* @var $orderItem Mage_Sales_Model_Order_Item */
             $product = $orderItem->getProduct();
             $expertModel = $this->_getExpertModel($product);
-            $affiliateModel = $this->_getAffiliateModel($isDirectPurchase);
-            $customerModel = $this->_getCustomerModel($order->getCustomerId());
 
-            $this->_saveToDiscountTable($customerModel, $product);
-            $this->_saveToPaymentTable();
-            $this->_saveToAmountTable();
+            $sharedAmounts = $this->_calculateShareAmounts($orderItem, $expertModel, $isNewCustomer, $isDirectPurchase);
+
+            $this->_saveToDiscountTable($expertModel, $orderItem, $sharedAmounts);
+            $this->_saveToPaymentTable($expertModel, $orderItem, $sharedAmounts);
+            $this->_saveToAmountTable($expertModel, $affiliateModel, $order, $orderItem, $sharedAmounts);
         }
     }
 
-    protected function _saveToDiscountTable(Mage_Customer_Model_Customer $expertModel, Mage_Catalog_Model_Product $product)
+    protected function _calculateShareAmounts(Mage_Sales_Model_Order_Item $orderItem, $expertModel, $isNewCustomer, $isDirectPurchase)
     {
+        $amount = array();
+        // Ignore qty (not use $orderItem->getRowTotalInclTax()) since all products are downloadable
+        $amount['gross'] = floatval($orderItem->getPriceInclTax());
+        $amount['pferde_ratio'] = $this->_getAdminShareRatio();
+        $amount['pferde_share'] = $amount['gross'] * $amount['pferde_ratio'];
+
+        $remain = $amount['gross'] - $amount['pferde_share'];
+        $affliateEarningShare = $this->_getAffiliateEarningTypeAndRatio($orderItem->getProduct(), $isNewCustomer, $isDirectPurchase);
+        $amount['affiliate_type'] = $affliateEarningShare['type'];
+        $amount['affiliate_ratio'] = $affliateEarningShare['ratio'];
+        $amount['affiliate_share'] = $remain * $affliateEarningShare['ratio'];
+
+        $remain -= $amount['affiliate_share'];
+        $amount['expert_tax_rate'] = $this->_getExpertTaxRate($expertModel);
+        $amount['expert_tax'] = $remain * $amount['expert_tax_rate'];
+        $amount['expert_ratio'] = 1 - $amount['affiliate_ratio'];
+        $amount['expert_share'] = $remain - $amount['expert_tax'];
+
+        return $amount;
+    }
+
+    protected function _saveToDiscountTable(Mage_Customer_Model_Customer $expertModel, Mage_Sales_Model_Order_Item $orderItem, $shareAmounts)
+    {
+        $product = $orderItem->getProduct();
+
         $modelToSave = Mage::getModel('brst_calculate/discount')->setId(null) //New blank model
             ->setMemberId($expertModel->getId())
             ->setMemberName($this->_getExpertName($product))
@@ -97,25 +131,76 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
         }
 
         $modelToSave->setTotalOrder(intval($modelToSave->getTotalOrder()) + 1)
-            ->setGrossEarned()
-            ->setAmountEarned(0)
-            ->setTaxPaid(0)
-            ->setAdminAmount(0)
-            ->setBalance(0)
-        ;
-
-
-
+            ->setGrossEarned(floatval($modelToSave->getGrossEarned()) + $shareAmounts['gross'])
+            ->setAmountEarned(floatval($modelToSave->getAmountEarned()) + $shareAmounts['expert_share'])
+            ->setTaxPaid(floatval($modelToSave->getTaxPaid()) + $shareAmounts['expert_tax'])
+            ->setAdminAmount(floatval($modelToSave->getAdminAmount()) + $shareAmounts['pferde_share'])
+            ->setBalance(floatval($modelToSave->getBalance()) + $shareAmounts['expert_share'])
+            ;
+        $modelToSave->save();
     }
 
-    protected function _saveToPaymentTable()
+    protected function _saveToPaymentTable(Mage_Customer_Model_Customer $expertModel, Mage_Sales_Model_Order_Item $orderItem, $shareAmounts)
     {
+        $product = $orderItem->getProduct();
+        $expertName = $this->_getExpertName($product);
+        $modelToSave = Mage::getModel('brst_member/payment')->setId(null) //New blank model
+            ->setMemberName($expertName)
+            ->setTotalEarned(0)
+            ->setTotalPaid(0)
+            ->setPendingAmount(0)
+            ->setInprogress(0)
+            ;
 
+        $modelCollection = Mage::getModel('brst_member/payment')->getCollection()->addFieldToFilter('member_name', $expertName);
+        if($modelCollection->count() > 0) { // Has previous data
+            foreach($modelCollection as $model) {
+                $modelToSave = $model;
+                break;
+            }
+        }
+
+        $modelToSave->setTotalEarned(floatval($modelToSave->getTotalEarned() + $shareAmounts['expert_share']))
+            ->setPendingAmount(floatval($modelToSave->getTotalEarned()) - floatval($modelToSave->getTotalPaid()))
+            ->setStatus($modelToSave->getPendingAmount() > 0 ? 'unpaid' : 'paid')
+            ->setLastInvoiceDate(date('d/m/Y'))
+            ->save()
+            ;
     }
 
-    protected function _saveToAmountTable()
+    protected function _saveToAmountTable(
+        Mage_Customer_Model_Customer $expertModel,
+        AW_Affiliate_Model_Affiliate $affiliateModel,
+        Mage_Sales_Model_Order $order,
+        Mage_Sales_Model_Order_Item $orderItem,
+        $shareAmounts)
     {
+        $product = $orderItem->getProduct();
+        $modelToSave = Mage::getModel('brst_experts/amount');
+        $modelToSave->setOrderId($order->getIncrementId());
+        $modelToSave->setProductId($product->getName());
+        $modelToSave->setCustomerId($order->getCustomerId());
+        $modelToSave->setAffiliateId(is_null($affiliateModel->getId()) ? null : $affiliateModel->getCustomer()->getId());
 
+        $modelToSave->setGrossPrice($orderItem->getPriceInclTax());
+
+        $modelToSave->setShareRatio($shareAmounts['pferde_ratio'] * 100);
+        $modelToSave->setAdminPay($shareAmounts['pferde_share']);
+
+        $modelToSave->setAffiliateName(is_null($affiliateModel->getId()) ? 'N/A' : $affiliateModel->getCustomer()->getName());
+        $modelToSave->setShareType($shareAmounts['affiliate_type']);
+        $modelToSave->setAffiliateRatio($shareAmounts['affiliate_ratio'] * 100);
+        $modelToSave->setAffiliatePay($shareAmounts['affiliate_share']);
+
+        $modelToSave->setExpertName($this->_getExpertName($product));
+        $modelToSave->setExpertRatio($shareAmounts['expert_ratio'] * 100);
+        $modelToSave->setTax($shareAmounts['expert_tax_rate'] * 100);
+        $modelToSave->setTaxPay($shareAmounts['expert_tax']);
+        $modelToSave->setGetyoupaid($shareAmounts['expert_share']);
+
+        $modelToSave->setCreatedAt(date('d/m/Y'));
+        $modelToSave->setOrdertimestamp(time());
+        $modelToSave->save();
     }
 
     protected function _getAdminShareRatio()
@@ -157,7 +242,9 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
     {
         $bankModelCollection = Mage::getModel('bank/bank')->getCollection()->addFieldToFilter('customer_id', $expertModel->getId());
         if($bankModelCollection->count() == 0) {
-            Mage::throwException($this->__('There is no bank information for expert id = %s', $expertModel->getId()));
+            // Default to small business
+            return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_SMALL_BUSINESS);
+            //Mage::throwException($this->_helper->__('There is no bank information for expert id = %s', $expertModel->getId()));
         }
 
         foreach($bankModelCollection as $bankModel) {
@@ -180,13 +267,13 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
         $expertName = $this->_getExpertName($product);
         $adminUserCollection = Mage::getModel('admin/user')->getCollection()->addFieldToFilter('username', $expertName);
         if($adminUserCollection->count() == 0) {
-            Mage::throwException($this->__('There is no expert with name: %s', $expertName));
+            Mage::throwException($this->_helper->__('There is no expert with name: %s', $expertName));
         }
 
         foreach($adminUserCollection as $adminUser) {
             $expertModel = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($adminUser->getEmail());
             if(!$expertModel->getId()) {
-                Mage::throwException($this->__('There is no expert with email: %s', $adminUser->getEmail()));
+                Mage::throwException($this->_helper->__('There is no expert with email: %s', $adminUser->getEmail()));
             }
 
             //TODO: Should cache expertModel per product.
@@ -200,884 +287,51 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
         return $product->getResource()->getAttribute('member_list')->getFrontend()->getValue($product);
     }
 
-    protected function _getAffiliateModel($directPurchase)
+    protected function _getAffiliateModel(Mage_Customer_Model_Customer $customerModel, $directPurchase)
     {
         $affiliateModel = Mage::getModel('awaffiliate/affiliate');
         if($directPurchase) {
-            $originalAffiliate = $this->_getOriginalAffiliatePurchaseFrom();
+            $originalAffiliate = $this->_getOriginalAffiliatePurchaseFrom($customerModel);
             if($originalAffiliate && $originalAffiliate->getId()) { // Repeat customer, original affiliate will get the share
                 $affiliateModel = $originalAffiliate;
-            } else { // Completely new customer, only Expert get the share
-                //TODO: set zero amount for affiliate
+            } else {
+                // Do nothing.
+                // Completely new customer, only Expert get the share
             }
         } else { // Purchase via affiliate link
             $affiliateModel->load($this->getAffiliateId());
             if(!$affiliateModel->getId()) {
-                Mage::throwException($this->__('Affiliate not existed. Id = %s', $this->getAffiliateId()));
+                Mage::throwException($this->_helper->__('Affiliate not existed. Id = %s', $this->getAffiliateId()));
             }
         }
 
         return $affiliateModel;
     }
 
-    protected function _getOriginalAffiliatePurchaseFrom()
+    protected function _getOriginalAffiliatePurchaseFrom(Mage_Customer_Model_Customer $customerModel)
     {
-        //TODO: Implement.
+        $affiliateClientCollection = Mage::getModel('awaffiliate/client')->getCollection()
+            ->addFieldToFilter('customer_id', $customerModel->getId())
+            ->addOrder('id', 'ASC');
+
+        if($affiliateClientCollection->count() == 0) { // Completely new customer
+            return null;
+        }
+
+        // Get first affiliate id
+        return Mage::getModel('awaffiliate/affiliate')->load($affiliateClientCollection->getFirstItem()->getAffiliateId());
     }
 
     protected function _getCustomerModel($customerId)
     {
         $customerModel = Mage::getModel('customer/customer')->load($customerId);
         if(!$customerModel->getId()) {
-            Mage::throwException($this->__('Customer does not exist. Id = %s', $customerId));
+            Mage::throwException($this->_helper->__('Customer does not exist. Id = %s', $customerId));
         }
 
         return $customerModel;
     }
 
-
-
-
-    public function createTransaction1($isaffiliate=Null,$oid=Null)
-    {
-       
-        if ($this->_isValidForCreation()) {
-            $affiliatedetail =  Mage::getModel('awaffiliate/affiliate')->load($this->getAffiliateId())->getData();
-
-            /* For experts collection */
-            /* @var $order Mage_Sales_Model_Order */
-            $order = $this->getLinkedEntityOrder();
-            $orderItemCollection = $order->getAllItems();
-            foreach ($orderItemCollection as $orderItem)
-            {
-//                $name[] = $item->getName();
-//                $unitPrice[]=$item->getPrice();
-//                $sku[]=$item->getSku();
-//                $ids[]=$item->getProductId();
-//                $qty[]=$item->getQtyToInvoice();
-//                $created_date[] = substr($item->getCreatedAt(), 0, 10);
-//            }
-//            foreach($ids as $key=>$id)
-//            {
-                /* @var $orderItem Mage_Sales_Model_Order_Item */
-//                $id = $orderItem->getProductId();
-                $item_name = $orderItem->getName();
-                $product_price = $orderItem->getPrice();
-
-                $_product = Mage::getModel('catalog/product')->load($orderItem->getProductId());
-                $specialproduct=$_product['special_product'];
-                $expertname = $_product->getResource()->getAttribute('member_list')->getFrontend()->getValue($_product);
-                $adminmodel = Mage::getModel('admin/user')->getCollection()->getData();
-                foreach($adminmodel as $admininfo)
-                    {
-                        if($admininfo['username']==$expertname)
-                        {
-                           $expertemail = $admininfo['email'];
-                           $expertinfo = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($expertemail);
-                           $expertid = $expertinfo['entity_id'];
-                           break;
-                        }
-                    }
-                
-                /** Get affiliate data **/
-                $customerEntity = Mage::getModel('customer/customer')->load($affiliatedetail['customer_id']);
-                $created_at = date('d/m/Y');
-
-                /** Get order collection of a current customer **/
-
-                // HiepHM: check whether customer is new (only has this order)
-                $orderCollection = Mage::getModel('sales/order')->getCollection()
-                    ->addFieldToFilter('customer_id', $order->getCustomerId())
-                    ->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_COMPLETE);
-                $isNewCustomer = ($orderCollection->count() == 1); //HiepHM: This order only.
-
-                /** calculate shareratio for admin **/
-                $configdata = Mage::getStoreConfig('brst_experts/specific');
-                $specialShareRatio = '40';
-                $specificShareRatio = Mage::getStoreConfig('brst_experts/specific/specific');
-                $globalShareRatio = Mage::getStoreConfig('brst_experts/global/global');
-                
-                foreach ($configdata as $value) {
-                     if($expertname==$value && $specialproduct=='48')
-                      {
-                          if($specialShareRatio > $specificShareRatio)
-                          {
-                              $sharetype='special';
-                              $shareratioadmin=$specialShareRatio;
-                              $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                          }
-                          else
-                          {
-                              $sharetype='specific';
-                              $shareratioadmin=$specificShareRatio;
-                              $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                          }
-                      }
-                      else if($expertname==$value)
-                      {
-                          $sharetype='specific';
-                          $shareratioadmin=$specificShareRatio;
-                          $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                      }
-                      else{
-                           $sharetype='global';
-                          $shareratioadmin=$globalShareRatio;
-                          $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                      }
-                }
-                
-                /** set Affiliate Ratio ***/
-                if($specialproduct=='48'){
-                    $affiliateratio='40';
-                }
-                else if($isNewCustomer){
-                    $affiliateratio='20';
-                }
-                else{
-                    $affiliateratio='10';
-                }
-                $affiliatepay=$product_price*$affiliateratio/100; // HiepHM: must calcualte base on deduced total
-               
-                $expertratio=100-$shareratioadmin;
-                $expertprice=$product_price-$affiliatepay;
-
-
-
-
-
-                /** Tax apply or not */
-//                $customerModel1 = Mage::getModel('customer/session')->getCustomer()->getCustometId();
-                $bankdetail=Mage::getModel('bank/bank')->getCollection()->getData();
-                foreach($bankdetail as $bankdata)
-                 {
-                     if($expertid == $bankdata['customer_id'])
-                     {
-                        $businesstype=$bankdata['businesstype'];
-                        if($businesstype=='small' || $businesstype==NULL)
-                         {
-                             $taxpay='0';
-                             $taxratio='0';
-                             /***Earnings of Expert **/
-                             $expertearning=$expertprice*$expertratio/100;
-                             $getyoupaid=$expertearning;
-                             break;
-                         }
-                         else
-                         {
-                             $taxratio='19';
-                             $expertearning=($expertprice*$expertratio/100);
-                             $taxpay=$expertearning*$taxratio/100;
-                             $getyoupaid=$expertearning-$taxpay;
-                             break;
-                         }
-                     }
-                     else
-                     {
-                             $taxpay='0';
-                             $taxratio='0';
-                             /***Earnings of Expert **/
-                             $expertearning=$expertprice*$expertratio/100;
-                             $getyoupaid=$expertearning;
-                     }
-                 }
-                
-                /* for member total discount */
-                $check_model = Mage::getModel('brst_calculate/discount')->getCollection()->getData();
-                $ifexist=0;
-                $adminid='';
-                $no_order='';
-                $totalamount='';
-                $member_amount='';
-                $tax_paid='';
-                $admin_amount='';
-                $balance='';
-                foreach($check_model as $colldta)
-                {
-                    if($colldta['member_name'] == $expertname)
-                    {
-                        $ifexist=1;
-                        $adminid=$colldta['id'];
-                        $no_order=$colldta['total_order'];
-                        $totalamount=$colldta['gross_earned'];
-                        $member_amount=$colldta['amount_earned'];
-                        $tax_paid=$colldta['tax_paid'];
-                        $admin_amount=$colldta['admin_amount'];
-                        $balance=$colldta['balance'];
-                        break;
-                    }
-                }
-                if($ifexist==1)
-                {
-                    $model = Mage::getModel('brst_calculate/discount')->load($adminid);
-                    $model->setmember_name($expertname);
-                    $model->settotal_order($no_order + 1);
-                    $model->setgross_earned($totalamount + $product_price);
-                    $model->setamount_earned($member_amount + $getyoupaid);
-                    $model->settax_paid($tax_paid + $taxpay);
-                    $model->setadmin_amount($admin_amount + $adminshareratiovalue);
-                    $model->setbalance($member_amount + $getyoupaid);
-                    $model->save();
-                }
-                else
-                {
-                    $model = Mage::getModel('brst_calculate/discount');
-                    $model->setmember_id($expertid);
-                    $model->setmember_name($expertname);
-                    $model->settotal_order(1);
-                    $model->setgross_earned($product_price);
-                    $model->setamount_earned($getyoupaid);
-                    $model->settax_paid($taxpay);
-                    $model->setadmin_amount($adminshareratiovalue);
-                    $model->setbalance($getyoupaid);
-                    $model->save();
-                }
-                /* end member total discount */
-                /* insert data into 'brst_member_payment' */
-                    $member_model = Mage::getModel('brst_member/payment')->getCollection()->getData();
-                    $exist=0;
-                    $memberid='';
-                    $total_earned='';
-                    $totalpaid='';
-                    $pending_amount='';
-                    $inprogress='';
-                    $invoice_date='';
-                    $status='';
-                    $sendinvoice='';
-                    foreach($member_model as $colldata)
-                    {
-                        if($colldata['member_name'] == $expertname)
-                        {
-                            $exist=1;
-                            $memberid=$colldata['id'];
-                            $total_earned=$colldata['total_earned'];
-                            $totalpaid=$colldata['total_paid'];
-                            $pending_amount=$colldata['pending_amount'];
-                            $inprogress=$colldata['inprogress'];
-                            $invoice_date=$colldata['last_invoice_date'];
-                            $status=$colldata['status'];
-                            $sendinvoice=$colldata['send_invoice'];
-                            break;
-                        }
-                    }
-                    if($exist==1)
-                    {
-                        $models = Mage::getModel('brst_member/payment')->load($memberid);
-                        $models->settotal_earned($total_earned + $getyoupaid);
-                        $models->setpending_amount(($total_earned + $getyoupaid) - $totalpaid);
-                        if((($total_earned + $getyoupaid) - $totalpaid) > 0)
-                        {
-                           $models->setstatus('unpaid');  
-                        }
-                        else
-                        {
-                             $models->setstatus('paid');  
-                        }
-                        $models->setlast_invoice_date($created_at);
-                        //$models->setlast_invoice_date($created_at);
-                        $models->save();
-                    }
-                    else
-                    {
-                        $models = Mage::getModel('brst_member/payment');
-                        $models->setmember_name($expertname);
-                        $models->settotal_earned($getyoupaid);
-                        //$models->settotal_paid();
-                        $models->setpending_amount($getyoupaid);
-                        //$models->setinprogress();
-                        $models->setlast_invoice_date($created_at);
-                       
-                        //$models->setsend_invoice();
-                        $models->save();
-                    }
-                /* end for member payment */
-                /*** Insert data into into table 'brst_experts_amount' **/
-                $expertmodel = Mage::getModel('brst_experts/amount');
-                $expertmodel->setorder_id($order->getIncrementId());
-                $expertmodel->setproduct_id($item_name);
-                $expertmodel->setexpert_name($expertname);
-                $expertmodel->setexpert_ratio($expertratio);
-                $expertmodel->setshare_ratio($shareratioadmin);
-                $expertmodel->setshare_type($sharetype);
-                $expertmodel->setaffiliate_name($customerEntity->getFirstname());
-                $expertmodel->setaffiliate_ratio($affiliateratio);
-                $expertmodel->settax($taxratio);
-                $expertmodel->setgross_price($product_price);
-                $expertmodel->setaffiliate_pay($affiliatepay);
-                $expertmodel->setadmin_pay($adminshareratiovalue);
-                $expertmodel->settax_pay($taxpay);
-                $expertmodel->setgetyoupaid($getyoupaid);
-                $expertmodel->setcreated_at($created_at);
-                $expertmodel->setordertimestamp(time());
-                $expertmodel->setcustomer_id($order->getCustomerId());
-                $expertmodel->setaffiliate_id($customerEntity->getId());
-              
-               //echo "<pre>";print_r($expertmodel);die('helo');
-                $expertmodel->save();
-               //  echo "<pre>";print_r($expertmodel);die('helo');
-                /* insert every item of order into table 'brst_member_orders' */
-//                $connection=Mage::getSingleton("core/resource")->getConnection("core_write");
-//                $qry="insert into brst_member_orders(member_id,member_name,product_amount,invoice_date) values ('$expertid','$expertname','$product_price','$created_at')";
-//                $connection->query($qry);
-            }
-            //$customdiscount->save();
-        }
-        else if($isaffiliate=='customer')
-        {
-                  
-            $order = Mage::getModel('sales/order')->loadByIncrementId($oid);
-            $clientdata=Mage::getModel('awaffiliate/client')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
-            $clientinfo=$clientdata->getData();
-            
-            
-            /*** Get order collection of a current customer**/
-            $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
-            $orderData=$orderCollection->getData();
-            $orderId=$orderData[0]['entity_id'];
-           // echo "<pre>";print_r($orderData);die('helo');
-            
-            $countorder=count($clientinfo);
-            if($countorder>1 || $countorder==1)
-            {
-                $affiliateId=$clientinfo[0]['affiliate_id'];
-              // die('djgdfgdfgfdgdfgdfs');
-                $affiliatedata =  Mage::getModel('awaffiliate/affiliate')->load($affiliateId)->getData();
-                $customerEntity = Mage::getModel('customer/customer')->load($affiliatedata['customer_id']);
-                $orderItemCollection = $order->getAllItems();
-                foreach ($orderItemCollection as $itemId => $orderItem)
-                {
-                    $name[] = $orderItem->getName();
-                    $unitPrice[]=$orderItem->getPrice();
-                    $sku[]=$orderItem->getSku();
-                    $ids[]=$orderItem->getProductId();
-                    $qty[]=$orderItem->getQtyToInvoice();
-                    $created_date[] = substr($orderItem->getCreatedAt(), 0, 10);
-                }
-                foreach($ids as $key=>$id)
-                {
-                    
-                    $id=$ids[$key];
-                    $item_name=$name[$key];
-                    $product_price=$unitPrice[$key];
-                    $admin_price = $product_price * 20/100;
-//                    $total_discount = $admin_price + $rate;
-//                    $expert_price = ($product_price - $total_discount);
-                    
-                    $_product = Mage::getModel('catalog/product')->load($id);
-                    $specialproduct=$_product['special_product'];
-                    $expertname = $_product->getResource()->getAttribute('member_list')->getFrontend()->getValue($_product);
-                    $adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
-                    
-                    foreach($adminmodel as $admininfo)
-                    {
-                        if($admininfo['username']==$expertname)
-                        {
-                           $expertemail=$admininfo['email'];
-                           $expertinfo = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($expertemail);
-                           $expertid=$expertinfo['entity_id'];
-                           break;
-                        }
-                    }
-                    
-                  
-                    
-                    /** Get affiliate data**/
-                    $created_at=date('d/m/Y');
-                    
-                    
-                    /** calculate shareratio for admin  **/
-                    $configdata=Mage::getStoreConfig('brst_experts/specific');
-                    $specialShareRatio='40';
-                    $specificShareRatio=Mage::getStoreConfig('brst_experts/specific/specific');
-                    $globalShareRatio=Mage::getStoreConfig('brst_experts/global/global');
-
-                    foreach ($configdata as $key => $value) {
-                         if($expertname==$value && $specialproduct=='48')
-                          {
-                              if($specialShareRatio > $specificShareRatio)
-                              {
-                                  $sharetype='special';
-                                  $shareratioadmin=$specialShareRatio;
-                                  $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                              }
-                              else
-                              {
-                                  $sharetype='specific';
-                                  $shareratioadmin=$specificShareRatio;
-                                  $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                              }
-
-                          }
-                          else if($expertname==$value)
-                          {
-                              $sharetype='specific';
-                              $shareratioadmin=$specificShareRatio;
-                              $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                          }
-                          else{
-                               $sharetype='global';
-                              $shareratioadmin=$globalShareRatio;
-                              $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                          }
-                    }
-                    
-                         /** set Affiliate Ratio ***/
-                        if($specialproduct=='48'){
-                            $affiliateratio='40';
-                        }
-                        else if($orderId==''){
-                            $affiliateratio='20';
-                        }
-                        else{
-                            $affiliateratio='10';
-                        }
-                       //$affiliateprice=$product_price-$adminshareratiovalue;
-                      $affiliatepay=$product_price*$affiliateratio/100;
-                      $expertratio=100-$shareratioadmin;
-                      $expertprice=$product_price-$affiliatepay;
-                    
-                    /** Tax apply or not */
-                    $customerModel1 = Mage::getModel('customer/session')->getCustomer()->getCustometId();
-                    $bankdetail=Mage::getModel('bank/bank')->getCollection()->getData();
-                    foreach($bankdetail as $bankdata)
-                     {
-                         if($expertid == $bankdata['customer_id'])
-                         {
-                            $businesstype=$bankdata['businesstype'];
-                            if($businesstype=='small')
-                             {
-                                 $taxpay='0';
-                                 $taxratio='0';
-                                 /***Earnings of Expert **/
-                                 $expertearning=$expertprice*$expertratio/100;
-                                 $getyoupaid=$expertearning;
-                                 break;
-                             }
-                             else
-                             {
-                                 $taxratio='19';
-                                 $expertearning=$expertprice*$expertratio/100;
-                                 $taxpay=$expertearning*$taxratio/100;
-                                 $getyoupaid=$expertearning-$taxpay;
-                                 break;
-                             }
-                         }
-                         else {
-                                 $taxpay='0';
-                                 $taxratio='0';
-                                /*** Earnings of Expert **/
-                                 $expertearning=$expertprice*$expertratio/100;
-                                 $getyoupaid=$expertearning;
-                        }
-                     }
-
-                    /* for member total discount */
-                    $check_model = Mage::getModel('brst_calculate/discount')->getCollection()->getData();
-                    $ifexist=0;
-                    $adminid='';
-                    $no_order='';
-                    $totalamount='';
-                    $member_amount='';
-                    $tax_paid='';
-                    $admin_amount='';
-                    $balance='';
-                    foreach($check_model as $colldta)
-                    {
-                        if($colldta['member_name'] == $expertname)
-                        {
-                            $ifexist=1;
-                            $adminid=$colldta['id'];
-                            $no_order=$colldta['total_order'];
-                            $totalamount=$colldta['gross_earned'];
-                            $member_amount=$colldta['amount_earned'];
-                            $tax_paid=$colldta['tax_paid'];
-                            $admin_amount=$colldta['admin_amount'];
-                            $balance=$colldta['balance'];
-                            break;
-                        }
-                    }
-                    if($ifexist==1)
-                    {
-                        $model = Mage::getModel('brst_calculate/discount')->load($adminid);
-                        $model->setmember_name($expertname);
-                        $model->settotal_order($no_order + 1);
-                        $model->setgross_earned($totalamount + $product_price);
-                        $model->setamount_earned($member_amount + $getyoupaid);
-                        $model->settax_paid($tax_paid + $taxpay);
-                        $model->setadmin_amount($admin_amount + $adminshareratiovalue);
-                        $model->setbalance($member_amount + $getyoupaid);
-                        $model->save();
-                    }
-                    else
-                    {
-                        $model = Mage::getModel('brst_calculate/discount');
-                        $model->setmember_id($expertid);
-                        $model->setmember_name($expertname);
-                        $model->settotal_order(1);
-                        $model->setgross_earned($product_price);
-                        $model->setamount_earned($getyoupaid);
-                        $model->settax_paid($taxpay);
-                        $model->setadmin_amount($adminshareratiovalue);
-                        $model->setbalance($getyoupaid);
-                        $model->save();
-                    }
-                    /* end member total discount */
-                    /* insert data into 'brst_member_payment' */
-                    $member_model = Mage::getModel('brst_member/payment')->getCollection()->getData();
-                    $exist=0;
-                    $memberid='';
-                    $total_earned='';
-                    $totalpaid='';
-                    $pending_amount='';
-                    $inprogress='';
-                    $invoice_date='';
-                    $status='';
-                    $sendinvoice='';
-                    foreach($member_model as $colldata)
-                    {
-                        if($colldata['member_name'] == $expertname)
-                        {
-                            $exist=1;
-                            $memberid=$colldata['id'];
-                            $total_earned=$colldata['total_earned'];
-                            $totalpaid=$colldata['total_paid'];
-                            $pending_amount=$colldata['pending_amount'];
-                            $inprogress=$colldata['inprogress'];
-                            $invoice_date=$colldata['last_invoice_date'];
-                            $status=$colldata['status'];
-                            $sendinvoice=$colldata['send_invoice'];
-                            break;
-                        }
-                    }
-                    if($exist==1)
-                    {
-                        $models = Mage::getModel('brst_member/payment')->load($memberid);
-                        $models->settotal_earned($total_earned + $getyoupaid);
-                        $models->setpending_amount($pending_amount + $getyoupaid);
-                        $models->setlast_invoice_date($created_at);
-                        //$models->setlast_invoice_date($created_at);
-                        $models->save();
-                    }
-                    else
-                    {
-                        $models = Mage::getModel('brst_member/payment');
-                        $models->setmember_name($expertname);
-                        $models->settotal_earned($getyoupaid);
-                        //$models->settotal_paid();
-                        $models->setpending_amount($getyoupaid);
-                        //$models->setinprogress();
-                        $models->setlast_invoice_date($created_at);
-                        //$models->setstatus();
-                        //$models->setsend_invoice();
-                        $models->save();
-                    }
-                    /* end for member payment */
-                    /** Insert data into into table 'brst_experts_amount' **/
-                    $expertmodel = Mage::getModel('brst_experts/amount');
-                    $expertmodel->setorder_id($oid);
-                    $expertmodel->setproduct_id($item_name);
-                    $expertmodel->setexpert_name($expertname);
-                    $expertmodel->setexpert_ratio($expertratio);
-                    $expertmodel->setshare_ratio($shareratioadmin);
-                    $expertmodel->setshare_type($sharetype);
-                    $expertmodel->setaffiliate_name($customerEntity->getFirstname());
-                    $expertmodel->setaffiliate_ratio($affiliateratio);
-                    $expertmodel->settax($taxratio);
-                    $expertmodel->setgross_price($product_price);
-                    $expertmodel->setaffiliate_pay($affiliatepay);
-                    $expertmodel->setadmin_pay($adminshareratiovalue);
-                    $expertmodel->settax_pay($taxpay);
-                    $expertmodel->setgetyoupaid($getyoupaid);
-                    $expertmodel->setcreated_at($created_at);
-                    $expertmodel->setordertimestamp(time());
-                    $expertmodel->setcustomer_id($order->getCustomerId());
-                    $expertmodel->setaffiliate_id($customerEntity->getId());
-                    $expertmodel->save();
-                    
-                    /* insert every item of order into table 'brst_member_orders' */
-                    $connection=Mage::getSingleton("core/resource")->getConnection("core_write");
-                    $qry="insert into brst_member_orders(member_id,member_name,product_amount,invoice_date) values ('$expertid','$expertname','$product_price','$created_at')";
-                    $connection->query($qry);
-                }
-           }
-           else
-           {
-            $order = Mage::getModel('sales/order')->loadByIncrementId($oid);
-            $clientdata=Mage::getModel('awaffiliate/client')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
-            $clientinfo=$clientdata->getData();
-           }
-            if($countorder==0)
-            {
-                $affiliateId='';
-                $affiliatedata =  Mage::getModel('awaffiliate/affiliate')->load($affiliateId)->getData();
-                $customerEntity = Mage::getModel('customer/customer')->load($affiliatedata['customer_id']);
-                $orderItemCollection = $order->getAllItems();
-                foreach ($orderItemCollection as $itemId => $orderItem)
-                {
-                    $name[] = $orderItem->getName();
-                    $unitPrice[]=$orderItem->getPrice();
-                    $sku[]=$orderItem->getSku();
-                    $ids[]=$orderItem->getProductId();
-                    $qty[]=$orderItem->getQtyToInvoice();
-                    $created_date[] = substr($orderItem->getCreatedAt(), 0, 10);
-                }
-                foreach($ids as $key=>$id)
-                {
-                   
-                    $id=$ids[$key];
-                 
-                    $item_name=$name[$key];
-                    $product_price=$unitPrice[$key];
-                    $admin_price = $product_price * 20/100;
-//                    $total_discount = $admin_price + $rate;
-//                    $expert_price = ($product_price - $total_discount);
-                    
-                    $_product = Mage::getModel('catalog/product')->load($id);
-                  
-                    $specialproduct=$_product['special_product'];
-                    $expertname = $_product->getResource()->getAttribute('member_list')->getFrontend()->getValue($_product);
-                    $adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
-                    
-                    foreach($adminmodel as $admininfo)
-                    {
-                        if($admininfo['username']==$expertname)
-                        {
-                           $expertemail=$admininfo['email'];
-                           $expertinfo = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($expertemail);
-                           $expertid=$expertinfo['entity_id'];
-                           break;
-                        }
-                    }
-                    
-                    /** Get affiliate data**/
-                    $created_at=date('d/m/Y');
-                    
-                    /*** Get order collection of a current customer**/
-                    $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_id', array('eq' => array($order->getCustomerId())));
-                    $orderData=$orderCollection->getData();
-                    $orderId=$orderData[0]['entity_id'];
-                    
-                    /** calculate shareratio for admin  **/
-                    $configdata=Mage::getStoreConfig('brst_experts/specific');
-                    $specialShareRatio='40';
-                    $specificShareRatio=Mage::getStoreConfig('brst_experts/specific/specific');
-                    $globalShareRatio=Mage::getStoreConfig('brst_experts/global/global');
-
-                    foreach ($configdata as $key => $value) {
-                         if($expertname==$value && $specialproduct=='48')
-                          {
-                              if($specialShareRatio > $specificShareRatio)
-                              {
-                                  $sharetype='special';
-                                  $shareratioadmin=$specialShareRatio;
-                                  $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                              }
-                              else
-                              {
-                                  $sharetype='specific';
-                                  $shareratioadmin=$specificShareRatio;
-                                  $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                              }
-
-                          }
-                          else if($expertname==$value)
-                          {
-                              $sharetype='specific';
-                              $shareratioadmin=$specificShareRatio;
-                              $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                          }
-                          else{
-                               $sharetype='global';
-                              $shareratioadmin=$globalShareRatio;
-                              $adminshareratiovalue=$product_price*$shareratioadmin/100;
-                          }
-                    }
-                    
-                         /** set Affiliate Ratio ***/
-                        if($specialproduct=='48'){
-                            $affiliateratio='0';
-                        }
-                        else if($orderId==''){
-                            $affiliateratio='0';
-                        }
-                        else{
-                            $affiliateratio='0';
-                        }
-                       //$affiliateprice=$product_price-$adminshareratiovalue;
-                      $affiliatepay=$product_price*$affiliateratio/100;
-                      $expertratio=100-$shareratioadmin;
-                      $expertprice=$product_price-$affiliatepay;
-                    
-                    /** Tax apply or not */
-                    $customerModel1 = Mage::getModel('customer/session')->getCustomer()->getCustometId();
-                    $bankdetail=Mage::getModel('bank/bank')->getCollection()->getData();
-                    foreach($bankdetail as $bankdata)
-                     {
-                         if($expertid == $bankdata['customer_id'])
-                         {
-                            $businesstype=$bankdata['businesstype'];
-                            if($businesstype=='small')
-                             {
-                                 $taxpay='0';
-                                 $taxratio='0';
-                                 /***Earnings of Expert **/
-                                 $expertearning=$expertprice*$expertratio/100;
-                                 $getyoupaid=$expertearning;
-                                 break;
-                             }
-                             else
-                             {
-                                 $taxratio='19';
-                                 $expertearning=$expertprice*$expertratio/100;
-                                 $taxpay=$expertearning*$taxratio/100;
-                                 $getyoupaid=$expertearning-$taxpay;
-                                 break;
-                             }
-                         }
-                         else {
-                                 $taxpay='0';
-                                 $taxratio='0';
-                                /*** Earnings of Expert **/
-                                 $expertearning=$expertprice*$expertratio/100;
-                                 $getyoupaid=$expertearning;
-                        }
-                     }
-
-                    /* for member total discount */
-                    $check_model = Mage::getModel('brst_calculate/discount')->getCollection()->getData();
-                    $ifexist=0;
-                    $adminid='';
-                    $no_order='';
-                    $totalamount='';
-                    $member_amount='';
-                    $tax_paid='';
-                    $admin_amount='';
-                    $balance='';
-                    foreach($check_model as $colldta)
-                    {
-                        if($colldta['member_name'] == $expertname)
-                        {
-                            $ifexist=1;
-                            $adminid=$colldta['id'];
-                            $no_order=$colldta['total_order'];
-                            $totalamount=$colldta['gross_earned'];
-                            $member_amount=$colldta['amount_earned'];
-                            $tax_paid=$colldta['tax_paid'];
-                            $admin_amount=$colldta['admin_amount'];
-                            $balance=$colldta['balance'];
-                            break;
-                        }
-                    }
-                    if($ifexist==1)
-                    {
-                        $model = Mage::getModel('brst_calculate/discount')->load($adminid);
-                        $model->setmember_name($expertname);
-                        $model->settotal_order($no_order + 1);
-                        $model->setgross_earned($totalamount + $product_price);
-                        $model->setamount_earned($member_amount + $getyoupaid);
-                        $model->settax_paid($tax_paid + $taxpay);
-                        $model->setadmin_amount($admin_amount + $adminshareratiovalue);
-                        $model->setbalance($member_amount + $getyoupaid);
-                        $model->save();
-                    }
-                    else
-                    {
-                        $model = Mage::getModel('brst_calculate/discount');
-                        $model->setmember_id($expertid);
-                        $model->setmember_name($expertname);
-                        $model->settotal_order(1);
-                        $model->setgross_earned($product_price);
-                        $model->setamount_earned($getyoupaid);
-                        $model->settax_paid($taxpay);
-                        $model->setadmin_amount($adminshareratiovalue);
-                        $model->setbalance($getyoupaid);
-                        $model->save();
-                    }
-                    /* end member total discount */
-                    /* insert data into 'brst_member_payment' */
-                    $member_model = Mage::getModel('brst_member/payment')->getCollection()->getData();
-                    $exist=0;
-                    $memberid='';
-                    $total_earned='';
-                    $totalpaid='';
-                    $pending_amount='';
-                    $inprogress='';
-                    $invoice_date='';
-                    $status='';
-                    $sendinvoice='';
-                    foreach($member_model as $colldata)
-                    {
-                        if($colldata['member_name'] == $expertname)
-                        {
-                            $exist=1;
-                            $memberid=$colldata['id'];
-                            $total_earned=$colldata['total_earned'];
-                            $totalpaid=$colldata['total_paid'];
-                            $pending_amount=$colldata['pending_amount'];
-                            $inprogress=$colldata['inprogress'];
-                            $invoice_date=$colldata['last_invoice_date'];
-                            $status=$colldata['status'];
-                            $sendinvoice=$colldata['send_invoice'];
-                            break;
-                        }
-                    }
-                    if($exist==1)
-                    {
-                        $models = Mage::getModel('brst_member/payment')->load($memberid);
-                        $models->settotal_earned($total_earned + $getyoupaid);
-                        $models->setpending_amount($pending_amount + $getyoupaid);
-                        $models->setlast_invoice_date($created_at);
-                        //$models->setlast_invoice_date($created_at);
-                        $models->save();
-                    }
-                    else
-                    {
-                        $models = Mage::getModel('brst_member/payment');
-                        $models->setmember_name($expertname);
-                        $models->settotal_earned($getyoupaid);
-                        //$models->settotal_paid();
-                        $models->setpending_amount($getyoupaid);
-                        //$models->setinprogress();
-                        $models->setlast_invoice_date($created_at);
-                        //$models->setstatus();
-                        //$models->setsend_invoice();
-                        $models->save();
-                    }
-                    /* end for member payment */
-                    /** Insert data into into table 'brst_experts_amount' **/
-                    $expertmodel = Mage::getModel('brst_experts/amount');
-                    $expertmodel->setorder_id($oid);
-                    $expertmodel->setproduct_id($item_name);
-                    $expertmodel->setexpert_name($expertname);
-                    $expertmodel->setexpert_ratio($expertratio);
-                    $expertmodel->setshare_ratio($shareratioadmin);
-                    $expertmodel->setshare_type($sharetype);
-                    $expertmodel->setaffiliate_name('');
-                    $expertmodel->setaffiliate_ratio($affiliateratio);
-                    $expertmodel->settax($taxratio);
-                    $expertmodel->setgross_price($product_price);
-                    $expertmodel->setaffiliate_pay($affiliatepay);
-                    $expertmodel->setadmin_pay($adminshareratiovalue);
-                    $expertmodel->settax_pay($taxpay);
-                    $expertmodel->setgetyoupaid($getyoupaid);
-                    $expertmodel->setcreated_at($created_at);
-                    $expertmodel->setordertimestamp(time());
-                    $expertmodel->setcustomer_id($order->getCustomerId());
-                    $expertmodel->setaffiliate_id('');
-                    $expertmodel->save();
-                    
-                    /* insert every item of order into table 'brst_member_orders' */
-                    $connection=Mage::getSingleton("core/resource")->getConnection("core_write");
-                    $qry="insert into brst_member_orders(member_id,member_name,product_amount,invoice_date) values ('$expertid','$expertname','$product_price','$created_at')";
-                    $connection->query($qry);
-                }
-           }
-        }
-        else {
-            Mage::throwException($this->__('Not valid for create transaction'));
-        }
-        return $this;
-    }
-    
     protected function _canBeApplied($profitModel)
     {
         switch ($profitModel->getType()) {
@@ -1216,10 +470,10 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
     {
         $res = parent::_beforeSave();
         if (is_null($this->getData('rate'))) {
-            Mage::throwException(Mage::helper('awaffiliate')->__('Rate is not specified'));
+            Mage::throwException(Mage::helper('awaffiliate')->$this->_helper->__('Rate is not specified'));
         }
         if (is_null($this->getData('currency_code'))) {
-            Mage::throwException(Mage::helper('awaffiliate')->__('Currency code is not specified'));
+            Mage::throwException(Mage::helper('awaffiliate')->$this->_helper->__('Currency code is not specified'));
         }
         if ($this->getData('withdrawal_transaction_ids') !== null && is_array($this->getData('withdrawal_transaction_ids')))
             $this->setData('withdrawal_transaction_ids', @implode(',', $this->getData('withdrawal_transaction_ids')));
