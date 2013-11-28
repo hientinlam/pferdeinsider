@@ -5,7 +5,7 @@
             <version>1.0.0</version>
         </Brst_Experts>
     </modules>
-     
+
     <global>
         <helpers>
             <brst_experts>
@@ -13,14 +13,14 @@
                 <class>Brst_Experts_Helper</class>
             </brst_experts>
         </helpers>
-                    
+
         <blocks>
             <brst_experts>
                 <!-- Set a block definition and lookup directory -->
                 <class>Brst_Experts_Block</class>
             </brst_experts>
         </blocks>
-         
+
         <models>
             <brst_experts>
                 <!-- This is where we define our model directory -->
@@ -28,7 +28,7 @@
                 <!-- Define a resource to create a custom table -->
                 <resourceModel>brst_experts_mysql4</resourceModel>
             </brst_experts>
-             
+
             <!-- Here's our resource model we'll use to create a database table -->
             <brst_experts_mysql4>
                 <class>Brst_Experts_Model_Mysql4</class>
@@ -41,7 +41,7 @@
                 </entities>
             </brst_experts_mysql4>
         </models>
-         
+
         <!-- And finally we define our resource setup script -->
         <resources>
             <brst_experts_setup>
@@ -51,7 +51,7 @@
             </brst_experts_setup>
         </resources>
     </global>
-     
+
     <admin>
         <routers>
             <adminhtml>
@@ -64,7 +64,7 @@
             </adminhtml>
         </routers>
     </admin>
-     
+
     <adminhtml>
         <layout>
             <updates>
@@ -78,4 +78,18 @@
             </updates>
         </layout>
     </adminhtml>
+    <default>
+        <brst_experts>
+            <earnings_ratio>
+                <pferde>20</pferde>
+                <affiliate_newcustomer>20</affiliate_newcustomer>
+                <affiliate_special>40</affiliate_special>
+                <affiliate_repeatcustomer>10</affiliate_repeatcustomer>
+            </earnings_ratio>
+            <tax_rate>
+                <small_business>0</small_business>
+                <big_business>19</big_business>
+            </tax_rate>
+        </brst_experts>
+    </default>
 </config>
