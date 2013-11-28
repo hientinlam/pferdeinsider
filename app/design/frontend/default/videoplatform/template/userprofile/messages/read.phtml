@@ -34,8 +34,35 @@
 </div>
 <?php if ($message):?>
     <h3 class="title-msg"><?php echo $message->getTitle()?></h3>
-   <p class="text-msg"><?php echo $message->getMessage()?></p>
-    <button class="button btn-msg" title="Back" type="submit" onclick="javascript:history.go(-1)"><span><span>Back</span></span></button>
+    <p class="text-msg"><?php echo $message->getMessage()?></p>
+
+    <h2><?php echo $this->__('Reply'); ?></h2>
+    <form id="send-message" method="POST" action="<?php echo $this->getUrl('userprofile/messages/newPost/')?>">
+        <input type="hidden" name="status" value="0" id="status" />
+        <input type="hidden" name="send_to" id="sent_to" value="<?php echo $message->getCustomerId(); ?>" />
+        <ul class="form-list">
+            <li class="fields">
+                <div class="field">
+                    <label for="title"><?php echo $this->__('Title'); ?></label>
+                    <div class="input-box">
+                        <input type="text" class="input-text" title="<?php echo $this->__('Title'); ?>" value="<?php echo $this->getReplyTitle(); ?>" name="title" id="title">
+                    </div>
+                </div>
+                <div class="field" style="float:none;">
+                    <label for="message"><em>*</em><?php echo $this->__('Message'); ?></label>
+                    <div class="input-box">
+                        <textarea class="input-textarea required-entry" title="<?php echo $this->__('Message'); ?>" name="message" id="message"></textarea>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button class="button btn-msg" title="<?php echo $this->__('Back'); ?>" type="button" onclick="javascript:history.go(-1)"><span><span><?php echo $this->__('Back'); ?></span></span></button>
+        <button style="padding:5px 30px;" class="button btn-msg" title="<?php echo $this->__('Post'); ?>" type="submit"><span><span><?php echo $this->__('Post'); ?></span></span></button>
+    </form>
+    <script type="text/javascript">
+        var messageForm = new VarienForm('send-message', false);
+    </script>
+
 <?php else:?>
     <?php echo $this->__('Message not found')?>
 <?php endif;?>

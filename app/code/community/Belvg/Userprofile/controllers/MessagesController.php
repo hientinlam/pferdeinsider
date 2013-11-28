@@ -67,17 +67,19 @@ class Belvg_Userprofile_MessagesController extends Mage_Core_Controller_Front_Ac
 		$this->renderLayout();
 	}
 
-    public function newPostAction() {
-       $message = $this->getRequest()->getPost();
-       
-       
-            
-             $message = $this->getRequest()->getPost();
-             $messageModel = Mage::getModel('userprofile/messages');
-             $messageModel->add($message);
-             $this->_redirect('*/*/');  
-                     
-         }
+    public function newPostAction()
+    {
+        /** @var Mage_Customer_Model_Session $session */
+        $session = Mage::getSingleton('customer/session');
+        if ($session->getId()) {
+            $message = $this->getRequest()->getPost();
+            $messageModel = Mage::getModel('userprofile/messages');
+            $messageModel->add($message);
+        } else {
+            $session->addError('You must be logged in in order to send a message.');
+        }
+        $this->_redirect('*/*/');
+    }
 
     public function readAction() {
 		if ($this->getRequest()->getParam('id'))
@@ -94,33 +96,37 @@ class Belvg_Userprofile_MessagesController extends Mage_Core_Controller_Front_Ac
 		}                
 		$this->_redirect ('*/*/');		
 	}
-         public function newMessageAction() {
-       $customer_id=$_POST['customer_id'];
-            $date=date('Y-m-d',time());
-            $message=$_POST['message'];
-            $title=$_POST['title'];
-         
-            $send_to=$_POST['email'];
-            if($customer_id==NULL)
-            {
-                $custid='0';
-            }
-            else {
-                $custid=$_POST['customer_id'];
-            }
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $query="insert into belvg_userprofile_messages(customer_id,date,title,message,status,type,send_to) values($custid,'$date','$title','$message','0','1','$send_to')";
-            $result=$connection->query($query);
-            $id=$connection->lastInsertId();
-                if($id)
-                 {
-                          $res['success']='success';
-                          $res['id']=$id;
-                          echo json_encode($res);
-                          exit;
 
-                 }
-       
-         }
+    public function newMessageAction()
+    {
+        $customer_id = $_POST['customer_id'];
+        $date = date('Y-m-d', time());
+        $message = $_POST['message'];
+        $title = $_POST['title'];
 
+        $send_to = $_POST['email'];
+        if ($customer_id == NULL) {
+            $custid = '0';
+        } else {
+            $custid = $_POST['customer_id'];
+        }
+        /** @var Varien_Db_Adapter_Pdo_Mysql $connection */
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $connection->insert('belvg_userprofile_messages', array(
+            'customer_id' => $custid,
+            'date' => $date,
+            'title' => $title,
+            'message' => $message,
+            'status' => '0',
+            'type' => '1',
+            'send_to' => $send_to,
+        ));
+        $id = $connection->lastInsertId();
+        if ($id) {
+            $res['success'] = 'success';
+            $res['id'] = $id;
+            echo json_encode($res);
+            exit;
+        }
+    }
 }
