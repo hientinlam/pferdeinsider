@@ -261,38 +261,27 @@ echo "</pre>";
                         </select>
                         </div>
                      </div>
-                      <div id="germanystateid" style="display:none;">
-                       <div class="field name-firstname" style="width:312px !important;">
-                       <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?></label>
-                       <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
-                        <select class="validate-select" name="state" title="state" id="stateajax" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;"  >
-                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
-                          <?php    foreach ($collection as $country):  
-                            if($country->getId()=='DE'):
-                                $regionCollection = Mage::getModel('directory/region_api')->items($country->getId());
-                                foreach ($regionCollection as $region):  ?>
-                            <option value="<?php echo $region['region_id'] ?>"><?php echo $region['name']; ?></option>
-                            <?php endforeach; endif; endforeach; ?>
-                        </select>
+
+                    <?php foreach ($collection as $country): ?>
+                        <?php if ($country->getId() != 'DE' && $country->getId() != 'AT') continue; ?>
+                        <div id="<?php echo ($country->getId() == 'DE' ? 'germanystateid' : 'austriastateid') ?>" style="display:none;">
+                            <div class="field name-firstname" style="width:312px !important;">
+                                <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?> </label>
+                                <div class="input-box"
+                                     style="background: url('<?php echo $this->getSkinUrl("images/263.png") ?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
+                                    <select class="validate-select" name="state" title="state" id="stateajax"
+                                            style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;">
+                                        <option value="" selected="selected">Bitte wähle eine Option aus.</option>
+                                        <?php $regionCollection = $country->getLoadedRegionCollection(); ?>
+                                        <?php foreach ($regionCollection as $region): ?>
+                                            <option value="<?php echo $region->getId() ?>"><?php echo $region->getName() ?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                   </div>
-                      <div id="austriastateid" style="display:none;">
-                       <div class="field name-firstname" style="width:312px !important;">
-                       <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?></label>
-                       <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
-                        <select class="validate-select" name="state" title="state" id="stateajax" style="background: none repeat scroll 0 0 transparent;border:medium none;color:#333333;font-size: 14px;overflow: hidden;padding-top:3px;width:282px;"  >
-                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
-                          <?php    foreach ($collection as $country):  
-                            if($country->getId()=='AT'):
-                                $regionCollection = Mage::getModel('directory/region_api')->items($country->getId());
-                                foreach ($regionCollection as $region):  ?>
-                            <option value="<?php echo $region['region_id'] ?>"><?php echo $region['name']; ?></option>
-                            <?php endforeach; endif; endforeach; ?>
-                        </select>
-                        </div>
-                     </div>
-                   </div>
+                    <?php endforeach; ?>
+
                      <div id="defaultstate" style="">
                        <div class="field name-firstname" style="width:312px !important;">
                        <label for="country" class="required"><em>*</em><?php echo $this->__('Bundesland') ?></label>
@@ -303,8 +292,6 @@ echo "</pre>";
                         </div>
                      </div>
                    </div>
-                      
-                    
                 </div>
                 </li>
                  <li class="fields">
