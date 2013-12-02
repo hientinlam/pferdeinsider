@@ -38,6 +38,7 @@ $outbox = $this->getOutboxMessages();
 </div>
 <div class="tab">
         <button class="button btn-msg" title="New" type="button" onclick='location.href="<?php echo $this->getBaseUrl() ?>userprofile/messages/new/"'><span><span>Neue Nachricht</span></span></button>
+        <button style="width: 140px" class="button btn-msg" title="<?php echo $this->__('New Message to Admin'); ?>" type="button" onclick='location.href="<?php echo $this->getBaseUrl() ?>userprofile/messages/new/admin/1"'><span><span><?php echo $this->__('New Message to Admin'); ?></span></span></button>
         <ul class="tabs msg-tabs">
                 <li id="tabs_item1" class="item active"><a href="javascript:;">Posteingang(<?php echo $inbox->count()?>)</a></li>
                 <li id="tabs_item2" class="item"><a href="javascript:;">Postausgang(<?php echo $outbox->count()?>)</a></li>
@@ -67,7 +68,7 @@ $outbox = $this->getOutboxMessages();
                                     <h3><?php echo $inmsg->getTitle()?></h3>
                                     <i><?php echo $inmsg->getDate()?></i>
                                     <p><?php echo $inmsg->getMessage()?></p>
-                                    <button class="button btn-msg" title="Read" type="button" onclick="location.href='<?php echo $this->getBaseUrl() ?>userprofile/messages/read/id/<?php echo $inmsg->getId() ?>/'"><span><span>lesen</span></span></button>
+                                    <button class="button btn-msg" title="<?php echo $this->__('reply'); ?>" type="button" onclick="location.href='<?php echo $this->getBaseUrl() ?>userprofile/messages/read/id/<?php echo $inmsg->getId() ?>/'"><span><span><?php echo $this->__('reply'); ?></span></span></button>
                                     <button class="button btn-msg" title="Delete" type="button" onclick="location.href='<?php echo $this->getBaseUrl() ?>userprofile/messages/delete/id/<?php echo $inmsg->getId() ?>/'"><span><span>löschen</span></span></button>
                                 </li>
                             <?php endforeach;?>                        

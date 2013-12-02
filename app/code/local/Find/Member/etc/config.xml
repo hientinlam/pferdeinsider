@@ -22,6 +22,15 @@
                 </member>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Find_Member>
+                    <files>
+                        <default>Find_Member.csv</default>
+                    </files>
+                </Find_Member>
+            </modules>
+        </translate>
     </frontend>
     <global>
         <models>
@@ -68,17 +77,12 @@
                 <class>Find_Member_Helper</class>
             </member>
         </helpers>
-        
         <rewrite>
-           <fancy_url>
-                      <from><![CDATA[/member\/(.*)/]]></from>
-                      <to><![CDATA[member/index/index/name/$1]]></to>
-                          <complete>1</complete>
+            <fancy_url>
+                <from><![CDATA[/member\/(.*)/]]></from>
+                <to><![CDATA[member/index/index/name/$1]]></to>
+                <complete>1</complete>
             </fancy_url>
-        </rewrite> 
-     
+        </rewrite>
     </global>
-    
-    
-    
 </config>

@@ -31,6 +31,8 @@
 
 class Belvg_Userprofile_Block_Messages_Read  extends  Mage_Core_Block_Template
 {
+    /** @var Belvg_Userprofile_Model_Messages */
+    protected $_message;
 
     protected function _getSession(){
         return Mage::getSingleton('customer/session');
@@ -41,14 +43,26 @@ class Belvg_Userprofile_Block_Messages_Read  extends  Mage_Core_Block_Template
         
     }
 
-    public function getMessage(){        
-        $message_id = $this->getRequest()->getParam('id');
-        if ($message_id)
-            return Mage::getModel('userprofile/messages')->load($message_id);
-        return false;
-
+    public function getMessage()
+    {
+        if (null === $this->_message) {
+            $message_id = $this->getRequest()->getParam('id');
+            if ($message_id) {
+                $this->_message = Mage::getModel('userprofile/messages')->load($message_id);
+            }
+        }
+        return $this->_message;
     }
-    
+
+    protected function getReplyTitle()
+    {
+        $prefix = $this->__('RE:');
+        $title = $this->getMessage()->getTitle();
+        if (strpos($title, $prefix) !== 0) {
+            $title = $prefix . ' ' . $title;
+        }
+        return $title;
+    }
 }
 
 

@@ -33,7 +33,9 @@
 
 
 class Belvg_Userprofile_Block_Adminhtml_Messages_Grid extends Mage_Adminhtml_Block_Widget_Grid
-{	
+{
+    protected $_adminFilter = false;
+
 	public function __construct(){
 		parent::__construct();
 		$this->setId('statusGrid');
@@ -41,10 +43,20 @@ class Belvg_Userprofile_Block_Adminhtml_Messages_Grid extends Mage_Adminhtml_Blo
 		$this->setDefaultDir('DESC');
 	}
 
+    /**
+     * @param boolean $adminOnly
+     */
+    public function setAdminFilter($adminFilter)
+    {
+        $this->_adminFilter = $adminFilter;
+    }
+
 	protected function _prepareCollection(){
-		$collection = Mage::getModel('userprofile/messages')->getCollection()->addCustomerEntityFilter()->addOutboxFilter();	
-               // echo "<pre>";print_r($collection->getData());die('abc');
-      		$this->setCollection($collection);				
+		$collection = Mage::getModel('userprofile/messages')->getCollection()->addCustomerEntityFilter()->addOutboxFilter();
+        if ($this->_adminFilter) {
+            $collection->addRecepientFilter(0);
+        }
+        $this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
 

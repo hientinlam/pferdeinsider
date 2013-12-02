@@ -32,174 +32,185 @@
    */-->
 
 <config>
-
-
-
-	<modules>
-		<Belvg_Userprofile>
-			<version>2.0.0</version>
-		</Belvg_Userprofile>
-	</modules>
-	<blocks>
-            <userprofile><class>Belvg_Userprofile_Block</class></userprofile>
-        </blocks>
-	<admin>
-
-		<routers>
-			<userprofile>
-				<use>admin</use>
-				<args>
-					<module>Belvg_Userprofile</module>
-					<frontName>userprofile</frontName>
-				</args>
-			</userprofile>
-                </routers>
-
-	</admin>
-	<frontend>
-		<layout>
-		    <updates>
-			    <userprofile>
-				    <file>userprofile.xml</file>
-			    </userprofile>
-		    </updates>
-           </layout>
-	</frontend>
+    <modules>
+        <Belvg_Userprofile>
+            <version>2.0.0</version>
+        </Belvg_Userprofile>
+    </modules>
+    <blocks>
+        <userprofile>
+            <class>Belvg_Userprofile_Block</class>
+        </userprofile>
+    </blocks>
+    <admin>
+        <routers>
+            <userprofile>
+                <use>admin</use>
+                <args>
+                    <module>Belvg_Userprofile</module>
+                    <frontName>userprofile</frontName>
+                </args>
+            </userprofile>
+        </routers>
+    </admin>
+    <frontend>
+        <layout>
+            <updates>
+                <userprofile>
+                    <file>userprofile.xml</file>
+                </userprofile>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Belvg_Userprofile>
+                    <files>
+                        <default>Belvg_Userprofile.csv</default>
+                    </files>
+                </Belvg_Userprofile>
+            </modules>
+        </translate>
+    </frontend>
     <adminhtml>
-	    <layout>
-		    <updates>
-			    <userprofile>
-				    <file>belvg_userprofile.xml</file>
-			    </userprofile>
-		    </updates>
-           </layout>
-           <menu>
-               <customer>
+        <layout>
+            <updates>
+                <userprofile>
+                    <file>belvg_userprofile.xml</file>
+                </userprofile>
+            </updates>
+        </layout>
+        <menu>
+            <customer>
+                <children>
+                    <userprofile translate="title" module="userprofile">
+                        <title>Customer Profile</title>
+                        <sort_order>300</sort_order>
+                        <children>
+                            <userprofile_messages translate="title">
+                                <title>Messages</title>
+                                <sort_order>0</sort_order>
+                                <action>userprofile/adminhtml_messages/</action>
+                            </userprofile_messages>
+                            <admin_messages translate="title">
+                                <title>Admin Messages</title>
+                                <sort_order>10</sort_order>
+                                <action>userprofile/adminhtml_messages/admin/</action>
+                            </admin_messages>
+                        </children>
+                    </userprofile>
+                </children>
+            </customer>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
                     <children>
-                        <userprofile translate="title" module="userprofile">
-                            <title>Customer Profile</title>
-                            <sort_order>300</sort_order>
-                            <children>
-                                <userprofile_messages translate="title">
-                                    <title>Messages</title>
-                                    <sort_order>0</sort_order>
-                                    <action>userprofile/adminhtml_messages/</action>
-                                </userprofile_messages>
-                               
-                            </children>
-                        </userprofile>
+                        <blog2>
+                            <title>Blog Module</title>
+                            <sort_order>200</sort_order>
+                        </blog2>
                     </children>
-                </customer>
-	   </menu>
-		<acl>
-			<resources>
-				<all>
-					<title>Allow Everything</title>
-				</all>
-				<admin>
-					<children>
-						<blog2>
-							<title>Blog Module</title>
-							<sort_order>200</sort_order>
-						</blog2>
-					</children>
-				</admin>
-			</resources>
-		</acl>
-
-
+                </admin>
+            </resources>
+        </acl>
     </adminhtml>
     <global>
-
-	    <blocks>
-		    <userprofile>
-			    <class>Belvg_Userprofile_Block</class>
-		    </userprofile>
-                     <customer>
-                        <rewrite>
-                            <account_navigation>Belvg_Userprofile_Block_Rewrite_FrontCustomerAccountNavigation</account_navigation>
-                        </rewrite>
-                    </customer>
-                    <customer>
-                        <rewrite>
-                            <account_dashboard_hello>Belvg_Userprofile_Block_Rewrite_FrontCustomerAccountHello</account_dashboard_hello>
-                        </rewrite>
-                    </customer>
-                     <customer>
-                        <rewrite>
-                            <form_edit>Belvg_Userprofile_Block_Rewrite_FrontCustomerAccountEdit</form_edit>
-                        </rewrite>
-                    </customer>
-                    <page>
-                        <rewrite>
-                            <html_header>Belvg_Userprofile_Block_Rewrite_FrontPageHtmlHeader</html_header>
-                        </rewrite>
-                    </page>
-                    <review>
-                        <rewrite>
-                            <product_view_list>Belvg_Userprofile_Block_Rewrite_FrontReviewProductViewList</product_view_list>
-                        </rewrite>
-                    </review>                    
-                    <adminhtml>
-                        <rewrite>
-                            <customer_grid>Belvg_Userprofile_Block_Rewrite_AdminCustomerGrid</customer_grid>
-                        </rewrite>
-                    </adminhtml>
-	    </blocks>
-             <resources>
-                <userprofile_setup>
-                    <setup>
-                            <module>Belvg_Userprofile</module>
-                    </setup>
-                    <connection>
-                            <use>core_setup</use>
-                    </connection>
-                </userprofile_setup>
-                <userprofile_write>
-                    <connection><use>core_write</use></connection>
-                </userprofile_write>
-                <userprofile_read>
-                    <connection><use>core_read</use></connection>
-                </userprofile_read>
-            </resources>
-	    <models>
-		    <userprofile>
-			    <class>Belvg_Userprofile_Model</class>
-			    <resourceModel>userprofile_mysql4</resourceModel>
-		    </userprofile>
-		    <userprofile_mysql4>
-			    <class>Belvg_Userprofile_Model_Mysql4</class>
-                                <entities>
-                                    <avatars>
-                                        <table>belvg_userprofile_avatars</table>
-                                    </avatars>
-                                     <messages>
-                                        <table>belvg_userprofile_messages</table>
-                                    </messages>
-                                </entities>
-		    </userprofile_mysql4>
-            </models>
-
-	    <helpers>
-		    <userprofile>
-			    <class>Belvg_Userprofile_Helper</class>
-		    </userprofile>
-	    </helpers>
-            <events>
-                  <adminhtml_customer_save_after> <!-- identifier of the event we want to catch -->
-                    <observers>
-                      <custom_event_handler> <!-- identifier of the event handler -->
-                        <type>model</type> <!-- class method call type; valid are model, object and singleton -->
-                        <class>userprofile/observer</class> <!-- observers class alias -->
-                        <method>customObserverAction</method>  <!-- observer's method to be called -->
-                        <args></args> <!-- additional arguments passed to observer -->
-                      </custom_event_handler>
-                    </observers>
-                  </adminhtml_customer_save_after>
-            </events>
+        <blocks>
+            <userprofile>
+                <class>Belvg_Userprofile_Block</class>
+            </userprofile>
+            <customer>
+                <rewrite>
+                    <account_navigation>Belvg_Userprofile_Block_Rewrite_FrontCustomerAccountNavigation</account_navigation>
+                </rewrite>
+            </customer>
+            <customer>
+                <rewrite>
+                    <account_dashboard_hello>Belvg_Userprofile_Block_Rewrite_FrontCustomerAccountHello</account_dashboard_hello>
+                </rewrite>
+            </customer>
+            <customer>
+                <rewrite>
+                    <form_edit>Belvg_Userprofile_Block_Rewrite_FrontCustomerAccountEdit</form_edit>
+                </rewrite>
+            </customer>
+            <page>
+                <rewrite>
+                    <html_header>Belvg_Userprofile_Block_Rewrite_FrontPageHtmlHeader</html_header>
+                </rewrite>
+            </page>
+            <review>
+                <rewrite>
+                    <product_view_list>Belvg_Userprofile_Block_Rewrite_FrontReviewProductViewList</product_view_list>
+                </rewrite>
+            </review>
+            <adminhtml>
+                <rewrite>
+                    <customer_grid>Belvg_Userprofile_Block_Rewrite_AdminCustomerGrid</customer_grid>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <resources>
+            <userprofile_setup>
+                <setup>
+                    <module>Belvg_Userprofile</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </userprofile_setup>
+            <userprofile_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </userprofile_write>
+            <userprofile_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </userprofile_read>
+        </resources>
+        <models>
+            <userprofile>
+                <class>Belvg_Userprofile_Model</class>
+                <resourceModel>userprofile_mysql4</resourceModel>
+            </userprofile>
+            <userprofile_mysql4>
+                <class>Belvg_Userprofile_Model_Mysql4</class>
+                <entities>
+                    <avatars>
+                        <table>belvg_userprofile_avatars</table>
+                    </avatars>
+                    <messages>
+                        <table>belvg_userprofile_messages</table>
+                    </messages>
+                </entities>
+            </userprofile_mysql4>
+        </models>
+        <helpers>
+            <userprofile>
+                <class>Belvg_Userprofile_Helper</class>
+            </userprofile>
+        </helpers>
+        <events>
+            <adminhtml_customer_save_after> <!-- identifier of the event we want to catch -->
+                <observers>
+                    <custom_event_handler> <!-- identifier of the event handler -->
+                        <type>model</type>
+                        <!-- class method call type; valid are model, object and singleton -->
+                        <class>userprofile/observer</class>
+                        <!-- observers class alias -->
+                        <method>customObserverAction</method>
+                        <!-- observer's method to be called -->
+                        <args></args>
+                        <!-- additional arguments passed to observer -->
+                    </custom_event_handler>
+                </observers>
+            </adminhtml_customer_save_after>
+        </events>
     </global>
-
-
-
 </config>
 

@@ -65,7 +65,11 @@ class Belvg_Userprofile_Block_Messages  extends  Mage_Core_Block_Template
         if ($message->getStatus() == 0) return true;
         else            return false;
     }
-    
+
+    public function isMessageToAdmin()
+    {
+        return $this->getRequest()->getParam('admin', 0) == 1;
+    }
 }
 
 

@@ -100,4 +100,9 @@ class Find_Member_Block_Member extends Mage_Core_Block_Template
 	{
 		return $this->getChildHtml('toolbar');
 	}
+
+    public function canSendMessage()
+    {
+        return (bool)Mage::getSingleton('customer/session')->getId();
+    }
 }
