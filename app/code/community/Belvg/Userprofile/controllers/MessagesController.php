@@ -99,6 +99,13 @@ class Belvg_Userprofile_MessagesController extends Mage_Core_Controller_Front_Ac
 
     public function newMessageAction()
     {
+        /** @var Mage_Customer_Model_Session $session */
+        $session = Mage::getSingleton('customer/session');
+        if (!$session->getId()) {
+            $session->addError('You must be logged in in order to send a message.');
+            $this->_redirect('*/*/');
+            return;
+        }
         $customer_id = $_POST['customer_id'];
         $date = date('Y-m-d', time());
         $message = $_POST['message'];

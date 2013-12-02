@@ -37,6 +37,22 @@
 			</all>
 			<admin>
 				<children>
+                    <customer>
+                        <children>
+                            <userprofile translate="title" module="userprofile">
+                                <title>User Profile</title>
+                                <sort_order>1000</sort_order>
+                                <children>
+                                    <userprofile_messages translate="title" module="userprofile">
+                                        <title>Messages</title>
+                                    </userprofile_messages>
+                                    <admin_messages translate="title" module="userprofile">
+                                        <title>Admin Messages</title>
+                                    </admin_messages>
+                                </children>
+                            </userprofile>
+                        </children>
+                    </customer>
 					<system>
 						<children>
 							<config>

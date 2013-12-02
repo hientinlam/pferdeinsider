@@ -66,6 +66,11 @@ class Belvg_Userprofile_Model_Mysql4_Messages_Collection extends Mage_Core_Model
       return $this;
     }
 
+    public function addRecepientFilter($recepientId)
+    {
+        $this->getSelect()->where('send_to = ?', $recepientId);
+        return $this;
+    }
 }
 ?>
 

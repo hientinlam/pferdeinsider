@@ -91,7 +91,11 @@
                                 <sort_order>0</sort_order>
                                 <action>userprofile/adminhtml_messages/</action>
                             </userprofile_messages>
-
+                            <admin_messages translate="title">
+                                <title>Admin Messages</title>
+                                <sort_order>10</sort_order>
+                                <action>userprofile/adminhtml_messages/admin/</action>
+                            </admin_messages>
                         </children>
                     </userprofile>
                 </children>

@@ -40,7 +40,7 @@
                     <input type="hidden" name="status" value="0" id="status" />
                     <?php if ($this->isMessageToAdmin()) { ?>
                         <h2><?php echo $this->__('Message to Admin'); ?></h2>
-                        <input type="hidden" name="send_to" value="" id="sent_to" />
+                        <input type="hidden" name="send_to" value="0" id="sent_to" />
                     <?php } else { ?>
                     <label for="search"><?php echo $this->__('Select Member') ?></label></br>
                     <div class="input-box" style="background: url('<?php echo $this->getSkinUrl("images/263.png")?>') no-repeat scroll 0 0 transparent; margin-right:10px; border: 1px solid #999999;float:left;height:25px; overflow: hidden;width:263px;">
