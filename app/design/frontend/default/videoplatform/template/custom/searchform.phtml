@@ -98,27 +98,20 @@ foreach($adminmodel as $admininfo)
             <!-- end -->
 
             <?php
-            $id = $this->getRequest()->getParam('name');
             $customer = Mage::getSingleton('customer/session')->getCustomer();
-            $user = Mage::getModel('admin/user')->getCollection()->getData();
-            foreach ($user as $userinfo) {
-                if ($userinfo['username'] == $id) {
-                    break;
-                }
-            }
             $attributecode = 'member_list';
             $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', $attributecode);
             if ($attribute->usesSource()) {
                 $attribute_options = $attribute->getSource()->getAllOptions(false);
             }
             foreach ($attribute_options as $optiondata) {
-                if ($optiondata['label'] == $id) {
+                if ($optiondata['label'] == $expertname) {
 
                     $expertnameid = $optiondata['value'];
 
                 }
             }
-            $custemail = $userinfo['email'];
+            $custemail = $admininfo['email'];
             $customerdata = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($custemail);
             $custid = $customerdata['entity_id'];
             $membersubscriber = Mage::getModel('allmembers/allmembers')->getCollection()->getData();
@@ -253,7 +246,7 @@ $currentPage = (int) $this->getRequest()->getParam('p', 1);
  $cookiedata=explode('=',$_COOKIE["memberproduct"]);
 
 
-if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'member/'.$id || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'member/'.$id.'/' )
+if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'member/'.$expertname || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'member/'.$expertname.'/' )
 {
    setcookie('memberproduct', '', -3600);
    unset($_COOKIE["memberproduct"]);

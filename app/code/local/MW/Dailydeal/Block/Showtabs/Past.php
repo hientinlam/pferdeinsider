@@ -45,6 +45,9 @@ class MW_Dailydeal_Block_Showtabs_Past extends Mage_Core_Block_Template
 //            $toolbar->setModes($modes);
 //        }
 
+        $toolbar->setAvailableOrders(array('dailydeal_id' => 'ID'));
+        $toolbar->setDefaultOrder('dailydeal_id');
+        $toolbar->setDefaultDirection('DESC');
         // set collection to toolbar and apply sort
         $toolbar->setCollection($collection);
 
