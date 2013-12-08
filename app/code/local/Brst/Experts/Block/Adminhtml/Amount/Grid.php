@@ -66,23 +66,16 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
+        $this->addColumn('raw_price',
+            array(
+                'header' => $this->__('Raw Sales'),
+                'index' => 'raw_price',
+            )
+        );
         $this->addColumn('gross_price',
             array(
-                'header' => $this->__('Gross Price'),
+                'header' => $this->__('Gross Sales'),
                 'index' => 'gross_price',
-            )
-        );
-
-        $this->addColumn('share_ratio',
-            array(
-                'header' => $this->__('Pferde Ratio'),
-                'index' => 'share_ratio',
-            )
-        );
-        $this->addColumn('admin_pay',
-            array(
-                'header' => $this->__('Paid to Pferde'),
-                'index' => 'admin_pay'
             )
         );
 
@@ -113,18 +106,32 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
-        $this->addColumn('tax',
+        $this->addColumn('share_ratio',
             array(
-                'header' => $this->__('Tax Rate'),
-                'index' => 'tax',
+                'header' => $this->__('Pferde Ratio'),
+                'index' => 'share_ratio',
             )
         );
-        $this->addColumn('tax_pay',
+        $this->addColumn('admin_pay',
             array(
-                'header' => $this->__('Tax Amount'),
-                'index' => 'tax_pay'
+                'header' => $this->__('Paid to Pferde'),
+                'index' => 'admin_pay'
             )
         );
+
+//        $this->addColumn('tax',
+//            array(
+//                'header' => $this->__('Tax Rate'),
+//                'index' => 'tax',
+//            )
+//        );
+//        $this->addColumn('tax_pay',
+//            array(
+//                'header' => $this->__('Tax Amount'),
+//                'index' => 'tax_pay'
+//            )
+//        );
+
         $this->addColumn('getyoupaid',
             array(
                 'header' => $this->__('Paid to Expert'),
