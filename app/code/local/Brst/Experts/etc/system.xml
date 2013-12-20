@@ -10,13 +10,44 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
+                <tax_rate>
+                    <label>Tax Rate</label>
+                    <comment>
+                        <![CDATA[ <b>Input in percentage, e.g 10 for 10%</b> ]]>
+                    </comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <!--<small_business>-->
+                            <!--<label>Small business owner</label>-->
+                            <!--<frontend_type>text</frontend_type>-->
+                            <!--<sort_order>100</sort_order>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<validate>validate-digits</validate>-->
+                        <!--</small_business>-->
+                        <vat>
+                            <label>VAT</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                        </vat>
+                    </fields>
+                </tax_rate>
                 <earnings_ratio translate="label">
                     <label>Earnings Ratio</label>
                     <comment>
                         <![CDATA[ <b>Input in percentage, e.g 10 for 10%</b> ]]>
                     </comment>
                     <frontend_type>text</frontend_type>
-                    <sort_order>100</sort_order>
+                    <sort_order>200</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -65,37 +96,6 @@
                         </affiliate_repeatcustomer>
                     </fields>
                 </earnings_ratio>
-                <tax_rate>
-                    <label>Tax Rate</label>
-                    <comment>
-                        <![CDATA[ <b>Input in percentage, e.g 10 for 10%</b> ]]>
-                    </comment>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>200</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <small_business>
-                            <label>Small business owner</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>100</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <validate>validate-digits</validate>
-                        </small_business>
-                        <big_business>
-                            <label>Big business owner</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>200</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <validate>validate-digits</validate>
-                        </big_business>
-                    </fields>
-                </tax_rate>
             </groups>
         </brst_experts>
     </sections>

@@ -34,8 +34,8 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
     const XML_PATH_RATIO_AFF_SPECIAL = 'brst_experts/earnings_ratio/affiliate_special';
     const XML_PATH_RATIO_AFF_REPEAT = 'brst_experts/earnings_ratio/affiliate_repeatcustomer';
 
-    const XML_PATH_TAX_RATE_SMALL_BUSINESS = 'brst_experts/tax_rate/small_business';
-    const XML_PATH_TAX_RATE_BIG_BUSINESS = 'brst_experts/tax_rate/big_business';
+//    const XML_PATH_TAX_RATE_SMALL_BUSINESS = 'brst_experts/tax_rate/small_business';
+    const XML_PATH_TAX_RATE_VAT = 'brst_experts/tax_rate/vat';
 
     protected $_helper;
 
@@ -88,21 +88,23 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
     {
         $amount = array();
         // Ignore qty (not use $orderItem->getRowTotalInclTax()) since all products are downloadable
-        $amount['gross'] = floatval($orderItem->getPriceInclTax());
-        $amount['pferde_ratio'] = $this->_getAdminShareRatio();
-        $amount['pferde_share'] = $amount['gross'] * $amount['pferde_ratio'];
+        $amount['raw'] = floatval($orderItem->getPriceInclTax());
+        $amount['gross'] = round($amount['raw'] / (1 + $this->_getVatTaxRate($expertModel)), 2);
 
-        $remain = $amount['gross'] - $amount['pferde_share'];
         $affliateEarningShare = $this->_getAffiliateEarningTypeAndRatio($orderItem->getProduct(), $isNewCustomer, $isDirectPurchase);
         $amount['affiliate_type'] = $affliateEarningShare['type'];
         $amount['affiliate_ratio'] = $affliateEarningShare['ratio'];
-        $amount['affiliate_share'] = $remain * $affliateEarningShare['ratio'];
+        $amount['affiliate_share'] = round($amount['gross'] * $affliateEarningShare['ratio'], 2);
 
-        $remain -= $amount['affiliate_share'];
-        $amount['expert_tax_rate'] = $this->_getExpertTaxRate($expertModel);
-        $amount['expert_tax'] = $remain * $amount['expert_tax_rate'];
-        $amount['expert_ratio'] = 1 - $amount['affiliate_ratio'];
-        $amount['expert_share'] = $remain - $amount['expert_tax'];
+        $remain = $amount['gross'] - $amount['affiliate_share'];
+
+        $amount['pferde_ratio'] = $this->_getAdminShareRatio();
+        $amount['pferde_share'] = $remain * $amount['pferde_ratio'];
+
+        $amount['expert_tax_rate'] = 0;
+        $amount['expert_tax'] = 0;
+//        $amount['expert_ratio'] = 1 - $amount['affiliate_ratio'];
+        $amount['expert_share'] = $remain - $amount['pferde_share'];
 
         return $amount;
     }
@@ -182,7 +184,8 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
         $modelToSave->setCustomerId($order->getCustomerId());
         $modelToSave->setAffiliateId(is_null($affiliateModel->getId()) ? null : $affiliateModel->getCustomer()->getId());
 
-        $modelToSave->setGrossPrice($orderItem->getPriceInclTax());
+        $modelToSave->setRawPrice($shareAmounts['raw']);
+        $modelToSave->setGrossPrice($shareAmounts['gross']);
 
         $modelToSave->setShareRatio($shareAmounts['pferde_ratio'] * 100);
         $modelToSave->setAdminPay($shareAmounts['pferde_share']);
@@ -193,9 +196,9 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
         $modelToSave->setAffiliatePay($shareAmounts['affiliate_share']);
 
         $modelToSave->setExpertName($this->_getExpertName($product));
-        $modelToSave->setExpertRatio($shareAmounts['expert_ratio'] * 100);
-        $modelToSave->setTax($shareAmounts['expert_tax_rate'] * 100);
-        $modelToSave->setTaxPay($shareAmounts['expert_tax']);
+//        $modelToSave->setExpertRatio($shareAmounts['expert_ratio'] * 100);
+//        $modelToSave->setTax($shareAmounts['expert_tax_rate'] * 100);
+//        $modelToSave->setTaxPay($shareAmounts['expert_tax']);
         $modelToSave->setGetyoupaid($shareAmounts['expert_share']);
 
         $modelToSave->setCreatedAt(date('d/m/Y'));
@@ -238,22 +241,23 @@ class AW_Affiliate_Model_Transaction_Profit extends Mage_Core_Model_Abstract
         );
     }
 
-    protected function _getExpertTaxRate(Mage_Customer_Model_Customer $expertModel)
+    protected function _getVatTaxRate(Mage_Customer_Model_Customer $expertModel)
     {
-        $bankModelCollection = Mage::getModel('bank/bank')->getCollection()->addFieldToFilter('customer_id', $expertModel->getId());
-        if($bankModelCollection->count() == 0) {
-            // Default to small business
-            return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_SMALL_BUSINESS);
-            //Mage::throwException($this->_helper->__('There is no bank information for expert id = %s', $expertModel->getId()));
-        }
-
-        foreach($bankModelCollection as $bankModel) {
-            if($bankModel->getBusinesstype() == null || $bankModel->getBusinesstype() == 'small') {
-                return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_SMALL_BUSINESS);
-            } else {
-                return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_BIG_BUSINESS);
-            }
-        }
+        return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_VAT);
+//        $bankModelCollection = Mage::getModel('bank/bank')->getCollection()->addFieldToFilter('customer_id', $expertModel->getId());
+//        if($bankModelCollection->count() == 0) {
+//            // Default to small business
+//            return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_SMALL_BUSINESS);
+//            //Mage::throwException($this->_helper->__('There is no bank information for expert id = %s', $expertModel->getId()));
+//        }
+//
+//        foreach($bankModelCollection as $bankModel) {
+//            if($bankModel->getBusinesstype() == null || $bankModel->getBusinesstype() == 'small') {
+//                return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_SMALL_BUSINESS);
+//            } else {
+//                return $this->_getConfigPercentage(self::XML_PATH_TAX_RATE_BIG_BUSINESS);
+//            }
+//        }
     }
 
     protected function _getConfigPercentage($configPath)

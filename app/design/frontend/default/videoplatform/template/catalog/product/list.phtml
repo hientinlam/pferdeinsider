@@ -123,17 +123,6 @@ $attributeCode = 'ustream_video';
     <?php echo $this->getToolbarHtml() ?>
         </div>
     </div>
-    <?php // List mode ?>
-    <?php if($this->getMode()!='grid'): ?>
-    <?php $_iterator = 0; ?>
-    <ol class="products-list" id="products-list">
-    <?php foreach ($_productCollection as $_product): ?>
-     <?php endforeach; ?>
-    </ol>
-    
-    <script type="text/javascript"><?php decorateList('products-list', 'none-recursive'); ?></script>
-
-    <?php else: ?>
 
 <?php // Grid Mode ?>
 <?php $_collectionSize = $_productCollection->count() ?>
@@ -301,4 +290,3 @@ $attributeCode = 'ustream_video';
 <?php echo $this->getToolbarHtml() ?>
 </div>
 </div>
-<?php endif; ?>

@@ -87,8 +87,8 @@
                 <affiliate_repeatcustomer>10</affiliate_repeatcustomer>
             </earnings_ratio>
             <tax_rate>
-                <small_business>0</small_business>
-                <big_business>19</big_business>
+                <!--<small_business>0</small_business>-->
+                <vat>19</vat>
             </tax_rate>
         </brst_experts>
     </default>
