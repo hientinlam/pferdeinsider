@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	
-	<customer_account>
-        <reference name="customer_account_navigation">
-        	<action method="addLink" translate="label" module="forum"><name>forum_topics</name><path>forum/mytopics/</path><label>Meine Foren Themen</label></action>
-            <action method="addLink" translate="label" module="forum"><name>forum_posts</name><path>forum/myposts/</path><label>Meine Foren Beiträge</label></action>
-        </reference>
-    </customer_account>
-    
     <forum_myposts_index translate="label">
         <label>My Forum Posts</label>
         <update handle="customer_account"/>

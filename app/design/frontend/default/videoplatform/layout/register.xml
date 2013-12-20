@@ -2,6 +2,38 @@
 
 	<layout version="0.1.0">
 
+        <my_handle>
+            <reference name="customer_account_navigation">
+                <action method="addOrderedLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
+                <action method="addOrderedLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>create_product</name><path>createproduct/index/index/</path><label>Produkt erstellen</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>createproduct</name><path>createproduct/index/showproduct/</path><label>Meine Produkte</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>expertcalculation</name><path>allmembers/index/expertcalculation/</path><label>Meine Einnahmen</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>allmembers</name><path>allmembers/index/earnings/</path><label>Einnahmen über Webseite</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
+                <action method="addOrderedLink" translate="label" module="allmembers"><name>member_videos</name><path>allmembers/index/videos</path><label>Subscriptions</label></action>
+                <action method="addOrderedLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
+                <action method="addOrderedLink" translate="label" module="sales"><name>Zahlungsvereinbarungen</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
+                <action method="addOrderedLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
+                <action method="addOrderedLink" translate="label" module="sales"><name>review</name><path>review/customer/</path><label>Meine Produktbewertungen</label></action>
+                <action method="addOrderedLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>Meine Schlagworte</label></action>
+                <action method="addOrderedLink" translate="label" module="wishlist"><name>wishlist</name><path>wishlist/</path><label>Meine Wunschliste</label></action>
+                <action method="addOrderedLink" translate="label" module="oauth"><name>OAuth Customer Tokens</name><path>oauth/customer_token</path><label>My Applications</label></action>
+                <action method="addOrderedLink" translate="label" module="downloadable"><name>customer</name><path>downloadable/customer/products/</path><label>Meine Download Produkte</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate</path><label>Affiliate Program</label></action>
+                <action method="addOrderedLink" ifconfig="monkey/general/active" translate="label" module="monkey"><name>mailchimp</name><path>monkey/customer_account/index</path><label>Newsletter Abonnements</label></action>
+                <action method="addOrderedLink" translate="label" module="facebookconnect"><name>facebookconnect</name><path>facebookconnect/manage/</path><label>Facebook Connect</label></action>
+                <action method="addOrderedLink" translate="label" module="forum"><name>forums</name><path>forum/mytopics/</path><label>Meine Foren Themen</label></action>
+                <action method="addOrderedLink" translate="label" module="forum"><name>forum</name><path>forum/myposts/</path><label>Meine Foren Beiträge</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>customer.profile.messages</name><path>userprofile/messages/all</path><label>Nachrichten</label></action>
+                <action method="addOrderedLink" translate="label" module="customer"><name>comments</name><path>comment/index/index/</path><label>Produkt erstellen</label></action>
+                <action method="addOrderedLink" translate="label" module="newsletter"><name>manage</name><path>newsletter/manage/</path><label>Newsletter Einstellungen</label></action>
+            </reference>
+        </my_handle>
 		<register_index_index>
 			<reference name="root">
 				<action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -28,43 +60,7 @@
                         </reference>
                        <reference name="left">
                             <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
-                                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>account_editPersonalinfo</name><path>register/index/personalinfo</path><label>Persönliche Informationen</label></action>
-                                <action method="addLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>Bank Information</name><path>bank/index/index</path><label>Bankdaten</label></action>
-
-                                <action method="addLink" translate="label" module="customer">
-                                    <name>brst_createproduct</name>
-                                    <path>createproduct/index/index</path>
-                                    <label>Produkt erstellen</label>
-                                </action>
-                                <action method="addLink" translate="label" module="customer"><name>brstcreateproduct</name><path>createproduct/index/showproduct</path><label>Meine Produkte</label></action>
-                             <action method="addLink" translate="label" module="customer"><name>expertcalculation</name><path>allmembers/index/expertcalculation/</path><label>Meine Einnahmen</label></action>
-
-                                <action method="addLink" translate="label" module="customer">
-                                    <name>allmembers</name>
-                                    <path>allmembers/index/earnings/</path>
-                                    <label>Einnahmen über Webseite</label>
-                                </action>
-                    <action method="addLink" translate="label" module="customer"><name>allmember</name><path>allmembers/index/viaaffiliate/</path><label>Einnahmen über Affiliate Partner</label></action>
-                                <!--<action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
-                              -->
-                                <action method="addLink" translate="label" module="allmembers"><name>member_videos</name><path>allmembers/index/videos</path><label>Subscriptions</label></action>
-                                <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>Meine Bestellungen</label></action>
-                                <action method="addLink" translate="label" module="sales"><name>Zahlungsvereinbarungen</name><path>sales/billing_agreement/</path><label>Zahlungsvereinbarungen</label></action>
-                                <action method="addLink" translate="label" module="sales"><name>Recurring Profiles</name><path>sales/recurring_profile/</path><label>Recurring Profiles</label></action>
-                                <action method="addLink" translate="label" module="sales"><name>review</name><path>review/customer/</path><label>Meine Produktbewertungen</label></action>
-                                <action method="addLink" translate="label" module="tag"><name>tags</name><path>tag/customer/</path><label>Meine Schlagworte</label></action>
-                                <action method="addLink" translate="label" module="oauth"> <name>OAuth Customer Tokens</name> <path>oauth/customer_token</path><label>My Applications</label></action>
-                                <action method="addLink" translate="label" module="wishlist"><name>wishlist</name><path>wishlist/</path><label>Meine Wunschliste</label></action>
-                                <action method="addLink" translate="label" module="newsletter"><name>manage</name><path>newsletter/manage/</path><label>Newsletter Einstellungen</label></action>
-                                <action method="addLink" translate="label" module="downloadable"><name>customer</name><path>/downloadable/customer/products/</path><label>Meine Download Produkte</label></action>
-                                <action method="addLink" translate="label" module="forum"><name>forums</name><path>forum/mytopics/</path><label>Meine Foren Themen</label></action>
-                                <action method="addLink" translate="label" module="forum"><name>forum</name><path>forum/myposts/</path><label>Meine Foren Themen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>customer.profile.messages</name><path>userprofile/messages/all/</path><label>Nachrichtens</label></action>
-                              </block>
+                            </block>
 
                             <remove name="tags_popular"/>
                         </reference>
@@ -84,13 +80,7 @@
                         </reference>
                        <reference name="left">
                             <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
-                                <action method="addLink" translate="label" module="customer"><name>account</name><path>customer/account/</path><label>Account Übersicht</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>account_edit</name><path>customer/account/edit/</path><label>Account Informationen</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>account_editInfo</name><path>register/index/personalinfo/</path><label>Persönliche Informationen</label></action>
-                                <action method="addLink" translate="label" module="register"><name>myprofile</name><path>register/myprofile/</path><label>See Public Profile</label></action>
-                                <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Adressbuch</label></action>
-                                <action method="addLink" translate="label" module="allmembers"><name>member_videos</name><path>allmembers/index/videos</path><label>Subscriptions</label></action>
-                          </block>
+                            </block>
 
                             <block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
                             <remove name="tags_popular"/>

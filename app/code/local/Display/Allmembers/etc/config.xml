@@ -11,6 +11,11 @@
             <allmembers>
                 <class>Display_Allmembers_Block</class>
             </allmembers>
+            <customer>
+                <rewrite>
+                    <account_navigation>Display_Allmembers_Block_Account_Navigation</account_navigation>
+                </rewrite>
+            </customer>
         </blocks>
         <helpers>
             <allmembers>

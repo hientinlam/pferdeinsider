@@ -47,14 +47,6 @@ Default layout, loads most of the pages
 <!--
 Customer account pages, rendered for all tabs in dashboard
 -->
-
-    <customer_account>
-        <!-- Mage_Wishlist -->
-        <reference name="customer_account_navigation">
-            <action method="addLink" translate="label" module="wishlist" ifconfig="wishlist/general/active"><name>wishlist</name><path>wishlist/</path><label>Meine Wunschliste</label></action>
-        </reference>
-    </customer_account>
-
 <!--
 Customer account home dashboard layout
 -->
