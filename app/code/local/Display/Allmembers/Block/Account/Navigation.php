@@ -30,12 +30,12 @@ class Display_Allmembers_Block_Account_Navigation extends Mage_Customer_Block_Ac
         if ($this->_customLoaded) {
             return $this;
         }
-        /** @var Mage_Core_Model_Layout_Update $update */
-        $update = Mage::getModel('core/layout_update');
-        $navigationRefs = $update->load(array('my_handle'))->asSimplexml()->xpath("//reference[@name='customer_account_navigation']");
-        foreach ($navigationRefs as $reference) {
-            $this->getLayout()->generateBlocks($reference);
-        }
+
+        $update = Mage::getStoreConfig('cms/my_account_menu/links_config');
+        $update = '<reference name="customer_account_navigation">' . $update
+                . '</reference>';
+        $update = Mage::getModel('core/layout_element', $update);
+        $this->getLayout()->generateBlocks($update);
 
         $this->_customLoaded = true;
         return $this;
