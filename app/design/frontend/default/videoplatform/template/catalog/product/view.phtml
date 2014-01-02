@@ -55,8 +55,8 @@ foreach($adminmodel as $admininfo)
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="viewproduct">
 <div class="product-view">
+<form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
     <div class="">
-    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <div class="no-display">
             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
             <input type="hidden" name="related_product" id="related-products-field" value="" />
@@ -67,37 +67,37 @@ foreach($adminmodel as $admininfo)
                  <div class="product-name">
                      <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
                   </div>
-                  <span> 
+                  <span>
                      <?php if ($_product->getShortDescription()):?>
                         <div class="short-description">
                         <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
                         </div>
                     <?php endif;?>
                   </span>
-                   
+
                     <div class="instructor" style="">
                          <span style="clear:both !important;float:none !important; color:#333333; display:inline-block; width:90px;">Ausbilder</span> <span style="clear:both !important;float:none !important;width:225px"> <a style="text-decoration:none;" href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>"> <?php echo ': '. ucwords($customer->getFirstname()." ".$customer->getLastname()); ?></a></span>
                     </div>
                     <div class="instructor_length">
-                         <span style="display:inline-block; width:90px;">Länge</span> <span style="width:225px"> : 2 Day Workshop</span>
+                         <span style="display:inline-block; width:90px;">L?nge</span> <span style="width:225px"> : 2 Day Workshop</span>
                     </div>
                    <div class="instructor_length">
                      <?php $attr1 = $_product->getResource()->getAttribute("video_category");
                             if ($attr1->usesSource()): $name = $attr1->getSource()->getOptionText($_product->getVideoCategory()); endif; $countvalue=count($name) ?>
-                       <span style="display:inline-block; width:90px;">Stichwort</span> <span style="">:</span><span style="display: inline-block; width: 185px; vertical-align: top; margin-left: 5px;"> 
-                            <?php 
+                       <span style="display:inline-block; width:90px;">Stichwort</span> <span style="">:</span><span style="display: inline-block; width: 185px; vertical-align: top; margin-left: 5px;">
+                            <?php
                             if($countvalue==1)
                                 {
-                                echo '<a  style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$name.'">'.$name.',</a> '; 
+                                echo '<a  style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$name.'">'.$name.',</a> ';
                                 }else
-                                    { 
+                                    {
                                     foreach($name as $value)
-                                        { 
-                                        echo '<a style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$value.'">'.$value.',</a> '; 
-                                        
-                                        } ; 
-                                        
-                                        } 
+                                        {
+                                        echo '<a style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$value.'">'.$value.',</a> ';
+
+                                        } ;
+
+                                        }
                          ?>
                        </span>
                     </div>
@@ -108,7 +108,7 @@ foreach($adminmodel as $admininfo)
              <div class="buy_now_portion" style="width:335px;">
                 <div class="buy_now_part">
                      <?php $dealcollection=Mage::getModel('dailydeal/dailydeal')->getCollection()->getData();
-                       $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); 
+                       $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
                         foreach($dealcollection as $deal)
                         {
                            if($deal['product_id'] == $_product->getId())
@@ -117,12 +117,12 @@ foreach($adminmodel as $admininfo)
                                 $discounttype=$deal['discount_type'];
                                  break;
                             }
-                            
+
                         }
                       $orignalprice=$_product->getPrice();
                         $paise=($orignalprice-$dealprice)*100;
                          $discountpercent=$paise/$orignalprice;
-                      
+
                        ?>
                     <?php if($_product['special_product']==47){ echo $this->getPriceHtml($_product, true); } ?>
                     <?php if($_product['special_product']==48) { ?>
@@ -142,10 +142,10 @@ foreach($adminmodel as $admininfo)
                     </div>
                     <div class="buy_now_black">
                         <div class="buy_now_title">
-                            
+
                         <?php if($_product['is_salable']): ?>
                               <button  style="cursor:pointer;background: #8FD400;border:none; font-size: 14px;margin-top: 5px;font-family:verdana;text-decoration:none;color:#333333; padding: 10px; display:table; margin: 0 auto;" type="submit" name="submit" ><?php echo 'JETZT KAUFEN' ?></button>
-                                              
+
                          <?php else: ?>
                         <p class="availability out-of-stock" style="margin-top:4px !important;"><span><?php echo $this->__('Out of stock') ?></span></p>
                     <?php endif; ?>
@@ -154,33 +154,33 @@ foreach($adminmodel as $admininfo)
                 </div>
                 <div class="buy_now_part2">
                     <?php if ($_product['special_product']==48) { ?>
-                   
+
                     <div class="get_off"> GET <?php echo number_format($discountpercent, 2) ?>% OFF </div>
                     <div class="order_now">
                           <button  class="order_now" style="color:#9E0B0F;text-decoration:underline;border:none; font-size: 14px;margin-top: 5px;font-family:verdana;" type="submit" name="submit" style="text-decoration:none;color:#333333;" ><?php echo 'Jetzt bestellen' ?></button>&nbsp;
-                                              
-                       
+
+
                     </div>
                      <div class="deal_ends" style="  color: #333333;font-family: Arial;font-size: 12px; padding-top:55px; text-align: center;width: 100%;">
-                          Angebot endet in 
+                          Angebot endet in
                     </div>
                      <?php } ?>
-                   
+
                     <?php if ($_product['special_product']==47) { ?>
                     <div class="order_now">
                                   <button  class="order_now" style="color:#9E0B0F;text-decoration:underline;border:none; font-size: 14px;margin-top: 5px;font-family:verdana;" type="submit" name="submit" style="text-decoration:none;color:#333333;" ><?php echo 'Jetzt bestellen' ?></button>&nbsp;
-                                              
-                       
+
+
                     </div>
                      <div class="deal_ends" style="  color: #333333;font-family: Arial;font-size: 12px; padding-top:25px; text-align: center;width: 100%;">
-                          Angebot endet in 
+                          Angebot endet in
                     </div>
                     <link media="all" type="text/css" href="http://54.228.195.42/magento/skin/frontend/default/default/mw_dailydeal/css/superneat.css" rel="stylesheet">
                     <div class="deal-product">
                     <div class="ct-deal-pro">
 			<!-- Countdown Javascript -->
 			<div class="counter" id="counter">
-				<ul class="countdown">	
+				<ul class="countdown">
 					 <li class="first"><div id="view_cd_hour-3" class="countdown_num"><span>0</span><span>0</span></div>
                                              <span class="colon" style="font-size:22px;">:</span>
                                              <div id="hour" style="margin-top:-10px;padding-left:8px;text-align:left;">Tage</div></li>
@@ -193,7 +193,7 @@ foreach($adminmodel as $admininfo)
                                             <div style="margin-top:-10px;margin-left:-2px;" id="second">Sekunden</div></li>
 				</ul>
 			</div>
-			
+
 			</div>
                     </div>
 		</div>
@@ -206,8 +206,8 @@ foreach($adminmodel as $admininfo)
                  </div>
             </div>
 
-           
-            
+
+
 
         </div>
 
@@ -234,7 +234,6 @@ foreach($adminmodel as $admininfo)
         <?php endif;?>
     </div>
        
-    </form>
     <script type="text/javascript">
     //<![CDATA[
         var productAddToCartForm = new VarienForm('product_addtocart_form');
@@ -377,6 +376,45 @@ foreach($adminmodel as $admininfo)
                             </div>
                            </div>
                        </div>
+         <?php
+            /** @var Mage_Catalog_Model_Product $_product */
+            $_product = $this->getProduct();
+            if ($_product->getTypeId() == 'grouped') {
+                $_groupedProducts = $_product->getTypeInstance(true)->getAssociatedProducts($_product);
+         ?>
+      <div style="float:right;width:610px; border-top: 1px solid #B6AFA6">
+          <span style="padding: 25px">Bundled Products</span>
+          <?php foreach ($_groupedProducts as $_groupedProduct)  { ?>
+          <?php
+                $_groupedProduct = Mage::getModel('catalog/product')->load($_groupedProduct->getId());
+                $_productMaterial = $_groupedProduct->getProductMaterial();
+          ?>
+            <li class="session-group">
+                <input type="hidden" name="super_group[<?php echo $_groupedProduct->getId(); ?>]" value="1" />
+                <div class="session-screen-shot">
+                    <a class="product-image" title="" href="<?php echo $_groupedProduct->getProductUrl(); ?>" style="">
+                    <img alt="" src="<?php echo $this->helper('catalog/image')->init($_groupedProduct, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(146,82) ?>" class="keyframe-img">
+                    <span style=" float: right; position: relative;right:0px;top: -81px;">
+                        <?php if($_productMaterial=='7'): ?>
+                            <img src="<?php echo $this->getSkinUrl('images/img_video.png')?>"/>
+                        <?php elseif($_productMaterial=='8'):?>
+                            <img src="<?php echo $this->getSkinUrl('images/img_audio.png')?>"/>
+                        <?php elseif($_productMaterial=='10'): ?>
+                            <img src="<?php echo $this->getSkinUrl('images/img_ebook.png')?>"/>
+                        <?php else : ?>
+                            <img src="<?php echo $this->getSkinUrl('images/img_photo.png')?>"/>
+                        <?php  endif; ?>
+                       </span>
+                    </a>
+                </div>
+                <div class="session-group-title"><a title="" href="<?php echo $_groupedProduct->getProductUrl(); ?>"><?php echo $_groupedProduct->getName(); ?></a></div>
+                <div class="session-group-title"></div>
+            </li>
+          <?php } ?>
+      </div>
+      <?php
+            }
+      ?>
       <div style="float:right;width:610px;">
            <?php 
                  $membercollection=Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('member_list',Array('eq'=>$expertid));
@@ -436,7 +474,7 @@ jQuery(document).ready(function() {
                         }
                     ?>
                             <?php $curmon=date(m); if($key== $curmon){ ?>
-                           <div class="session_title_header1"  id="<?php echo $count ?>" onclick=""> TEIL <?php echo $count ?> 
+                           <div class="session_title_header1"  id="<?php echo $count ?>" onclick=""> TEIL <?php echo $count ?>
                                <span style="padding-left:10px;"><?php $newDate = date("M d, Y", strtotime($latestdate)); echo $newDate; ?></span>
                                <span style="float:right;"><?php echo count($data).' videos'; ?></span>
                            </div>
@@ -737,6 +775,7 @@ jQuery(document).ready(function() {
 
                          </div>
     </div>
+</form>
     </div>
 
 

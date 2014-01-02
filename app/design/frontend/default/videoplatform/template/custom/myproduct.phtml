@@ -83,9 +83,9 @@ foreach($adminmodel as $admininfo)
 $productModel = Mage::getModel('catalog/product');
 $attr = $productModel->getResource()->getAttribute("member_list");
 if ($attr->usesSource()) {
-   $id = $attr->getSource()->getOptionId($expertname[0]);  }
+    $id = $attr->getSource()->getOptionId($expertname[0]);
+}
 $collection = Mage::getResourceModel('catalog/product_collection'); 
-$_product=$collection->getData();
 $attributes = Mage::getSingleton('catalog/config')
                             ->getProductAttributes();
 $collection->addAttributeToSelect($attributes)
@@ -93,7 +93,7 @@ $collection->addAttributeToSelect($attributes)
  $collection->addFieldToFilter(array(
                             array('attribute'=>'member_list',array('eq'=>$id)),
                             ))->setPageSize($pageSize)
-            ->setCurPage($currentPage);   
+            ->setCurPage($currentPage);
  $curencySymbol =  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); 
         
 
@@ -103,7 +103,7 @@ $collection->addAttributeToSelect($attributes)
 $totCat = $collection->getSize();
 $store_cats = $collection->load();
 $pageTot = ceil( $totCat / $pageSize );
-$pageSize1=array('9','15','30',All);
+$pageSize1=array('9','15','30','All');
 
 $firstproduct=1;
 if(($this->getRequest()->getParam('p') > 1 ))
@@ -158,7 +158,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
         <ol>
              <?php if ($currentPage != '1'): ?>
             <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
+                <a class="previous" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
                   <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
                 </a>
             </li>

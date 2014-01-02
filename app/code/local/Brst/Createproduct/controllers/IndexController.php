@@ -38,7 +38,16 @@ class Brst_Createproduct_IndexController extends Mage_Core_Controller_Front_Acti
            $productData = array();
            try  
            {
-                
+                $productType =  'downloadable';
+                if ($this->getRequest()->getParam('producttype', false) == 'grouped') {
+                    $productType = 'grouped';
+                    $linkData = array();
+                    $groupedProducts = $this->getRequest()->getParam('grouped_products', array());
+                    foreach ($groupedProducts as $groupedId) {
+                        $linkData[$groupedId] = array('qty' => 1, 'position' => 0);
+                    }
+                    $productData['grouped_link_data'] = $linkData;
+                }
                 $productData['website_ids'] = array(1);
                 $productData['video_category'] = $productdata1['productcategory'];
                 $productData['status'] = 1;
@@ -62,13 +71,16 @@ class Brst_Createproduct_IndexController extends Mage_Core_Controller_Front_Acti
                 $productData['linkurl'] = $productdata1['linkurl'];
                 $productData['tax_class_id'] =2;
           //echo "<pre>";print_r($productData);die('sdhjdfj');
-                $new_product_id = $api->create('downloadable',$attribute_sets[0]['set_id'],'ND3',$productData);
+                $new_product_id = $api->create($productType,$attribute_sets[0]['set_id'],'ND3',$productData);
                 
                 /********************** Add Related Product ***************/
                 
                  $memberproducts = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('member_list',Array('eq'=>$productdata1['productexpertname']));
                  $memberdata=$memberproducts->getData();
                  $prd = Mage::getModel('catalog/product')->load($new_product_id);
+                 if ($productType == 'grouped') {
+                     $prd->setGroupedLinkData($linkData);
+                 }
                  $i=0;
 
                  foreach($memberdata as $memberpro)

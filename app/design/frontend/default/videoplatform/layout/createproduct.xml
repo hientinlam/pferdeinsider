@@ -21,7 +21,7 @@
 			
             <reference name="content">
                 <block type="core/html_calendar" name="html_calendar" as="html_calendar" template="page/js/calendar.phtml"/>
-                <block type="comment/comment" name="comment" template="custom/createproduct.phtml"/>
+                <block type="createproduct/create" name="comment" template="custom/createproduct.phtml"/>
             </reference>
         </createproduct_index_index>
         

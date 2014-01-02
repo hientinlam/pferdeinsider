@@ -653,7 +653,7 @@ $custdata = $result->fetch($select);
                   <li  id="tab1" class="selected"  onclick="tabdata(this);">VIDEO</li>
                   <li id="tab2" onclick="tabdata(this);">AUDIO</li>
                   <li id="tab3"  onclick="tabdata(this);">EBOOKS</li>
-                  <li id="tab4"  onclick="tabdata(this);">FOTOS</li>
+                  <li id="tab4"  onclick="tabdata(this);">Bundles</li>
                   <li id="tab5"  onclick="tabdata(this);">LIVE WEBINARE</li>
                 </ul>
             </div>
@@ -1369,10 +1369,10 @@ $custdata = $result->fetch($select);
 </div>
 <div id="tab4Content" style="display:none;margin-top: 50px;">
        <div class="page-title">
-           <h1>FOTO PRODUKT ERSTELLEN</h1>
+           <h1>Bundled Product Creation</h1>
     </div>
         <form id="photo-form-validate" enctype="multipart/form-data" method="post" action="<?php echo $this->getUrl()?>createproduct/index/create" />
-        <input type="hidden" value="photo" name="producttype" />
+        <input type="hidden" value="grouped" name="producttype" />
          <input type="hidden" value="<?php echo $productexpertname ; ?>" name="productexpertname" />
          <input type="hidden"  width="30" title="qty" value="10000" name="qty" id="qty"/>
          <input type="hidden" name="currenturl" id="currenturl" value=""/>
@@ -1399,15 +1399,15 @@ $custdata = $result->fetch($select);
                     </div>
                  </li> -->
                  
-                 <li class="fields">
-                      <div class="field name">
-                             <label class="required" for="price"><em> </em>Preis</label>
-                                 <div class="input-box">
-                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="photoprice"/>
-                                 </div>
-                                <div class="validation-advice" id="photopricemsg" style="display:none;"></div>
-                        </div>
-                 </li>
+<!--                 <li class="fields">-->
+<!--                      <div class="field name">-->
+<!--                             <label class="required" for="price"><em> </em>Preis</label>-->
+<!--                                 <div class="input-box">-->
+<!--                                     <input type="text" class="input-text required-entry" title="Product price" value="" name="productprice" id="photoprice"/>-->
+<!--                                 </div>-->
+<!--                                <div class="validation-advice" id="photopricemsg" style="display:none;"></div>-->
+<!--                        </div>-->
+<!--                 </li>-->
                 
                   <li class="fields">
                       <div class="field name">
@@ -1448,7 +1448,7 @@ $custdata = $result->fetch($select);
                  </li>
                  <li class="fields">
                       <div class="field name">
-                            <input type="hidden" value="9" name="productmaterial" />      
+                            <input type="hidden" value="140" name="productmaterial" />
                       </div>
                  </li>
                
@@ -1531,20 +1531,7 @@ $custdata = $result->fetch($select);
                  
                  </div>  
         
-                       <li class="fields">
-                      <div class="entry-edit">
-                            <div class="entry-edit-head">
-                                  <h4 class="icon-head head-edit-form fieldset-legend"><?php echo 'neues Produkt hochladen';?></h4>
-                            </div>
-                          <div id="s3photoamazondiv">
-                           <fieldset id="grop_fields" style="padding-left:15px;">
-                                  <a id="various3" class="photos3fancybox" style="text-decoration:none;padding:5px;color:#FFFFFF;background:#333333;width:150px;" class="button" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'s3/index.php'?>">Upload Photo</a>
 
-                            </fieldset>
-                          </div>
-                             <div id="amazonphotocontentimg"></div>
-                        </div>
-                </li>
                     <script type="text/javascript">
 		jQuery(document).ready(function() {
 			
@@ -1560,26 +1547,53 @@ $custdata = $result->fetch($select);
 			
 		});
 	</script>
-                 
-                   <li class="fields">
-                      <div class="field name">
-                          <div class="input-box">
-                                     <input type="hidden" class="input-text" title="Product LinkUrl" value="" name="linkurl" id="photolinkurl"/>
-                                 </div>
-                        </div>
-                 </li>
 
-                <li class="fields">
-                      <div class="field name">
-                             <label class="required" for="Product Image"><em> </em>Produktbild</label>
-                                 <div class="input-box">
-                                     <input type="file" name="file" class="input-text required-entry" title="Product Image" value=""  id="productimage"/>
-                                 </div>
-                        </div>
-                 </li>
-                 
-                 
-                 
+            <li class="fields">
+                <div class="field name">
+                    <div class="input-box">
+                        <input type="hidden" class="input-text" title="Product LinkUrl" value="" name="linkurl" id="photolinkurl"/>
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field name">
+                    <label class="required" for="Product Image"><em> </em>Produktbild</label>
+                    <div class="input-box">
+                        <input type="file" name="file" class="input-text required-entry" title="Product Image" value=""  id="productimage"/>
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <?php
+                    $_currencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+                    $_products = $this->getExpertsProducts();
+                    $i = 1;
+                ?>
+                <table width="750">
+                    <tr><th class="myproductth">#</th><th class="myproductth">Product Name</th><th class="myproductth">Type</th><th class="myproductth">Price</th></tr>
+                    <?php foreach ($_products as $_product) { ?>
+                    <?php
+                        if ($_product->getTypeId() == 'grouped') {
+                            continue;
+                        }
+                        $_product= Mage::getModel('catalog/product')->load($_product->getId());
+                        $_attr = $_product->getResource()->getAttribute("product_material");
+                        if ($_attr->usesSource()) {
+                            $_material = $_attr->getSource()->getOptionText($_product['product_material']);
+                        }
+                    ?>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="grouped_products[]" value="<?php echo $_product->getId(); ?>" />
+                                #<?php echo $i++; ?>
+                            </td>
+                            <td><?php echo $_product->getName(); ?></td>
+                            <td><?php echo $_material; ?></td>
+                            <td><?php echo $_currencySymbol . number_format($_product->getPrice(),2)?></td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </li>
         </ul>
     </div>
     
