@@ -76,7 +76,7 @@
                         </reference>
 			
             <reference name="content">
-                <block type="comment/comment" name="comment" template="custom/update.phtml"/>
+                <block type="createproduct/create" name="comment" template="custom/update.phtml"/>
             </reference>
         </createproduct_index_edit>
         <createproduct_index_update>
@@ -93,7 +93,7 @@
                         </reference>
 			
             <reference name="content">
-                <block type="comment/comment" name="comment" template="custom/update.phtml"/>
+                <block type="createproduct/create" name="comment" template="custom/update.phtml"/>
             </reference>
         </createproduct_index_update>
       

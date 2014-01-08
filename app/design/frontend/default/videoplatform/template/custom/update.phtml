@@ -147,6 +147,7 @@
 <?php
 $productId=$_GET['id'];
 $_myprodsamples = Mage::getModel('downloadable/link')->getCollection()->addProductToFilter($Id);
+/** @var Mage_Catalog_Model_Product $productdata */
 $productdata=Mage::getModel('catalog/product')->load($productId);
 foreach ($_myprodsamples as $_sample):
      $video= $_sample['sample_url'];
@@ -156,7 +157,7 @@ endforeach;
 
 
 $connection = Mage::getSingleton('core/resource')->getConnection('core_read');
-$query="select * from events_product where product_id=".$productId;
+$query="select * from events_product where product_id=" . (int)$productId;
 $result=$connection->query($query)->fetch();
 $eventdatas=Mage::getModel('events/events')->load($result['eventid']);
 $eventstartdate=$eventdatas['event_start_date'];
@@ -216,7 +217,8 @@ endforeach;
                     </div>
                  </li>
                 
-                
+
+                 <?php if ($productmaterial != 140) { ?>
                  <li class="fields">
                       <div class="field name">
                              <label class="required" for="price"><em> </em>Preis</label>
@@ -226,6 +228,7 @@ endforeach;
                                  </div>
                         </div>
                  </li>
+                 <?php } ?>
               
                  <!--<li class="fields">
                       <div class="field name">
@@ -271,6 +274,7 @@ endforeach;
                                   </div>   
                         </div>
                  </li>
+<!--
                  <li class="fields">
                       <div class="field name">
                              <label style="width:500px;" class="required" for="Product Material"><em> </em>Product Material</label>
@@ -283,12 +287,12 @@ endforeach;
                                             foreach($options as $optiondata): ?>
                                                 <option <?php if($optiondata['value']==$productdata->getProductMaterial()) { echo "selected='selected'"; } ?> value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
                                 <?php endforeach; ?>
-                        
+
                                       </select>
-                                  </div>          
+                                  </div>
                       </div>
                  </li>
-               
+-->
                  
                  
                  <li class="fields">
@@ -433,7 +437,7 @@ endforeach;
 				'height'			: '75%',
 				'autoScale'			: false,
 				'transitionIn'		: 'none',
-                                'type'			: 'iframe',
+                'type'			    : 'iframe',
 				'transitionOut'		: 'none'
 				
 			});
@@ -568,6 +572,42 @@ endforeach;
                                  </div>
                         </div>
                  </li>
+
+                 <?php if ($productdata->getTypeId() == 'grouped') { ?>
+                     <li class="fields">
+                         <?php
+                         $_currencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+                         $_products = $this->getExpertsProducts();
+                         $_associatedProductIds = $productdata->getTypeInstance(true)->getAssociatedProductIds($productdata);
+                         $i = 1;
+                         ?>
+                         <table width="750">
+                             <tr><th class="myproductth">#</th><th class="myproductth">Product Name</th><th class="myproductth">Type</th><th class="myproductth">Price</th></tr>
+                             <?php foreach ($_products as $_product) { ?>
+                                 <?php
+                                 if ($_product->getTypeId() == 'grouped') {
+                                     continue;
+                                 }
+                                 $_isAssociated = in_array($_product->getId(), $_associatedProductIds);
+                                 $_product= Mage::getModel('catalog/product')->load($_product->getId());
+                                 $_attr = $_product->getResource()->getAttribute("product_material");
+                                 if ($_attr->usesSource()) {
+                                     $_material = $_attr->getSource()->getOptionText($_product['product_material']);
+                                 }
+                                 ?>
+                                 <tr>
+                                     <td>
+                                         <input type="checkbox" name="grouped_products[]" <?php echo $_isAssociated ? 'checked="checked"' : ''; ?>value="<?php echo $_product->getId(); ?>" />
+                                         #<?php echo $i++; ?>
+                                     </td>
+                                     <td><?php echo $_product->getName(); ?></td>
+                                     <td><?php echo $_material; ?></td>
+                                     <td><?php echo $_currencySymbol . number_format($_product->getPrice(),2)?></td>
+                                 </tr>
+                             <?php } ?>
+                         </table>
+                     </li>
+                 <?php } ?>
                  
                  
         </ul>

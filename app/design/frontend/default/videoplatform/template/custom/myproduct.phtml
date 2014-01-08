@@ -258,7 +258,7 @@ $count=1;
         echo '<tr class='.$myproducttr.'><td style="padding:5px;"><img src="'. $this->helper('catalog/image')->init($_product, 'small_image')->keepAspectRatio(FALSE)->keepFrame(FALSE)->resize(100,50).'" ></td>';
       echo '<td style="padding:5px;">'.substr( $_product->getName(), 0, 100).'</td>';
       echo '<td style="padding:5px;">'.$productmaterial.'</td>';
-      echo '<td style="padding:5px;">'.$curencySymbol.number_format($_product->getPrice(),2).'</td>';
+      echo '<td style="padding:5px;">'. (($product->getTypeId() == 'grouped') ? '-' : $curencySymbol . number_format($_product->getPrice(),2)) . '</td>';
       echo '<td style="padding:5px;"><a style="cursor:pointer" href="'.Mage::getBaseUrl().'createproduct/index/edit?id='.$_product->getEntityId().'"><img src="'.$this->getSkinUrl('images/user_edit.png').'"/></a></td>';
        echo '<td style="padding:5px;"><a   style="cursor:pointer" class="ask" href="'.Mage::getBaseUrl().'createproduct/index/delete?id='.$_product->getEntityId().'"><img  src="'.$this->getSkinUrl('images/btn_trash.gif').'"/></a></td></tr>';
       $count++;

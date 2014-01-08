@@ -328,18 +328,24 @@ class Brst_Createproduct_IndexController extends Mage_Core_Controller_Front_Acti
             $productmodel = Mage::getModel('catalog/product')->load($updatedata['prodId']);  
             try {
                 if($updatedata['prodId'] != NULL )
-                {  
+                {
+                    if ($productmodel->getTypeId() == 'grouped') {
+                        $linkData = array();
+                        $groupedProducts = $this->getRequest()->getParam('grouped_products', array());
+                        foreach ($groupedProducts as $groupedId) {
+                            $linkData[$groupedId] = array('qty' => 1, 'position' => 0);
+                        }
+                        $productmodel->setGroupedLinkData($linkData);
+                    }
                     $productmodel->setWebsiteIds(array(Mage::app()->getStore($storeId)->getWebsiteId()));
                     $productmodel->setAttributeSetId(4);
                     $productmodel->setCategoryIds(array(5));
                     $productmodel->setVideoCategory($updatedata['productcategory']);
-                    $productmodel->setTypeId('downloadable');
                    // $productmodel->setSku($updatedata['productname']);
                     $productmodel->setPrice($updatedata['productprice']);
                     $productmodel->setSpecialPrice($updatedata['specialprice']);
                     $productmodel->setSpecialProduct($updatedata['specialproduct']);
                     $productmodel->setDownlodableOption($updatedata['downloadableoption']);
-                    $productmodel->setProductMaterial($updatedata['productmaterial']);
                     $productmodel->setMemberList($updatedata['productexpertname']);
                     $productmodel->setStatus(1);
                     $productmodel->setVisibility(4);
