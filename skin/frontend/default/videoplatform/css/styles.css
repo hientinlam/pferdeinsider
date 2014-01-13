@@ -666,7 +666,7 @@ tr.summary-details-excluded { font-style:italic; }
  #filteration{float:left;padding-right:3px;}
  #reset{padding:3px 5px 3px 5px;color:#FFFFFF;background:#333333;width:80px;cursor:pointer;border:none;}
 .typecolon{float:left;margin-top:-10px;}
-.colon{padding:0px !important;float:right;margin-top:12px !important;}
+.colon{/*padding:0px !important;float:right;margin-top:12px !important;*/}
 .leftsearch{background-color: #999999;border: none;float: right;padding: 3px;width: 25px;margin: -26px 1px 0px 0px;}
 .pferde_right{height: 319px; margin:0 auto; background: url('../images/slider_part_right.png')no-repeat right top;}
 .srch_icon {background: none repeat scroll 0 0 #999999;border-radius: 0 4px 4px 0;display: inline;padding: 10px 7px 14px 11px !important;position: relative;right: 5px;width: 30px;}
@@ -2898,3 +2898,5 @@ ol#my_recent_reviews li.even {
 .footer .icons{height: 60px; float:none;  margin: 0 auto;}
 .footer .menu{display: table;margin: 0 auto; float:none; width: auto;}
 .footer .copyright_outer {float:none; width: auto;}
+body.catalog-product-view .product-shop .identify{width:305px;}
+.col-left.sidebar .block-banner{display:none;}
