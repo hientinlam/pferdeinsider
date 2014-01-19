@@ -51,11 +51,12 @@
                      */
             if($groupid==4)
             {
-            ?>
-                    <?php foreach ($_links as $_link): ?>   
-                     <?php  if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos') { ?> 
-                        <?php $_last = ($_index++ >= $_count); ?>
-                        <?php if ($this->isActive($_link)): ?>
+				foreach ($_links as $k => $_link):
+					echo $k." - ";
+					if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos') {
+                        $_last = ($_index++ >= $_count);
+                        if ($this->isActive($_link)):
+			?>
                             <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
                         <?php else: ?>
                             <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
