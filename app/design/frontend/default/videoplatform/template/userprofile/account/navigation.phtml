@@ -129,13 +129,21 @@
                         </div>
                     <?php endif ?>
 
+                    <?php
+                        $label = str_replace(
+                            array("Meine Download Produkte","Subscriptions"),
+                            array("Produkte Download / Stream","Meine Abonnements"),
+                            $_link->getLabel()
+                        );
+                    ?>
+
                     <?php if ($this->isActive($_link)): ?>
-                            <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
+                            <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $label ?></strong></li>
                         <?php else: ?>
                             <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
-                                <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                                <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $label ?></a></li>
                             <?php elseif($_link->getLabel()!='Affiliate Program'): ?>
-                                <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                                <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $label ?></a></li>
                             <?php endif; ?>
                         <?php endif ?>
                     <?php // endif ?>
