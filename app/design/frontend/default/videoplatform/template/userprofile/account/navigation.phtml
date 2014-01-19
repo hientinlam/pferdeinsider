@@ -100,6 +100,7 @@
 			endforeach;
 			
 			ksort($newsort); //re-sort navigation list
+			$newsort = (object) $newsort;
 			$_links = $newsort;
 			// PhuongLan end custom code
 			
