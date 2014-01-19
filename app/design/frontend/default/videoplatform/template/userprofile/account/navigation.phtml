@@ -49,15 +49,58 @@
 			/**
 			 *  custom added code
 			 */
-			
-			echo "<pre>";
-			print_r($_links['account']);
-			echo "</pre>";
-			exit;
+
 			// PhuongLan custom code to re-sort navigation list
-			foreach ($_links as $k => $resort):
-				
+			$newsort = array();
+			foreach ($_links as $k => $resort): // assigning number to sort
+				if ($k == "orders"):
+					$i = 0;
+				elseif ($k == "customer"):
+					$i = 1;
+				elseif ($k == "member_videos"):
+					$i = 2;
+				elseif ($k == "review"):
+					$i = 3;
+				elseif ($k == "tags"):
+					$i = 4;
+				elseif ($k == "wishlist"):
+					$i = 5
+				elseif ($k == "expertcalculation"):
+					$i = 6;
+				elseif ($k == "allmembers"):
+					$i = 7;
+				elseif ($k == "allmember"):
+					$i = 8;
+				elseif ($k == "createproduct"):
+					$i = 9;
+				elseif ($k == "create_product"):
+					$i = 10;
+				elseif ($k == "account_editPersonalinfo"):
+					$i = 11;
+				elseif ($k == "myprofile"):
+					$i = 12;
+				elseif ($k == "account_edit"):
+					$i = 13;
+				elseif ($k == "address_book"):
+					$i = 14;
+				elseif ($k == "Bank Information"):
+					$i = 15;
+				elseif ($k == "member_videos"):
+					$i = 16;
+				elseif ($k == "facebookconnect"):
+					$i = 17;
+				elseif ($k == "mailchimp"):
+					$i = 18;
+				elseif ($k = "customer.profile.messages"):
+					$i = 19;
+				elseif ($k == "promote_products"):
+					$i = 20;
+				endif;
+				$newsort[$i] = $resort;
 			endforeach;
+			
+			ksort($newsort); //re-sort navigation list
+			$_links = $newsort;
 			// PhuongLan end custom code
 			
             if($groupid==4)
