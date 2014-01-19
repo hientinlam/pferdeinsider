@@ -59,6 +59,7 @@
                     $newsort[1] = $resort;
 				elseif ($resort->getName() == "member_videos"):
                     $newsort[2] = $resort;
+                    $newsort[16] = $resort;
 				elseif ($resort->getName() == "review"):
                     $newsort[3] = $resort;
 				elseif ($resort->getName() == "tags"):
@@ -85,8 +86,6 @@
                     $newsort[14] = $resort;
 				elseif ($resort->getName() == "Bank Information"):
                     $newsort[15] = $resort;
-				elseif ($resort->getName() == "member_videos"):
-                    $newsort[16] = $resort;
 				elseif ($resort->getName() == "facebookconnect"):
                     $newsort[17] = $resort;
 				elseif ($resort->getName() == "mailchimp"):
@@ -120,7 +119,7 @@
                     <?php // endif ?>
                 <?php endforeach; ?>
       <?php   }
-              else 
+              else
               { ?>
                      <?php foreach ($_links as $_link): ?>
                      <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
