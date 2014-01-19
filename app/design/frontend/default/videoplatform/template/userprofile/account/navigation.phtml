@@ -168,15 +168,23 @@
                           </div>
                       <?php endif ?>
 
+                    <?php
+                    $label = str_replace(
+                        array("Meine Download Produkte","Subscriptions","Meine Produkte","Persönliche Informationen","See Public Profile"),
+                        array("Produkte Download / Stream","Meine Abonnements","Meine erstellten Produkte","Mein Profil","öffentliches Profil ansehen"),
+                        $_link->getLabel()
+                    );
+                    ?>
+
                     <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
                         <?php $_last = ($_index++ >= $_count); ?>
                         <?php if ($this->isActive($_link)): ?>
-                            <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
+                            <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $label ?></strong></li>
                         <?php else: ?>
                             <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
-                            <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                            <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $label ?></a></li>
                         <?php elseif($_link->getLabel()!='Affiliate Program' && $_link->getLabel()!='Einnahmen über Webseite' && $_link->getLabel()!='Meine Einnahmen' && $_link->getLabel()!='Einnahmen über Affiliate Partner'  ): ?>
-                              <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                              <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $label ?></a></li>
                         <?php endif; ?>
                         <?php endif; ?>
                     <?php }?>
