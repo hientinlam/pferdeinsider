@@ -50,10 +50,6 @@
 			 *  custom added code
 			 */
 
-            echo "<pre>";
-            print_r($_links);
-            echo "</pre>";
-
 			// PhuongLan custom code to re-sort navigation list
 			$newsort = array();
 			foreach ($_links as $resort): // assigning number to sort
@@ -103,17 +99,12 @@
 			endforeach;
 			
 			ksort($newsort); //re-sort navigation list
-			//$_links = $newsort;
+			$_links = $newsort;
 			// PhuongLan end custom code
 
-            echo "<pre>";
-            print_r($newsort);
-            echo "</pre>";
-            exit;
-			
             if($groupid==4)
             {
-				foreach ($newsort as $_link):
+				foreach ($_links as $_link):
 					//if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos'):
                         $_last = ($_index++ >= $_count);
                         if ($this->isActive($_link)):
@@ -131,7 +122,7 @@
       <?php   }
               else 
               { ?>
-                     <?php foreach ($newsort as $_link): ?>
+                     <?php foreach ($_links as $_link): ?>
                      <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
                             <?php $_last = ($_index++ >= $_count); ?>
                             <?php if ($this->isActive($_link)): ?>
