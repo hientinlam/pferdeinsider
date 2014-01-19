@@ -51,10 +51,11 @@
 			 */
 
 			// PhuongLan custom code to re-sort navigation list
-			/* $newsort = array();
-			$i = 0;
+			$newsort = array();
 			foreach ($_links as $resort): // assigning number to sort
-				if ($resort->getName() == "customer"):
+                if ($resort->getName() == "orders"):
+                    $i = 0;
+                elseif ($resort->getName() == "customer"):
 					$i = 1;
 				elseif ($resort->getName() == "member_videos"):
 					$i = 2;
@@ -99,7 +100,7 @@
 			endforeach;
 			
 			ksort($newsort); //re-sort navigation list
-			$_links = $newsort; */
+			$_links = $newsort;
 			// PhuongLan end custom code
 			
             if($groupid==4)
