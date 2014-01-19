@@ -104,32 +104,31 @@
 			$_links = $newsort;
 			// PhuongLan end custom code
 
-            if($groupid==4)
-            {
+            if ($groupid == 4):
 				foreach ($_links as $_link):
 					//if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos'):
                         $_last = ($_index++ >= $_count);
             ?>
-                        <?php if ($_link->getName() == "expertcalculation"): ?>
-                            <div class="block-title">
-                                <strong><span><?php echo $this->__("Meine Einnahmen") ?></span></strong>
-                            </div>
-                        <?php elseif ($_link->getName() == "createproduct"): ?>
-                            <div class="block-title">
-                                <strong><span><?php echo $this->__("Produkte erstellen / verwalten") ?></span></strong>
-                            </div>
-                        <?php elseif ($_link->getName() == "account_editPersonalinfo"): ?>
-                            <div class="block-title">
-                                <strong><span><?php echo $this->__("Persönliche Informationen") ?></span></strong>
-                            </div>
-                            <li class="current"><strong><?php echo $this->__("Account Übersicht") ?></strong></li>
-                        <?php elseif ($_link->getName() == "promote_products"): ?>
-                            <div class="block-title">
-                                <strong><span><?php echo $this->__("Affiliate Programm") ?></span></strong>
-                            </div>
-                        <?php endif ?>
+                    <?php if ($_link->getName() == "expertcalculation"): ?>
+                        <div class="block-title">
+                            <strong><span><?php echo $this->__("Meine Einnahmen") ?></span></strong>
+                        </div>
+                    <?php elseif ($_link->getName() == "createproduct"): ?>
+                        <div class="block-title">
+                            <strong><span><?php echo $this->__("Produkte erstellen / verwalten") ?></span></strong>
+                        </div>
+                    <?php elseif ($_link->getName() == "account_editPersonalinfo"): ?>
+                        <div class="block-title">
+                            <strong><span><?php echo $this->__("Persönliche Informationen") ?></span></strong>
+                        </div>
+                        <li class="current"><strong><?php echo $this->__("Account Übersicht") ?></strong></li>
+                    <?php elseif ($_link->getName() == "promote_products"): ?>
+                        <div class="block-title">
+                            <strong><span><?php echo $this->__("Affiliate Programm") ?></span></strong>
+                        </div>
+                    <?php endif ?>
 
-            <?php if ($this->isActive($_link)): ?>
+                    <?php if ($this->isActive($_link)): ?>
                             <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
                         <?php else: ?>
                             <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
@@ -140,24 +139,41 @@
                         <?php endif ?>
                     <?php // endif ?>
                 <?php endforeach; ?>
-      <?php   }
-              else
-              { ?>
-                     <?php foreach ($_links as $_link): ?>
-                     <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
-                            <?php $_last = ($_index++ >= $_count); ?>
-                            <?php if ($this->isActive($_link)): ?>
-                                <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
-                            <?php else: ?>
-                                <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
-                                <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
-                            <?php elseif($_link->getLabel()!='Affiliate Program' && $_link->getLabel()!='Einnahmen über Webseite' && $_link->getLabel()!='Meine Einnahmen' && $_link->getLabel()!='Einnahmen über Affiliate Partner'  ): ?>
-                                  <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
-                            <?php endif; ?>
-                            <?php endif; ?>
-                                <?php }?>
-                    <?php endforeach; ?>
-        <?php }?>
+            <?php else: ?>
+                <?php foreach ($_links as $_link): ?>
+                      <?php if ($_link->getName() == "expertcalculation"): ?>
+                          <div class="block-title">
+                              <strong><span><?php echo $this->__("Meine Einnahmen") ?></span></strong>
+                          </div>
+                      <?php elseif ($_link->getName() == "createproduct"): ?>
+                          <div class="block-title">
+                              <strong><span><?php echo $this->__("Produkte erstellen / verwalten") ?></span></strong>
+                          </div>
+                      <?php elseif ($_link->getName() == "account_editPersonalinfo"): ?>
+                          <div class="block-title">
+                              <strong><span><?php echo $this->__("Persönliche Informationen") ?></span></strong>
+                          </div>
+                          <li class="current"><strong><?php echo $this->__("Account Übersicht") ?></strong></li>
+                      <?php elseif ($_link->getName() == "promote_products"): ?>
+                          <div class="block-title">
+                              <strong><span><?php echo $this->__("Affiliate Programm") ?></span></strong>
+                          </div>
+                      <?php endif ?>
+
+                    <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
+                        <?php $_last = ($_index++ >= $_count); ?>
+                        <?php if ($this->isActive($_link)): ?>
+                            <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
+                        <?php else: ?>
+                            <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
+                            <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                        <?php elseif($_link->getLabel()!='Affiliate Program' && $_link->getLabel()!='Einnahmen über Webseite' && $_link->getLabel()!='Meine Einnahmen' && $_link->getLabel()!='Einnahmen über Affiliate Partner'  ): ?>
+                              <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                    <?php }?>
+                <?php endforeach; ?>
+            <?php endif ?>
         </ul>
     </div>
 </div>
