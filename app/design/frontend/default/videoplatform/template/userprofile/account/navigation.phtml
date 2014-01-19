@@ -52,48 +52,47 @@
 
 			// PhuongLan custom code to re-sort navigation list
 			$newsort = array();
-			foreach ($_links as $k => $resort): // assigning number to sort
-				if ($k == "orders"):
-					$i = 0;
-				elseif ($k == "customer"):
+			$i = 0;
+			foreach ($_links as $resort): // assigning number to sort
+				if ($resort->getName() == "customer"):
 					$i = 1;
-				elseif ($k == "member_videos"):
+				elseif ($resort->getName() == "member_videos"):
 					$i = 2;
-				elseif ($k == "review"):
+				elseif ($resort->getName() == "review"):
 					$i = 3;
-				elseif ($k == "tags"):
+				elseif ($resort->getName() == "tags"):
 					$i = 4;
-				elseif ($k == "wishlist"):
+				elseif ($resort->getName() == "wishlist"):
 					$i = 5
-				elseif ($k == "expertcalculation"):
+				elseif ($resort->getName() == "expertcalculation"):
 					$i = 6;
-				elseif ($k == "allmembers"):
+				elseif ($resort->getName() == "allmembers"):
 					$i = 7;
-				elseif ($k == "allmember"):
+				elseif ($resort->getName() == "allmember"):
 					$i = 8;
-				elseif ($k == "createproduct"):
+				elseif ($resort->getName() == "createproduct"):
 					$i = 9;
-				elseif ($k == "create_product"):
+				elseif ($resort->getName() == "create_product"):
 					$i = 10;
-				elseif ($k == "account_editPersonalinfo"):
+				elseif ($resort->getName() == "account_editPersonalinfo"):
 					$i = 11;
-				elseif ($k == "myprofile"):
+				elseif ($resort->getName() == "myprofile"):
 					$i = 12;
-				elseif ($k == "account_edit"):
+				elseif ($resort->getName() == "account_edit"):
 					$i = 13;
-				elseif ($k == "address_book"):
+				elseif ($resort->getName() == "address_book"):
 					$i = 14;
-				elseif ($k == "Bank Information"):
+				elseif ($resort->getName() == "Bank Information"):
 					$i = 15;
-				elseif ($k == "member_videos"):
+				elseif ($resort->getName() == "member_videos"):
 					$i = 16;
-				elseif ($k == "facebookconnect"):
+				elseif ($resort->getName() == "facebookconnect"):
 					$i = 17;
-				elseif ($k == "mailchimp"):
+				elseif ($resort->getName() == "mailchimp"):
 					$i = 18;
-				elseif ($k = "customer.profile.messages"):
+				elseif ($resort->getName() = "customer.profile.messages"):
 					$i = 19;
-				elseif ($k == "promote_products"):
+				elseif ($resort->getName() == "promote_products"):
 					$i = 20;
 				endif;
 				$newsort[$i] = $resort;
@@ -105,7 +104,7 @@
 			print_r($newsort);
 			echo "</pre>";
 			exit;
-			$newsort = (object) $newsort;
+			//$newsort = (object) $newsort;
 			$_links = $newsort;
 			// PhuongLan end custom code
 			
