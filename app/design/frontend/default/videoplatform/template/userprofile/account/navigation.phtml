@@ -54,7 +54,7 @@
 			 */
 
 			// PhuongLan custom code to re-sort navigation list
-			/* $newsort = array();
+			$newsort = array();
 			foreach ($_links as $resort): // assigning number to sort
                 if ($resort->getName() == "orders"):
                     $newsort[0] = $resort;
@@ -79,29 +79,31 @@
                     $newsort[9] = $resort;
 				elseif ($resort->getName() == "create_product"):
                     $newsort[10] = $resort;
-				elseif ($resort->getName() == "account_editPersonalinfo"):
+                elseif ($resort->getName() == "account"):
                     $newsort[11] = $resort;
-				elseif ($resort->getName() == "myprofile"):
+				elseif ($resort->getName() == "account_editPersonalinfo"):
                     $newsort[12] = $resort;
-				elseif ($resort->getName() == "account_edit"):
+				elseif ($resort->getName() == "myprofile"):
                     $newsort[13] = $resort;
-				elseif ($resort->getName() == "address_book"):
+				elseif ($resort->getName() == "account_edit"):
                     $newsort[14] = $resort;
-				elseif ($resort->getName() == "Bank Information"):
+				elseif ($resort->getName() == "address_book"):
                     $newsort[15] = $resort;
-				elseif ($resort->getName() == "facebookconnect"):
+				elseif ($resort->getName() == "Bank Information"):
                     $newsort[17] = $resort;
-				elseif ($resort->getName() == "mailchimp"):
+				elseif ($resort->getName() == "facebookconnect"):
                     $newsort[18] = $resort;
-				elseif ($resort->getName() == "customer.profile.messages"):
+				elseif ($resort->getName() == "mailchimp"):
                     $newsort[19] = $resort;
-				elseif ($resort->getName() == "promote_products"):
+				elseif ($resort->getName() == "customer.profile.messages"):
                     $newsort[20] = $resort;
+				elseif ($resort->getName() == "promote_products"):
+                    $newsort[21] = $resort;
 				endif;
 			endforeach;
 			
 			ksort($newsort); //re-sort navigation list
-			$_links = $newsort; */
+			$_links = $newsort;
 			// PhuongLan end custom code
 
             if ($groupid == 4):
@@ -117,11 +119,10 @@
                         <div class="block-title">
                             <strong><span><?php echo $this->__("Produkte erstellen / verwalten") ?></span></strong>
                         </div>
-                    <?php elseif ($_link->getName() == "account_editPersonalinfo"): ?>
+                    <?php elseif ($_link->getName() == "account"): ?>
                         <div class="block-title">
                             <strong><span><?php echo $this->__("Persönliche Informationen") ?></span></strong>
                         </div>
-                        <li class="current"><strong><?php echo $this->__("Account Übersicht") ?></strong></li>
                     <?php elseif ($_link->getName() == "promote_products"): ?>
                         <div class="block-title">
                             <strong><span><?php echo $this->__("Affiliate Programm") ?></span></strong>
@@ -149,11 +150,10 @@
                           <div class="block-title">
                               <strong><span><?php echo $this->__("Produkte erstellen / verwalten") ?></span></strong>
                           </div>
-                      <?php elseif ($_link->getName() == "account_editPersonalinfo"): ?>
+                      <?php elseif ($_link->getName() == "account"): ?>
                           <div class="block-title">
                               <strong><span><?php echo $this->__("Persönliche Informationen") ?></span></strong>
                           </div>
-                          <li class="current"><strong><?php echo $this->__("Account Übersicht") ?></strong></li>
                       <?php elseif ($_link->getName() == "promote_products"): ?>
                           <div class="block-title">
                               <strong><span><?php echo $this->__("Affiliate Programm") ?></span></strong>
