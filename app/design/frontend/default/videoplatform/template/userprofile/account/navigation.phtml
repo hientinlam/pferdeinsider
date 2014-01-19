@@ -41,6 +41,9 @@
          endforeach;?>
     <div class="block-content">
         <ul>
+            <div class="block-title">
+                <strong><span><?php echo $this->__("Meine Produkte") ?></span></strong>
+            </div>
             <?php $_links = $this->getLinks();
             //echo "<pre>";print_r($_links);die('helo');?>
             <?php $_index = 1; ?>
@@ -106,8 +109,26 @@
 				foreach ($_links as $_link):
 					//if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos'):
                         $_last = ($_index++ >= $_count);
-                        if ($this->isActive($_link)):
-			?>
+
+                        $thisTitle = "";
+                        if ($_link->getName() == "whislist"):
+                            $thisTitle = "Meine Einnahmen";
+                        elseif ($_link->getName() == "allmember"):
+                            $thisTitle = "Produkte erstellen / verwalten";
+                        elseif ($_link->getName() == "account_editPersonalinfo"):
+                            $thisTitle = "Persönliche Informationen";
+                        elseif ($_link->getName() == "promote_products"):
+                            $thisTitle = "Affiliate Programm";
+                        endif;
+
+            ?>
+                            <div class="block-title">
+                                <strong><span><?php echo $this->__($thisTitle) ?></span></strong>
+                            </div>
+                            <?php if ($_link->getName() == "account_editPersonalinfo"): ?>
+                            <li class="current"><strong>Account Übersicht</strong></li>
+                            <?php endif ?>
+            <?php if ($this->isActive($_link)): ?>
                             <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $_link->getLabel() ?></strong></li>
                         <?php else: ?>
                             <?php if($_link->getLabel()=='Affiliate Program' && $status=='active'): ?>
