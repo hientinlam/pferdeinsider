@@ -105,7 +105,7 @@
             if($groupid==4)
             {
 				foreach ($_links as $_link):
-					if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos') {
+					//if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos'):
                         $_last = ($_index++ >= $_count);
                         if ($this->isActive($_link)):
 			?>
@@ -116,8 +116,9 @@
                             <?php elseif($_link->getLabel()!='Affiliate Program'): ?>
                                 <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
                             <?php endif; ?>
-                        <?php endif;  }?>                            
-                    <?php endforeach; ?>
+                        <?php endif ?>
+                    <?php // endif ?>
+                <?php endforeach; ?>
       <?php   }
               else 
               { ?>
