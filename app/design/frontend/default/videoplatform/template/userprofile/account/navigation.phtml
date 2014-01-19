@@ -46,13 +46,23 @@
             <?php $_index = 1; ?>
             <?php $_count = count($_links); ?>
             <?php
-                    /**
-                     *  custom added code
-                     */
+			/**
+			 *  custom added code
+			 */
+			
+			echo "<pre>";
+			print_r($_links);
+			echo "</pre>";
+			exit;
+			// PhuongLan custom code to re-sort navigation list
+			foreach ($_links as $k => $resort):
+				
+			endforeach;
+			// PhuongLan end custom code
+			
             if($groupid==4)
             {
-				foreach ($_links as $k => $_link):
-					echo $k." - ";
+				foreach ($_links as $_link):
 					if($_link->getLabel()!='Promote Products' && $_link->getLabel()!='Member Videos') {
                         $_last = ($_index++ >= $_count);
                         if ($this->isActive($_link)):
