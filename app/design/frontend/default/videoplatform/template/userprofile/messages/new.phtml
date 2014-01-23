@@ -73,20 +73,20 @@
                     <?php } ?>
                 </div>
                 <div class="field name-firstname">
-                    <label  for="firstname">Title</label>
+                    <label  for="firstname"><?php echo $this->__("Title") ?></label>
                     <div class="input-box">
-                        <input type="text" class="input-text" title="Title" value="" name="title" id="title">
+                        <input type="text" class="input-text" title="<?php echo $this->__("Title") ?>" value="" name="title" id="title">
                     </div>
                 </div>
                 <div class="field name-lastname" style="float:none;">
-                    <label  for="lastname"><em>*</em>Message</label>
+                    <label  for="lastname"><em>*</em><?php echo $this->__("Message") ?></label>
                     <div class="input-box">
-                        <textarea class="input-textarea" title="Message" value="" name="message" id="message"></textarea>
+                        <textarea class="input-textarea" title="<?php echo $this->__("Message") ?>" value="" name="message" id="message"></textarea>
                     </div>
                 </div>
             </div>
         </li>
     </ul>
-    <button style="padding:5px 30px;" class="button btn-msg" title="Read" type="submit"><span><span>Post</span></span></button>
+    <button style="padding:5px 30px;" class="button btn-msg" title="<?php echo $this->__("Post") ?>" type="submit"><span><span><?php echo $this->__("Post") ?></span></span></button>
 
 </form>
