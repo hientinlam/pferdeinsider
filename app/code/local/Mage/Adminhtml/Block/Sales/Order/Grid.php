@@ -87,7 +87,7 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
             'index' => 'created_at',
             'type' => 'datetime',
             'width' => '100px',
-            'format' => $dateFormatIso, 
+            'format' => $dateFormatIso,
         ));
 
         $this->addColumn('billing_name', array(

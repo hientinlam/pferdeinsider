@@ -66,37 +66,9 @@ foreach($adminmodel as $admininfo)
             <!-- end -->
             </br>
             <!-- Pops up a javascript login form when clicked; if user is signed in should pop up a send message form. -->
-            <div class="msgExp" style=" float: left;margin: 10px 0;width: 250px;">
-                <!-- <a id="various3" class="ebooks3fancybox" class="button" href="<?php echo Mage::getBaseUrl().'allmembers/index/message'?>">Send Message</a>-->
-                <a href="#" class="topopup">Nachricht senden</a>
-
-                         <!--  <script type="text/javascript">
-		jQuery(document).ready(function() {
-			
-                        jQuery(".ebooks3fancybox").fancybox({
-				'width'				: '45%',
-				'height'			: '70%',
-				'autoScale'			: false,
-				'transitionIn'		: 'none',
-				'transitionOut'		: 'none',
-				'type'				: 'iframe'
-			});
-
-			
-		});
-	</script> -->
-                <!-- <a href=""></a>-->
-            </div>
+            <div id="subscribemember" class="msgExp">
+                <button class="topopup green"><span><span>Nachricht senden</span></span></button>
             <!-- end -->
-            
-            <!-- Display only if they have their own website -->
-            <?php if($website != NULL) { ?>
-            <div class="expertWeb">
-            Webseite: <a href="<?php echo $website ?>"><?php echo $website ?></a>
-            </div>
-            <?php } ?>
-            <!-- end -->
-
             <?php
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             $attributecode = 'member_list';
@@ -130,11 +102,8 @@ foreach($adminmodel as $admininfo)
             $query = "select * from tbl_brstcustomer where customer_id = $custid";
             $result = $connection->query($query);
             $custdata = $result->fetch($select);
-            //echo "<pre>";print_r($custdata);die('ahah');
-
             ?>
             <?php /* Subscribe button -- start */ ?>
-            <div id="subscribemember" style="float:left;padding-top:20px;">
                 <form id="merchant-form-validate" method="post" action="<?php echo $this->getUrl()?>allmembers/index/subscribe">
                     <input type="hidden" name="customerid" value="<?php echo $customer->getId();?>"/>
                     <input type="hidden" name="id" value="<?php echo $subscribeId;?>"/>
@@ -150,21 +119,24 @@ foreach($adminmodel as $admininfo)
                     <?php
                     }
                     if($login && $status==0) { ?>
-                        <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
-                            <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px; margin-left: 0;"  class="button" title="Submit" type="submit" name="subscribe" ><span><span><?php echo $this->__("Subscribe"); ?></span></span></button>
-                        </div>
+                        <button class="green" title="Submit" type="submit" name="subscribe" ><span><span><?php echo $this->__("Subscribe"); ?></span></span></button>
                     <?php
                     } elseif ($login && $memberid==$expertnameid && $status==1) {
                         ?>
-                        <div class="buttons-set" style="margin:0px;padding: 8px 0 10px;">
-                            <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px; margin-left: 0;" class="button"  type="button" name="unsubscribe" onclick="changeaction()"><span><span><?php echo $this->__("Unsubscribe"); ?></span></span></button>
-                        </div>
+                        <button class="green"  type="button" name="unsubscribe" onclick="changeaction()"><span><span><?php echo $this->__("Unsubscribe"); ?></span></span></button>
                     <?php
                     }
                     ?>
                 </form>
             </div>
             <?php /* Subscribe button -- end */ ?>
+            <!-- Display only if they have their own website -->
+            <?php if($website != NULL) { ?>
+            <div class="expertWeb">
+                Webseite: <a href="<?php echo $website ?>"><?php echo $website ?></a>
+            </div>
+            <?php } ?>
+            <!-- end -->
         </div>
         <div class="left_subscribe_bg">
               <?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?>
@@ -295,8 +267,8 @@ if(($this->getRequest()->getParam('p') > 1 ))
  
  ?>
 
-<div   style="  float: left;margin-bottom: 15px;margin-top:15px;width: 1000px;" class="cattoolbar">
- <!--   <div class="toolbar">
+<!--div   style="  float: left;margin-bottom: 15px;margin-top:15px;width: 1000px;" class="cattoolbar">
+ <   <div class="toolbar">
     <div class="pager">
          <p class="amount" style="padding-top:5px;padding-right:5px;">
             <?php if($pageTot > 1): if($currentPage!= 1){?>
@@ -359,66 +331,13 @@ if(($this->getRequest()->getParam('p') > 1 ))
     </div>
     </div>
 </div>
-</div>  -->
 </div>
+</div>-->
 <!-- Use this pagination instead of the one above -->
         
   
 <?php if(count($collection) >0) { ?>
-    <div class="clear" style="height:15px;"></div>
-    <div id="sortNav" style="background:none; padding:0;" >
-      <form method="" action="">
-        <div style="float:left">
-        <label style="padding-right:10px;">Zeige</label>
-         <select style="width:70px;" onchange="setcookie('memberproduct',this.value);setLocation(this.value);">
-                        <?php foreach($pageSize1 as $key=>$limit) { ?>  
-                             <option <?php if($_COOKIE["memberproduct"]== Mage::getBaseUrl().'member/Rakesh?s='.$limit) { echo 'selected=selected'; }?> value="<?php echo Mage::getBaseUrl().'member/Rakesh?s='.$limit  ?>" > <?php echo $limit;?> </option>
-                    <?php } ?>
-           </select>
-        <label style="padding-left:10px; padding-right:0;">
-            <?php if($pageTot > 1): if($currentPage!= 1){?>
-                    <?php echo $this->__( $from.'-'.$to.' of '.$totCat) ?>
-             <?php } else { ?>
-                       <?php echo $this->__( $currentPage.'-'. $pageSize. ' of '.$totCat) ?>
-             <?php } ?>
-            <?php else: ?>
-               <?php echo $this->__('Anzahl Artikel Gesamt '.$totCat) ?>
-            <?php endif; ?>
-            
-            
-            </label>
-        </div>
-        <div id="navPage" style="margin-top:10px;">
-      <ul>
-         <?php if ($currentPage != '1'): ?>
-            <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
-                  <img src="<?php echo $this->getSkinUrl('images/backward.png') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
-                </a>
-            </li>
-        <?php endif;?>
-            <?php if($pageTot>1) {?>
-         <?php for ( $i=1; $i<=$pageTot; $i++ ) : ?>
-                <?php if ( $i == $currentPage ) : ?>
-                    <li ><a class="current" href="<?php ?>" ><?php echo $i ?></a></li>
-                    <?php else : ?>
-                    <li><a href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $i ?>" ><?php echo $i ?></a></li>
-                    <?php endif; ?>
-            <?php endfor; ?>
-                    <?php } ?>
-                     <?php if ($currentPage < $pageTot): ?>
-              
-            <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage+1 ?>" title="<?php echo $this->__('Next') ?>">
-                  <img src="<?php echo $this->getSkinUrl('images/forward.png') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
-                </a>
-            </li>
-        <?php endif;?>
-      </ul>
-    </div>
-      </form>
-	</div>
-    <div class="clear" style="height:25px;"></div>
+    <div class="clear1"></div>
 <?php }  ?>
     
     <!-- end of filtering -->
@@ -426,11 +345,11 @@ if(($this->getRequest()->getParam('p') > 1 ))
 <?php if($collection->getSize() != 0){ ?>
 <?php // Grid Mode ?>
 
-<?php $_collectionSize = $collection->count(); 
-     $_columnCount = $this->getColumnCount();
-   
-     ?>
-          
+<?php   $_collectionSize = $collection->count();
+        $_columnCount = $this->getColumnCount();
+        $displayRows = 1;
+    ?>
+
      <?php 
     	if(!$_columnCount){$_columnCount = 3;} 
          $i=0; 
@@ -438,7 +357,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
          foreach ($collection as $_product){
           $_product = Mage::getModel('catalog/product')->load($_product->getId());
       if ($i++%$_columnCount==0){ ?>
-        <div class="listgrid" id="listgrid">
+      <div class="listgrid <?php if((int)($i/$_columnCount) >= $displayRows):?>hidden<?php endif;?>" id="listgrid" rel="<?php echo (int)($i/$_columnCount);?>">
         <ul class="products-grid">
       <?php }?>
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
@@ -576,112 +495,14 @@ if(($this->getRequest()->getParam('p') > 1 ))
   
 <?php endif; ?>
 <?php $countdata++; }?>
-
+    <div class="more-block <?php if($_collectionSize <= $_columnCount*$displayRows):?><?php endif;?>">
+        <span>&raquo;</span><a href="javascript:void(0);"><?php echo $this->__('More courses');?></a>
+    </div>
 <?php } else { ?>
     <p style="float:left"><?php echo $this->__('Die Auswahl ist leer.'); ?></p>
 <?php }?>
-
-<div   style="margin-top:10px;float: left; width: 1000px;" class="cattoolbar">
-
-<!-- Use only pagination on bottom part -->
-<div class="clear" style="height:20px;"></div>
-<div id="navPage">
-      <ul>
-        <?php if ($currentPage != '1'): ?>
-            <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
-                  <img src="<?php echo $this->getSkinUrl('images/backward.png') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
-                </a>
-            </li>
-        <?php endif;?>
-            <?php if($pageTot>1) {?>
-         <?php for ( $i=1; $i<=$pageTot; $i++ ) : ?>
-                <?php if ( $i == $currentPage ) : ?>
-                    <li><a class="current" href="<?php ?>" ><?php echo $i ?></a></li>
-                    <?php else : ?>
-                    <li><a href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $i ?>" ><?php echo $i ?></a></li>
-                    <?php endif; ?>
-            <?php endfor; ?>
-                    <?php } ?>
-                     <?php if ($currentPage < $pageTot): ?>
-              
-            <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage+1 ?>" title="<?php echo $this->__('Next') ?>">
-                  <img src="<?php echo $this->getSkinUrl('images/forward.png') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
-                </a>
-            </li>
-        <?php endif;?>
-    </div>
-
-      
- </div>       
-      </div>
-         [Show list of packaged courses instead of member info]
-         <br />
-        <div class="page-title">
-         <h1>Member Information</h1>
-        </div>
-        <div class="fieldset" style="margin:0px;">
-           <ul class="form-list">
-                <li class="fields">
-                    <div class="customer-name">
-                         <div class="field name-firstname" style="width: 335px;">
-                             <label class="required" for="firstname">Vorname : </label>
-                                <?php echo $customerdata['firstname'] ;?>
-                         </div>
-                         <div class="field name-lastname" style="float:right;width: 335px;">
-                            <label class="required" for="lastname">Nachname : </label>
-                                     <?php echo $customerdata['lastname'] ;?>
-                         </div>
-                     </div>
-                </li>
-                
-                <li class="fields">
-                    <div class="customer-name">
-                        <div class="field name-firstname" style="width: 335px;">
-                             <label class="required" for="firstname">Email ID :</label>
-                                 <?php echo $custemail ;?>
-                        </div>
-                        <div class="field name-lastname" style="float:right;width: 335px;">
-                            <label class="required" for="lastname">Nickname : </label>
-                                    <?php echo $custdata['nickname'] ;?>
-                        </div>
-                    </div>
-                </li>
-                
-                 <li class="fields">
-                    <div class="customer-name">
-                         <div class="field name-firstname" style="width: 335px;">
-                             <label class="required" for="firstname">Type : </label>
-                                <?php echo $custdata['type'] ;?>
-                         </div>
-                          <div class="field name-lastname" style="float:right;width: 335px;">
-                            <label class="required" for="lastname">Horse Owner : </label>
-                                    <?php echo $custdata['horse_owner'] ;?>
-                          </div>
-                    </div>
-                </li>
-                
-                 <li class="fields">
-                    <div class="customer-name">
-                         <div class="field name-firstname" style="width: 335px;">
-                             <label class="required" for="firstname">Gender : </label>
-                                <?php echo $custdata['gender'] ;?>
-                         </div>
-                        <div class="field name-lastname" style="float:right;width: 335px;">
-                            <label class="required" for="lastname">Geburtsdatum : </label>
-                                    <?php echo $custdata['birthdate'] ;?>
-                         </div>
-                     </div>
-                </li>
-            </ul>
-      </div>
-
-       <?php // die('helo');  ?>
-
+</div>
 <div id="training" style="display:none;">
-   
-    <?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('event-calendar')->toHtml(); ?>
        <div class="product-shop" style="margin-top:15px;">
              <div class="identify">
                   <link rel="stylesheet" href="<?php echo $this->getSkinUrl().'css/events/calendar.css' ?>" type="text/css" media="screen" />
@@ -1143,7 +964,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
     
 </div>
 </div>
-</div>
+<div class="clear1"></div>
     <div id="toPopup">
         <?php if (!$this->canSendMessage()) { ?>
             <?php echo $this->__('You must be logged in in order to send a message.'); ?>
@@ -1257,7 +1078,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
                                 if(data.success=='success')
                                     {
                                         var lastid =data.id; 
-                                        jQuery("#toPopup").fadeOut("normal");
+                                        //jQuery("#toPopup").fadeOut("normal");
                           jQuery("#backgroundPopup").fadeOut("normal");
                           document.getElementById('title').value='';
                          document.getElementById('message').value=''
@@ -1278,11 +1099,18 @@ if(($this->getRequest()->getParam('p') > 1 ))
       
    jQuery(function($) {
 
-	$("a.topopup").click(function() {
+	$("button.topopup").click(function() {
 	    loadPopup(); // function show popup
 	    return false;
 	});
 
+    $("div.more-block a").live("click",function(){
+        var rows = $("div.listgrid.hidden"),
+            num = rows.length;
+        $(rows).eq(0).removeClass("hidden");
+        if(num - 1 <= 0)
+            $("div.more-block").hide();
+    });
 	/* event for close the popup */
 	$("div.close").hover(
 					function() {

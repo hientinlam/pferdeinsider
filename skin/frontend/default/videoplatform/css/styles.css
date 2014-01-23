@@ -138,7 +138,7 @@ ul,ol         { list-style:none;}
 /* Form Elements */
 input,select,textarea,button { font:12px/15px Arial, Helvetica, sans-serif; vertical-align:middle; color:#2f2f2f; }
 input.input-text,select,textarea { background:#fff; border:1px solid #b6b6b6; }
-input.input-text,textarea { padding:10px; }
+input.input-text,textarea { padding: 4px 10px; margin-top: 5px; }
 select { padding:1px; }
  
 select.multiselect option { border-bottom:1px solid #b6b6b6; padding:2px 5px; }
@@ -752,7 +752,7 @@ tr.summary-details-excluded { font-style:italic; }
 #nav ul li.parent li a { background-image:none; }
 
 /* 0 Level */
-#nav li { float:left;text-transform:uppercase; }
+#nav li { float:left;text-transform:uppercase; padding:0 34px; }
 #nav li.active a { color:#9E0B0F !important; }
 #nav a {color:#010101;font-family: Verdana;font-size: 14px;text-decoration: none; }
 #nav li.over a,
@@ -1042,7 +1042,7 @@ tr.summary-details-excluded { font-style:italic; }
 .vision_justo{width: 100%;float:left;color:#333333;font-family: Verdana;font-size: 14px;padding-bottom:20px;}
 .vision_justo span{font-style: italic;}
 .content_text{width: 100%;float:left;color:#333333;font-family: Verdana;font-size: 14px;}
-.expert_bg{background: #f0f0f0; padding: 15px;margin-bottom:15px; display:table;}
+.expert_bg{background: #f0f0f0; padding: 15px;margin-bottom:4px; display:table;}
 .expertname{ float:left;color:#333333;font-family: Verdana;font-size: 18px; padding-top: 10px;width:100%;height:27px;}
 /****newsletter subscribe block on expert product page ***/
 
@@ -1055,8 +1055,9 @@ tr.summary-details-excluded { font-style:italic; }
 .expertpg label {color: #333333;float: left;font-family: Arial;font-size: 14px;height: 25px;padding-left: 48px;padding-right: 40px;width: 83%; }
 .expertpg input.input-text { background: none repeat scroll 0 0 #FFFFFF;border: 2px solid #999999;color: #333333;float: left;font-family: arial;font-size: 14px;font-style: italic;height:22px;margin-left: 0;width: 160px;}
 .expertpg .actions { background:none; padding:0; margin:3px 0 0; text-align:left; }
-.expertpg .actions button.button {   background: none repeat scroll 0 0 #8FD400;float: right;height: 34px;text-align: center;width: 100px;}
-.expertpg .actions button.button span span{  color: #FFFFFF;font-family: Verdana;font-size: 14px;line-height: 27px;text-decoration: none;}
+.expertpg .actions button.button, button.green {background: none repeat scroll 0 0 #8FD400; float: left; height: 34px; text-align: center; border: none; margin: 5px; padding: 0 8px;}
+.expertpg .actions button.button span span, button.green span span{  color: #FFFFFF;font-family: Verdana;font-size: 14px;line-height: 27px;text-decoration: none;}
+button.green {margin-left:0px;}
 
 /****faq and help page ***/
 .content_part{width: 100%;height:auto;float:left;padding-top:20px;}
@@ -1114,7 +1115,7 @@ span.loreal{color:#333333 !important;font-size: 14px;padding-left:0px !important
 .productname_video{float:left !important;float:left \9; margin-top:-50px \9;}
 .audiovideoclass{float:left !important;margin-top:-50px!important; float:left \9; margin-top:-50px \9;}
 .listgrid  .products-grid .product-name .size{color: #666666;font-size: 10px !important;}
-.listgrid .products-grid {float: left;height: 320px;width: 100%;}
+.listgrid .products-grid {float: left;height: 310px;width: 100%;}
 .listgrid .products-grid.last { border-bottom:0; }
 .listgrid  .products-grid li.item { float:left; background-image: url("../images/bg.png"); background-repeat:no-repeat;margin-right: 20px;width:320px;height:300px; position: relative; }
 .listgrid  .products-grid .product-image {  display: block; margin: 15px; }
@@ -2451,7 +2452,7 @@ color: #666666;cursor: pointer;float: left;font-family: verdana;font-size: 14px;
 }
 .clear1{
 	clear: both;
-	height: 15px;
+	height: 20px;
 }
 .expertWeb{
 	margin-top: 20px;
@@ -2502,6 +2503,7 @@ color: #666666;cursor: pointer;float: left;font-family: verdana;font-size: 14px;
 .oDate{
 	color: rgb(158, 11, 15);
 }
+/*
 .msgExp{
 	display: block;
 	margin: 10px 0;
@@ -2512,7 +2514,7 @@ color: #666666;cursor: pointer;float: left;font-family: verdana;font-size: 14px;
 	background: #333;
 	color: #fff;
 	text-decoration: none;	
-}
+}*/
 #sortNav{
 	display: block;
 	padding: 15px;
@@ -2900,3 +2902,6 @@ ol#my_recent_reviews li.even {
 .footer .copyright_outer {float:none; width: auto;}
 body.catalog-product-view .product-shop .identify{width:305px;}
 .col-left.sidebar .block-banner{display:none;}
+
+.more-block{clear: both; width: 100%; border-top: 1px dashed darkgray; text-align: right; color: #9E0B0F; font-weight: bold;}
+.more-block span{padding:0 5px;}
