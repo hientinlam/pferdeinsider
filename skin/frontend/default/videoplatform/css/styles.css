@@ -752,7 +752,7 @@ tr.summary-details-excluded { font-style:italic; }
 #nav ul li.parent li a { background-image:none; }
 
 /* 0 Level */
-#nav li { float:left;text-transform:uppercase; padding:0 34px; }
+#nav li { float:left;text-transform:uppercase;}
 #nav li.active a { color:#9E0B0F !important; }
 #nav a {color:#010101;font-family: Verdana;font-size: 14px;text-decoration: none; }
 #nav li.over a,
