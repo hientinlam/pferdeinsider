@@ -2760,7 +2760,7 @@ width:50px !important;
     top:0px;
     left:0px;
 }
-#toPopup {
+#toPopup, #subPopup {
     font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
     background: none repeat scroll 0 0 #FFFFFF;
    
