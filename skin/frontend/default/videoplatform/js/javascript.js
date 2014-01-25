@@ -229,7 +229,6 @@
 function tabs4()
   {
       document.getElementById('tabContent2').style.display='block';
-      //document.getElementById('subscribemember').style.display='none';
       document.getElementById('training').style.display='none';
       document.getElementById('tab5').className='selected';
       document.getElementById('tab7').className='';
@@ -239,14 +238,12 @@ function tabs5()
 {
   document.getElementById('training').style.display='block';
   document.getElementById('tabContent2').style.display='none';
-  //document.getElementById('subscribemember').style.display='none';
   document.getElementById('tab7').className='';
   document.getElementById('tab5').className='';
   document.getElementById('tab6').className='selected';
 }  
 function tabs6()
   {
-      //document.getElementById('subscribemember').style.display='block';
       document.getElementById('tabContent2').style.display='none';
       document.getElementById('training').style.display='none';
       document.getElementById('tab7').className='selected';

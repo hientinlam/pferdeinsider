@@ -1,7 +1,9 @@
 <?php
 class Find_Member_Block_Member extends Mage_Core_Block_Template
 {
-
+    public $pageSize = 3;
+    public $totalProducts = 0;
+    public $currentPage = 1;
 	public function __construct()
 	{
           
@@ -46,7 +48,10 @@ class Find_Member_Block_Member extends Mage_Core_Block_Template
 	{   
                 
 		parent::_prepareLayout();
-                $data=$this->getRequest()->getParam('name');
+            $pageSize = 3;
+            $currentPage = (int) $this->getRequest()->getParam('p', 1);
+
+        $data=$this->getRequest()->getParam('name');
                  if ($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs')) {
                $breadcrumbsBlock->addCrumb('home', array(
                    'label'=>Mage::helper('catalog')->__('Home'),
@@ -71,10 +76,11 @@ class Find_Member_Block_Member extends Mage_Core_Block_Template
 		$toolbar = $this->getToolbarBlock();
 		// called prepare sortable parameters
 		$collection = $this->getCollection();
-                
+        $this->totalProducts = $collection->getSize();
+        $this->currentPage = $currentPage;
 		$toolbar->setCollection($collection);
-                $this->setChild('toolbar', $toolbar);
-		$this->getCollection()->load();
+        $this->setChild('toolbar', $toolbar);
+		$this->getCollection()->setPageSize($this->pageSize)->setCurPage($currentPage)->load();
                 
 		return $this;
 	}

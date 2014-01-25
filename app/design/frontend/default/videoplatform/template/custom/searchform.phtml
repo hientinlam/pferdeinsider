@@ -1,67 +1,48 @@
+<?php
+        Mage::app()->getCacheInstance()->flush();
+        $_helper = $this->helper('catalog/output');
+        $expertname = $this->getRequest()->getParam('name');
+        $adminmodel = Mage::getModel('admin/user')->getCollection()->getData();
+        foreach($adminmodel as $admininfo){
+            $adminusername=explode('-',$admininfo['username']);
+            if($adminusername[0]==$expertname)
+            {
+               $expertemail=$admininfo['email'];
+               $expertinfo = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($expertemail);
+               $expertid=$expertinfo['entity_id'];
+               break;
+            }
+        }
 
-            
-    <script type="text/javascript" src="<?php  echo $this->getSkinUrl('js/jquery.fancybox-1.3.4.pack.js') ?>"></script>
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/jquery.fancybox-1.3.4.css') ?>" media="screen" />
-<?php  
-Mage::app()->getCacheInstance()->flush();
-$_helper = $this->helper('catalog/output');
-$expertname=$this->getRequest()->getParam('name');
-$adminmodel=Mage::getModel('admin/user')->getCollection()->getData();
-foreach($adminmodel as $admininfo)
-{
-    $adminusername=explode('-',$admininfo['username']);
-  if($adminusername[0]==$expertname)
-  {
-       $expertemail=$admininfo['email'];
-       $expertinfo = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($expertemail);
-       $expertid=$expertinfo['entity_id'];
-       break;
-    }
-}
+        $registerdata=Mage::getModel('register/register')->getCollection()->getData();
+        $register_custinfo=array();
+        foreach($registerdata as $regkey=>$regdata){
+            if($regdata['customer_id']==$expertid){
+                $details=$regdata['aboutme'];
+                $vision=$regdata['vision'];
+                $status=$regdata['status'];
+                $website=$regdata['website'];
+                break;
+            }
+        }
 ?>
-   <?php $registerdata=Mage::getModel('register/register')->getCollection()->getData();
-                  $register_custinfo=array();
-                  foreach($registerdata as $regkey=>$regdata)
-                  {
-                      if($regdata['customer_id']==$expertid)
-                      {
-                        $details=$regdata['aboutme'];
-                        $vision=$regdata['vision'];
-                        $status=$regdata['status'];
-                        $website=$regdata['website'];
-                        break;
-                      }
-                  } 
-                  ?>
-<!-- Please remove whole block once breadcrumb function is added -->
-<div style="clear:both; height:5px;"></div>
-<div class="breadcrumbs">
-  <ul>
-    <li> <?php //echo $this->getLayout()->getBlock('breadcrumbs')->toHtml(); ?></li>
-  </ul>
-</div>
-<!-- end of comment -->
-
-
     <div class="left">
         <div class="expert_bg">
         <?php 
             $avatar = Mage::getModel('userprofile/avatars')->setStoreData(1)->loadByCustomerId($expertid);
-            if($avatar->getValue()!=NULL){
-            $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/'.$expertid.'/'.$avatar->getValue();
-            }
-            else{
+            if($avatar->getValue() !=NULL)
+                $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/'.$expertid.'/'.$avatar->getValue();
+            else
                $ava_src = str_replace('index.php','',$this->getBaseUrl()).'media/userprofile/avatar/dummy/dummy.jpg';
-            }
         ?>
             <a href="<?php ?>" title="<?php ?>" class="product-image"><img src="<?php echo $ava_src;?>" width="290" height="190" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
             <div class="expertname">
-            <?php echo ucwords($expertinfo->getFirstname()." ".$expertinfo->getLastname()); ?>
+                <?php echo ucwords($expertinfo->getFirstname()." ".$expertinfo->getLastname()); ?>
             </div>
             
             <!-- Display only if status is not null -->
             <div class="status" >
-           <?php echo $status ?>
+                <?php echo $status ?>
             </div>
             <!-- end -->
             </br>
@@ -93,7 +74,6 @@ foreach($adminmodel as $admininfo)
                     $memberid = $memberinfo['member_id'];
                     $status = $memberinfo['status'];
                     $subscribeId = $memberinfo['id'];
-
                     break;
                 }
             }
@@ -142,18 +122,14 @@ foreach($adminmodel as $admininfo)
               <?php echo $this->getLayout()->createBlock('newsletter/subscribe')->setTemplate('newsletter/subscribe.phtml')->toHtml(); ?>
         </div>
     </div>     
-
-         
                     <div class="expert_vision">
-                         <div class="about_the_expert">
-                         über den Experten
+                         <div class="about_the_expert">über den Experten</div>
+                         <div class="vision_justo">
+                           Vision: <span>"<?php echo empty($vision)?'Suspendisse justo ligula, malesuada ut varius sed':$vision; ?>"</span>
                          </div>
-                          <div class="vision_justo">
-                           Vision: <span>"<?php if($vision==NULL){ echo  'Suspendisse justo ligula, malesuada ut varius sed'; } else { echo $vision;} ?>"</span>
-                          </div>
-                          <div class="content_text">
+                         <div class="content_text">
                             <?php  
-                              if($details==NULL)
+                              if(empty($details))
                               { ?>
                                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis tristique enim
                                      sit amet viverra. Suspendisse justo ligula, malesuada ut varius sed, mattis nec purus.
@@ -193,171 +169,40 @@ foreach($adminmodel as $admininfo)
                          </ul>
                      </div>
                </div>
-    <script type="text/javascript">
-    function changeaction()
-    {
+<script type="text/javascript">
+    function changeaction(){
        document.getElementById("merchant-form-validate").action="<?php echo $this->getUrl()."/allmembers/index/unsubscribe"  ?>";
        document.getElementById("merchant-form-validate").submit();
     
     }
-    function setcookie(cName,cValue) 
-{ 
-  document.cookie=cName+"=" + cValue;
-}
-</script>
-      <div id="tabContent2" class="content_imgs">
-
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ;?>
-
-<?php $collection = $this->getCollection();
-
- $collection->getSize();
-
-  
-$currentPage = (int) $this->getRequest()->getParam('p', 1);
- $cookiedata=explode('=',$_COOKIE["memberproduct"]);
-
-
-if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'member/'.$expertname || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'member/'.$expertname.'/' )
-{
-   setcookie('memberproduct', '', -3600);
-   unset($_COOKIE["memberproduct"]);
-
-   $pageSize = (int) $this->getRequest()->getParam('s',9);
-}
-else {
-     if($cookiedata[1]!= NULL || $cookiedata[1]!= '')
-     {
-       $pageSize = (int) $this->getRequest()->getParam('s',$cookiedata[1]);
-     }
-     else
-     {
-       $pageSize = (int) $this->getRequest()->getParam('s',9);
-     }
-}
-   $collection->setPageSize($pageSize)
-            ->setCurPage($currentPage);
-           
-$totCat = $collection->getSize();
-$store_cats = $collection->load();
-$pageTot = ceil( $totCat / $pageSize );
-$pageSize1=array('9','15','30',All);
-
-$firstproduct=1;
-if(($this->getRequest()->getParam('p') > 1 ))
-{
-$from=(($this->getRequest()->getParam('p')-1)*$pageSize)+1;
-}else
-{
-   $from=($firstproduct*$pageSize)+1; 
-}
-if(($this->getRequest()->getParam('p') > 1 ))
-{
-    if(($currentPage < $pageTot))
-    {
-        $to=$this->getRequest()->getParam('p')*$pageSize;
-    }  else {
-        $to=$totCat;
+    function setcookie(cName,cValue){
+      document.cookie=cName+"="+cValue;
     }
-}
- else {
- $to=$pageSize;
-}
- 
- 
- ?>
+</script>
 
-<!--div   style="  float: left;margin-bottom: 15px;margin-top:15px;width: 1000px;" class="cattoolbar">
- <   <div class="toolbar">
-    <div class="pager">
-         <p class="amount" style="padding-top:5px;padding-right:5px;">
-            <?php if($pageTot > 1): if($currentPage!= 1){?>
-                    <?php echo $this->__('Artikel '. $from.' bis '.$to.' von '.$totCat.' Gesamt ') ?>
-             <?php } else { ?>
-                       <?php echo $this->__('Artikel '. $currentPage.' bis '. $pageSize. ' von '.$totCat.' Gesamt ') ?>
-             <?php } ?>
-            <?php else: ?>
-                <strong><?php echo $this->__('Anzahl Artikel Gesamt '.$totCat) ?></strong>
-            <?php endif; ?>
-        </p>
-        
-         
-        <div class="limiter">
-            <label>Zeige</label>
-             <span style="margin-top: 5px; float: right;">per page</span>
-            <div class="toolbarimg">
-                <select onchange="setcookie('memberproduct',this.value);setLocation(this.value);">
-                        <?php foreach($pageSize1 as $key=>$limit) { ?>  
-                             <option <?php if($_COOKIE["memberproduct"]== Mage::getBaseUrl().'member/Rakesh?s='.$limit) { echo 'selected=selected'; }?> value="<?php echo Mage::getBaseUrl().'member/Rakesh?s='.$limit  ?>" > <?php echo $limit;?> </option>
-                    <?php } ?>
-               </select>
-            </div>
-        </div>
-        
-        
-        
-        
-        
-    <div class="pages">
-        <strong></strong>
-        <ol>
-             <?php if ($currentPage != '1'): ?>
-            <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage-1 ?>" title="<?php echo $this->__('Previous') ?>">
-                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
-                </a>
-            </li>
-        <?php endif;?>
-            <?php if($pageTot>1) {?>
-         <?php for ( $i=1; $i<=$pageTot; $i++ ) : ?>
-                <?php if ( $i == $currentPage ) : ?>
-                    <li class="current"><?php echo $i ?></li>
-                    <?php else : ?>
-                    <li><a href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $i ?>" ><?php echo $i ?></a></li>
-                    <?php endif; ?>
-            <?php endfor; ?>
-                    <?php } ?>
-                     <?php if ($currentPage < $pageTot): ?>
-              
-            <li>
-                <a class="previous<?php  ?> <?php?>" href="<?php //echo $current_cat->getUrl() ?>?p=<?php echo $currentPage+1 ?>" title="<?php echo $this->__('Previous') ?>">
-                  <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo $this->__('Previous') ?>" class="v-middle" />
-                </a>
-            </li>
-        <?php endif;?>
-           
-        </ol>
-
-    </div>
-    </div>
-</div>
-</div>
-</div>-->
-<!-- Use this pagination instead of the one above -->
-        
-  
+<div id="tabContent2" class="content_imgs">
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ;?>
+<?php $collection = $this->getCollection();?>
 <?php if(count($collection) >0) { ?>
     <div class="clear1"></div>
 <?php }  ?>
-    
-    <!-- end of filtering -->
 
-<?php if($collection->getSize() != 0){ ?>
+<?php if($collection->getSize() > 0 && $this->totalProducts >= ($this->currentPage-1) * $this->pageSize){ ?>
 <?php // Grid Mode ?>
 
-<?php   $_collectionSize = $collection->count();
+<?php
+        $_collectionSize = $collection->count();
         $_columnCount = $this->getColumnCount();
-        $displayRows = 1;
-    ?>
-
+?>
+<div class="listgrid" id="listgrid-<?php echo $this->currentPage;?>" data-page="<?php echo $this->currentPage;?>"">
      <?php 
-    	if(!$_columnCount){$_columnCount = 3;} 
+    	if(!$_columnCount)$_columnCount = 3;
          $i=0; 
          $countdata=0;
          foreach ($collection as $_product){
           $_product = Mage::getModel('catalog/product')->load($_product->getId());
       if ($i++%$_columnCount==0){ ?>
-      <div class="listgrid <?php if((int)($i/$_columnCount) >= $displayRows):?>hidden<?php endif;?>" id="listgrid" rel="<?php echo (int)($i/$_columnCount);?>">
+
         <ul class="products-grid">
       <?php }?>
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
@@ -370,7 +215,6 @@ if(($this->getRequest()->getParam('p') > 1 ))
                 $enddate= explode(' ',$products[end_date]);
                 $end_date=$enddate[0];
                 $productmaterial=$products['product_material'];
-            // echo "<pre>";print_r($products->getData());die('ahjsa');
                 foreach ($_myprodsamples as $_sample){
                      $video= $_sample['sample_url'];
                       $video1= $_sample['link_url'];
@@ -467,7 +311,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
                         <div class="<?php echo $clas;?>">
                     <h2 class="product-name">
                          <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a>
-                      <div class="size">1 session: <?php echo $end_date ?></div>
+                      <div class="size"><?php echo $this->__('1 Session');?>: <?php echo $end_date ?></div>
                     </h2>
                     <div class="price-box">
                          <span id="product-price-4" class="regular-price">
@@ -490,13 +334,14 @@ if(($this->getRequest()->getParam('p') > 1 ))
             
         <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
          </ul>
-        
-    </div>
-  
 <?php endif; ?>
 <?php $countdata++; }?>
-    <div class="more-block <?php if($_collectionSize <= $_columnCount*$displayRows):?><?php endif;?>">
-        <span>&raquo;</span><a href="javascript:void(0);"><?php echo $this->__('More courses');?></a>
+</div>
+    <div class="more-loader hidden">
+        <img src="<?php echo $this->getSkinUrl();?>images/events/loader.gif"><span><?php echo $this->__('Loading').'...'?></span>
+    </div>
+    <div class="more-block <?php if($this->currentPage * $this->pageSize >= $this->totalProducts):?>hidden<?php endif;?>">
+        <span>&raquo;</span><a href="javascript:void(0);"><?php echo $this->__('More Courses');?></a>
     </div>
 <?php } else { ?>
     <p style="float:left"><?php echo $this->__('Die Auswahl ist leer.'); ?></p>
@@ -506,15 +351,10 @@ if(($this->getRequest()->getParam('p') > 1 ))
        <div class="product-shop" style="margin-top:15px;">
              <div class="identify">
                   <link rel="stylesheet" href="<?php echo $this->getSkinUrl().'css/events/calendar.css' ?>" type="text/css" media="screen" />
-                 <div class="eventTitle"> LIVE WEBINAR TERMINE</div>
-                 
-                 <div class="calendarbox">
-                 <p>Please attach a calendar widget with a 230x230 resolution. The height may vary but not the width.</p>
-                 </div>
-                 
+                 <div class="eventTitle">LIVE WEBINAR TERMINE</div>
+                 <?php echo $this->getLayout()->createBlock('events/calendarEvents')->setTemplate('events/expertcalendar.phtml')->toHtml(); ?>
                  <div class="clear1"></div>
-            <?php //echo $this->getLayout()->createBlock('events/calendarEvents')->setTemplate('events/expertcalendar.phtml')->toHtml(); ?>
-                 
+
                   <div class="eventTitle"> TERMIN EVENT </div>
                   <div style="background: none repeat scroll 0 0 #FFFFFF;padding:15px">
                       <div class="oEventtitle">Event Name</div>
@@ -522,7 +362,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
                       <div class="oLoc">Wo: Event Place</div>
                       <div class="oContact">Ruf uns an: +(063)-921-9999</div>
                   
-                      <? //php echo $this->getLayout()->createBlock('cms/block')->setBlockId('event-schedule')->toHtml(); ?> 
+                      <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('event-schedule')->toHtml(); ?>
                   </div>
              </div>
             <!-- Only Display if there's a live broadcast; if not just display "No broadcast at this time" -->
@@ -540,17 +380,13 @@ if(($this->getRequest()->getParam('p') > 1 ))
                        $todaytimestamp = mktime(0,0,0,date($today_month),date($today_day),date($today_year));
                   
                        foreach($eventmodel as $eventdata): 
-                         
-                      
                                     $connection = Mage::getSingleton('core/resource')->getConnection('core_read');
-                                 $query="select * from events_product where eventid=".$eventdata['event_id'];
+                                    $query="select * from events_product where eventid=".$eventdata['event_id'];
                                     $result=$connection->query($query)->fetch();
                                     $product=Mage::getModel('catalog/product')->load($result['product_id']);
-                                    //echo "<pre>";print_r($product['_defaultValues']);die("herer");
                                     $expertid =$product['member_list']; 
                                     $attr = $product->getResource()->getAttribute("member_list");
                                     if ($attr->usesSource()): $proexpertname = $attr->getSource()->getOptionText($expertid); endif;
-                                    
                                         $eventdate1= $eventdata['event_start_date'];
                                         $eventdata2=explode(' ',$eventdate1);
                                         $eventdate=$eventdata2[0];
@@ -568,7 +404,6 @@ if(($this->getRequest()->getParam('p') > 1 ))
                                         $endmonth=$demo1[1];
                                         $endday=$demo1[2]; 
                                         $endtimestamp = mktime(0,0,0,date($endmonth),date($endday),date($endyear)) ;
-                                        
                                         $today=date('Y-m-d');
                                         if($endtimestamp >= $todaytimestamp)
                                         {
@@ -576,7 +411,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
                                             $endarray[$eventdata['event_id']]=$endtimestamp; 
                                         }
                                      
-                                   endforeach;
+                       endforeach;
                                    //echo "<pre>";print_r($startarray);die('hrlo');
                                 $start = min($startarray);
                                   $prokey = array_search($start, $startarray);
@@ -600,11 +435,7 @@ if(($this->getRequest()->getParam('p') > 1 ))
                                            <?php
                                             
                                         }
-                                  
 ?>
-
-
-  
                     </div>
                     <div style="float:left;padding:5px 10px 5px 5px;width:260px; margin-left:15px;">
                         <div style="color: #333333;font-size: 16px;font-weight: bold;">
@@ -626,336 +457,34 @@ if(($this->getRequest()->getParam('p') > 1 ))
                     
                     [If no broadcast available show the text below]
                     <div style="font-size:25px;font-family:verdana;margin-top:15px;">Momentan gibt es keine Übertragung eines Live Webinars. Schau bald wieder vorbei.</div>
-                    
-         
         </div><!-- #main-schebulebox -->
-        
-        
         <div id="upcoming_schedbox">
         
           <div style="font-size:25px;font-family:verdana;margin-top:15px;">Live Webinare in diesem Monat</div>
+          <?php //echo $this->getLayout()->createBlock('events/events')->setTemplate('events/expertupcomingevents.phtml')->toHtml(); ?>
           <!-- Just list upcoming events for the current month. Same format as sessions but without the toggle function: *Note: this is just a copy of the session styling any content listed is just a copy on the existing session from a product. I just wanted to use the styling (classes) same format should be done when calling the upcoming live events -->
           <div style="float:right;width:660px;">
-                                  <div>
-                           
-                                                     
-                          <ul style="" class="ulcontent" id="ul-1">
-                                                                                                      <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                <div class="videosclick1" onclick="thevid=document.getElementById('thevideo1'); thevid.style.display='block';document.getElementById('viewplayer1').src = document.getElementById('viewplayer1').src.replace('autoplay=0','autoplay=1'); this.style.display='none'">
-                                                                                                       <img src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/8/2/82_Chrysanthemum_3_1.jpg" height="82" width="146" style="cursor:pointer">
-                                                   
-                                                     <a href="javascript:void(0)"></a>
-                                                      <span style=" float: right; position: relative;right: 0; top: -82px;" class="videotag">
-                                                                                                                    <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_video.png">
-                                                        
-                                                    </span>
-                                                </div>
-                                                 <div id="thevideo1" style="display:none">  
-                                                 <iframe id="viewplayer1" title="YouTube video player" class="youtube-player" type="text/html" width="146" height="82" src="https://www.youtube.com/embed/8-uaIblVDlU" frameborder="0" allowfullscreen=""></iframe>                                                 </div>
-                                                                                        </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/prod1.html" title="">prod1 </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/a-greek-oddysey-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/7/0/70_3d-logo_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/a-greek-oddysey-395.html" title="">A Greek Oddysey </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/connecting-your-personal-computer-to-the-internet-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/7/3/73_79ba_1_1.JPG" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/connecting-your-personal-computer-to-the-internet-395.html" title="">Connecting Your Personal Computer to the Internet </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/pga-tour-and-more-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/9/7/97_0511-0807-2314-0722_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/pga-tour-and-more-395.html" title="">PGA tour and more </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/tips-to-maximize-your-return-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/1/6/16_2012sponsors_1.png" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/tips-to-maximize-your-return-395.html" title="">Tips to Maximize Your Return </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/fundraising-events-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/8/7/87_1363870283_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/fundraising-events-395.html" title="">Fundraising Events  </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/golfevent-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/2/_/2_200727815538_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/golfevent-395.html" title="">GolfEvent </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/signature-gold-event-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/9/4/94_a_golf_ball_on_a_tee_near_the_9th_hole_0515-1002-2523-1323_SMU_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/signature-gold-event-395.html" title="">Signature Gold Event </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/video-copilot-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/9/9/99_after-effects-tutorials-22_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/video-copilot-395.html" title="">Video CoPilot </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/prisol-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/5/2/52_business_card_24_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/prisol-395.html" title="">Prisol </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/basic-computer-tutorial-396.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/images/catalog/product/placeholder/small_image.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/basic-computer-tutorial-396.html" title="">Basic Computer Tutorial  </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/comptech-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/4/1/41_computer_technician_CoolClips_vc019307_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/comptech-395.html" title="">CompTech </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/computer-repair-service-397.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/9/9/99_Computer-Technician_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/computer-repair-service-397.html" title="">Computer Repair Service </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/art-from-the-heart-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/6/9/69_cute-backgound-pattern-273_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/art-from-the-heart-395.html" title="">Art from the Heart </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/go-golf-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/1/3/13_golf-green-md_1.png" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/go-golf-395.html" title="">Go Golf </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/hydro-vision-golf-tournament-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/0/_/0_hqdefault_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/hydro-vision-golf-tournament-395.html" title="">Hydro Vision Golf Tournament </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/internal-computer-412.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/2/_/2_images_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/internal-computer-412.html" title="">Internal Computer </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/golf-walf-club-411.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/8/8/88_images_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/golf-walf-club-411.html" title="">Golf Walf Club </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/internal-computer-413.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/9/7/97_logo_1.png" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/internal-computer-413.html" title="">Internal Computer </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/golf-walf-club-412.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/8/8/88_louisville-country-clubs_311_1.gif" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/golf-walf-club-412.html" title="">Golf Walf Club </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/mahjong-3d-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/9/3/93_mahjongcub3d_logo_black_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/mahjong-3d-395.html" title="">Mahjong 3D </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                     <li class="session-group">
-                                        <div class="session-screen-shot"> 
-                                                                                                   <a style="" href="http://54.228.195.42/magento/index.php/products/tutorial-palace-395.html" title="" class="product-image">
-                                                       <img class="keyframe-img" src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/1/0/10_phoenix-tutorial-final_1.jpg" alt="">
-                                                           <span style=" float: right; position: relative;right:0px;top: -81px;">
-                                                                                                                                <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_photo.png">
-                                                            
-                                                           </span>
-                                                   </a> 
-                                                                                </div>
-
-                                          <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/tutorial-palace-395.html" title="">Tutorial Palace </a></div>
-                                          <div class="session-group-title"></div>
-                                    </li>
-                                                    
-                   </ul>
-               </div>
-               </div>
+            <div>
+                <ul style="" class="ulcontent" id="ul-1">
+                    <li class="session-group">
+                        <div class="session-screen-shot">
+                            <div class="videosclick1" onclick="thevid=document.getElementById('thevideo1'); thevid.style.display='block';document.getElementById('viewplayer1').src = document.getElementById('viewplayer1').src.replace('autoplay=0','autoplay=1'); this.style.display='none'">
+                                <img src="http://54.228.195.42/magento/media/catalog/product/cache/1/small_image/146x82/db978388cfd007780066eaab38556cef/8/2/82_Chrysanthemum_3_1.jpg" height="82" width="146" style="cursor:pointer">
+                                <a href="javascript:void(0)"></a>
+                                <span style=" float: right; position: relative;right: 0; top: -82px;" class="videotag">
+                                    <img src="http://54.228.195.42/magento/skin/frontend/default/videoplatform/images/img_video.png">
+                                </span>
+                            </div>
+                            <div id="thevideo1" style="display:none">
+                                <iframe id="viewplayer1" title="YouTube video player" class="youtube-player" type="text/html" width="146" height="82" src="https://www.youtube.com/embed/8-uaIblVDlU" frameborder="0" allowfullscreen=""></iframe>
+                            </div>
+                        </div>
+                        <div class="session-group-title"> <a href="http://54.228.195.42/magento/index.php/products/prod1.html" title="">prod1 </a></div>
+                        <div class="session-group-title"></div>
+                    </li>
+                </ul>
+            </div>
+          </div>
                
           [If no upcoming event show the text below]
           <?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('expert-upcoming-event')->toHtml(); ?>
@@ -1049,11 +578,8 @@ if(($this->getRequest()->getParam('p') > 1 ))
     <!--toPopup end-->
 <div id="backgroundPopup"></div>
 <script type="text/javascript">
-   function submitmessagecode()
-     {
-            	
-
-         var popupStatus = 0; 
+   function submitmessagecode(){
+         var popupStatus = 0;
          var title=document.getElementById('title').value;
          var message=document.getElementById('message').value;
          var customer_id=document.getElementById('customer_id').value;
@@ -1086,31 +612,36 @@ if(($this->getRequest()->getParam('p') > 1 ))
                             }
                     });
     }
-/*  function disablePopup() {
-  var popupStatus = 1;
-		if(popupStatus == 1) { // if value is 1, close popup
-			 jQuery("#toPopup").fadeOut("normal");
-                          jQuery("#backgroundPopup").fadeOut("normal");
-                          document.getElementById('title').value='';
-                         document.getElementById('message').value=''
-			popupStatus = 0;  // and set value to 0
-		}
-	}*/
-      
+
    jQuery(function($) {
 
+    $("div.more-block a").live("click",function(){
+        $("div.more-loader").removeClass("hidden");
+        var pages = $("div.listgrid"),
+            page = pages.length;
+        jQuery.ajax({
+            url:"",
+            type:"get",
+            dataType:"html",
+            data:{p:page+1},
+            }).done(function(data) {
+                jQuery("div.more-loader").addClass("hidden");
+                var p = jQuery(data).find("div.listgrid");
+                if(p.length > 0)
+                    jQuery.each(p,function(idx,pg){console.log(idx,pg);jQuery(pg).insertBefore(jQuery("div.more-loader"));});
+                else
+                    jQuery("div.more-block").addClass("hidden");
+            })
+            .fail(function(data) {
+                jQuery("div.more-loader").addClass("hidden");
+                alert( "error" );
+            });
+    });
 	$("button.topopup").click(function() {
 	    loadPopup(); // function show popup
 	    return false;
 	});
 
-    $("div.more-block a").live("click",function(){
-        var rows = $("div.listgrid.hidden"),
-            num = rows.length;
-        $(rows).eq(0).removeClass("hidden");
-        if(num - 1 <= 0)
-            $("div.more-block").hide();
-    });
 	/* event for close the popup */
 	$("div.close").hover(
 					function() {

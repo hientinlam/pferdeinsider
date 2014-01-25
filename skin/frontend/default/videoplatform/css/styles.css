@@ -2905,3 +2905,5 @@ body.catalog-product-view .product-shop .identify{width:305px;}
 
 .more-block{clear: both; width: 100%; border-top: 1px dashed darkgray; text-align: right; color: #9E0B0F; font-weight: bold;}
 .more-block span{padding:0 5px;}
+.more-loader{clear: both; width: 100%; text-align: center;}
+.more-loader span{margin: 0 5px; line-height: 24px;}

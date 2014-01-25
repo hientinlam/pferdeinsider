@@ -32,7 +32,7 @@
 	<script type="text/javascript">
 //        Opentip.useCss3Transitions = false;
 //        Opentip.useScriptaculousTransitions = true;
-		Opentip.debugging = true;
+		//Opentip.debugging = true;
 // 		Opentip.defaultStyle = 'rounded';
 		Opentip.styles.codeSample = {
 			showOn: 'click',
@@ -42,7 +42,7 @@
 			stem: true
 		}
 	</script>
-<div style="   background: none repeat scroll 0 0 #FFFFFF;padding:10px 10px 10px 15px">
+<div class="calendarbox">
 <h2 style="font-size:16px;background:#333333;color:#FFFFFF; margin-top: 10px;text-align: center;width: 254px;"><?php echo date('M Y', strtotime($date.'-'.$month.'-'.$year)) ?></h2>
 <?php echo Mage::helper('events/calendar')->calenderControls(); ?>
 <?php echo Mage::helper('events/calendar')->drawCalendar($month,$year); ?>

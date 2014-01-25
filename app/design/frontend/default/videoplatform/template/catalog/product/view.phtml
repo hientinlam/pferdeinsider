@@ -419,34 +419,18 @@ foreach($adminmodel as $admininfo)
            <?php 
                  $membercollection=Mage::getModel('catalog/product')->getCollection()->addFieldToFilter('member_list',Array('eq'=>$expertid));
                  $productcollect=$membercollection->getData();
+                 $bymonth = array();
                  foreach($productcollect as  $memberproduct){
-                 $prodmodel=Mage::getModel('catalog/product')->load($memberproduct['entity_id']);
-                 $createddate=explode(' ',$prodmodel->getCreatedAt());
-                 $month=explode('-',$createddate[0]);
-
-                 if($month[1]=='01'){$jan[].=$memberproduct['entity_id'];}
-                 if($month[1]=='02'){$feb[].=$memberproduct['entity_id'];}
-                 if($month[1]=='03'){$march[].=$memberproduct['entity_id'];}
-                 if($month[1]=='04'){$apr[].=$memberproduct['entity_id'];}
-                 if($month[1]=='05'){$may[].=$memberproduct['entity_id'];}
-                 if($month[1]=='06'){$june[].=$memberproduct['entity_id'];}
-                 if($month[1]=='07'){$july[].=$memberproduct['entity_id'];}
-                 if($month[1]=='08'){$aug[].=$memberproduct['entity_id'];}
-                 if($month[1]=='09'){$sep[].=$memberproduct['entity_id'];}
-                 if($month[1]=='10'){$oct[].=$memberproduct['entity_id'];}
-                 if($month[1]=='11'){$nov[].=$memberproduct['entity_id'];}
-                 if($month[1]=='12'){$dec[].=$memberproduct['entity_id'];}
-           
-                        // echo "<pre>";print_r($may);die('heh');
-             
-                 } 
-          $bymonth1=array('01'=>$jan,'02'=>$feb,'03'=>$march,'04'=>$apr,'05'=>$may,'06'=>$june,'07'=>$july,'08'=>$aug,'09'=>$sep,'10'=>$oct,'11'=>$nov,'12'=>$dec);
-          $bymonth=  array_reverse($bymonth1);
-           $count=1;
-        $jw=1;
-       // echo "<pre>";print_r($bymonth);die('helo');
-        ?>
-                       <div>
+                     $prodmodel = Mage::getModel('catalog/product')->load($memberproduct['entity_id']);
+                     $month = date('m',strtotime($prodmodel->getCreatedAt()));
+                     $bymonth[$month][] = $memberproduct['entity_id'];
+                 }
+                 krsort($bymonth);
+                 $count=1;
+                 $jw=1;
+                 //var_dump($bymonth);
+            ?>
+      <div>
                            
                                                      
                            <script type="text/javascript">
