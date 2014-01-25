@@ -640,7 +640,7 @@ endforeach;
 
 $resource = Mage::getSingleton('core/resource');
 $connection= $resource->getConnection('core_read');			
-$query="select * from tbl_brstmembersubscriber  where member_id = $productexpertname";
+$query="select * from tbl_brstmembersubscriber where member_id = $productexpertname";
 $result=$connection->query($query);
 $custdata = $result->fetch($select); 
 //echo "<pre>";print_r($custdata);die('aghasg');
@@ -751,7 +751,7 @@ $custdata = $result->fetch($select);
                  
                  <li class="fields">
                       <div class="field name">
-                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Produkt mit Rabatt erstellen</label>
                                   <div class="category-choose">
                                       <select class="validate-select" name="specialproduct" onchange="showdeal(this.value);">
                                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
@@ -1012,7 +1012,7 @@ $custdata = $result->fetch($select);
                  
                  <li class="fields">
                       <div class="field name">
-                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Produkt mit Rabatt erstellen</label>
                                   <div class="category-choose">
                                       <select class="validate-select" name="specialproduct" onchange="showdeal1(this.value)">
                                            <option value="" selected="selected">Bitte wähle eine Option aus
@@ -1235,7 +1235,7 @@ $custdata = $result->fetch($select);
                  
                 <li class="fields">
                       <div class="field name">
-                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Produkt mit Rabatt erstellen</label>
                                   <div class="category-choose">
                                       <select class="validate-select" name="specialproduct" onchange="showdeal2(this.value)">
                                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
@@ -1455,7 +1455,7 @@ $custdata = $result->fetch($select);
                  
                 <li class="fields">
                       <div class="field name">
-                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Produkt mit Rabatt erstellen</label>
                                   <div class="category-choose">
                                       <select class="validate-select" name="specialproduct" onchange="showdeal3(this.value)">
                                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
@@ -1692,7 +1692,7 @@ $custdata = $result->fetch($select);
                  
                  <li class="fields">
                       <div class="field name">
-                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Produkt mit Rabatt erstellen</label>
                                   <div class="category-choose">
                                      <select class="validate-select" name="specialproduct" onchange="eventshowdeal(this.value)"><option value="" selected="selected">Bitte wähle eine Option aus.</option>
                                       <?php $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'special_product ');
