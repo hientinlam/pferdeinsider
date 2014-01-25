@@ -136,7 +136,7 @@
             <remove name="tags_popular"/>
         </reference>
         <reference name="content">
-            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-earnings.phtml"/>
+            <block type="allmembers/allmembers" name="allmembers" template="custom/new-expert-earnings.phtml"/>
         </reference>
 
     </allmembers_index_new_earnings>
@@ -158,7 +158,7 @@
             <remove name="tags_popular"/>
         </reference>
         <reference name="content">
-            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-affiliate-earning.phtml"/>
+            <block type="allmembers/allmembers" name="allmembers" template="custom/new-expert-affiliate-earning.phtml"/>
         </reference>
 
     </allmembers_index_new_viaaffiliate>

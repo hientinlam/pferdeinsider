@@ -24,15 +24,8 @@ class Display_Allmembers_Block_Allmembers extends Mage_Core_Block_Template
                 'title'=>Mage::helper('catalog')->__('Horse Experts'),
                 'link'=>Mage::getBaseUrl().'allmembers/index/index'
             ) );
-            
-           
-            
         }
 
-
-            
-     
-          
          $toolbar = $this->getToolbarBlock();
 		// called prepare sortable parameters
 		$collection = $this->getCollection();
