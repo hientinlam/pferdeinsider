@@ -32,6 +32,10 @@
  */
 /** @var $this Mage_Customer_Block_Form_Login */
 ?>
+<style>
+    .col-main > span.facebookconnect-button{display:none !important;}
+    .buttons-set > span.facebookconnect-button{float: right; margin: 0 5px;}
+</style>
 <div class="account-login">
     <div class="page-title">
         <h1><?php echo $this->__('Login or Create an Account') ?></h1>
@@ -73,8 +77,12 @@
         <div class="col2-set">
             <div class="col-1 new-users">
                 <div class="buttons-set">
-               <button type="button" title="<?php echo $this->__('Create an Account') ?>" class="button" onclick="window.location='<?php echo Mage::getBaseUrl().'register/index/member';?>'"><span><span><?php echo $this->__('Create User') ?></span></span></button>
-                
+                    <button type="button" title="<?php echo $this->__('Create an Account') ?>" class="button" onclick="window.location='<?php echo Mage::getBaseUrl().'register/index/member';?>'"><span><span><?php echo $this->__('Create User') ?></span></span></button>
+                    <?php
+                    if ($block = $this->getLayout()->getBlock('facebookconnect_button')) {
+                        echo $block->toHtml();
+                    }
+                    ?>
                 </div>
             </div>
             <div class="col-2 registered-users">
