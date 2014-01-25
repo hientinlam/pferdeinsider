@@ -172,29 +172,28 @@ foreach($adminmodel as $admininfo)
 
 
                     </div>
-                     <div class="deal_ends" style="  color: #333333;font-family: Arial;font-size: 12px; padding-top:25px; text-align: center;width: 100%;">
+                    <div class="deal_ends" style="display:none; color: #333333;font-family: Arial;font-size: 12px; padding-top:25px; text-align: center;width: 100%;">
                           Angebot endet in
                     </div>
                     <link media="all" type="text/css" href="http://54.228.195.42/magento/skin/frontend/default/default/mw_dailydeal/css/superneat.css" rel="stylesheet">
-                    <div class="deal-product">
-                    <div class="ct-deal-pro">
-			<!-- Countdown Javascript -->
-			<div class="counter" id="counter">
-				<ul class="countdown">
-					 <li class="first"><div id="view_cd_hour-3" class="countdown_num"><span>0</span><span>0</span></div>
-                                             <span class="colon" style="font-size:22px;">:</span>
-                                             <div id="hour" style="margin-top:-10px;padding-left:8px;text-align:left;">Tage</div></li>
-					<li>
-                                            <div id="view_cd_min-3" class="countdown_num"><span>0</span><span>0</span></div>
-                                            <span class="colon" style="font-size:22px;">:</span>
-                                            <div id="minute" style="margin-top:-10px;padding-left:8px;text-align:left;">Stunden</div></li>
-					<li class="last"><div id="view_cd_sec-3" class="countdown_num"><span>0</span><span>0</span></div>
-                                            <span class="colon" style="font-size:22px;color:#F0F0F0;">:</span>
-                                            <div style="margin-top:-10px;margin-left:-2px;" id="second">Sekunden</div></li>
-				</ul>
-			</div>
-
-			</div>
+                    <div class="deal-product" style="display:none;">
+                        <div class="ct-deal-pro">
+                <!-- Countdown Javascript -->
+                            <div class="counter" id="counter">
+                                <ul class="countdown">
+                                     <li class="first"><div id="view_cd_hour-3" class="countdown_num"><span>0</span><span>0</span></div>
+                                                             <span class="colon" style="font-size:22px;">:</span>
+                                                             <div id="hour" style="margin-top:-10px;padding-left:8px;text-align:left;">Tage</div></li>
+                                    <li>
+                                                            <div id="view_cd_min-3" class="countdown_num"><span>0</span><span>0</span></div>
+                                                            <span class="colon" style="font-size:22px;">:</span>
+                                                            <div id="minute" style="margin-top:-10px;padding-left:8px;text-align:left;">Stunden</div></li>
+                                    <li class="last"><div id="view_cd_sec-3" class="countdown_num"><span>0</span><span>0</span></div>
+                                                            <span class="colon" style="font-size:22px;color:#F0F0F0;">:</span>
+                                                            <div style="margin-top:-10px;margin-left:-2px;" id="second">Sekunden</div></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 		</div>
                     <?php } elseif($_product['special_product']==48) { ?>
@@ -328,7 +327,7 @@ foreach($adminmodel as $admininfo)
 
                 ?>
                        <div class="product-shop" style="height:auto !important;">
-                             <div class="identify" style="height:300px;">
+                             <div class="identify">
                                     <div class="product-name">
                                        <a href="<?php ?>" title="<?php ?>" class="product-image"><img src="<?php echo $ava_src;?>" width="285" height="190" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                                     </div>
