@@ -366,7 +366,7 @@
                   </div>
              </div>
             <!-- Only Display if there's a live broadcast; if not just display "No broadcast at this time" -->
-            <div class="main_schedulebox">
+            <!--div class="main_schedulebox">
                 <div style="font-size:20px; margin-bottom:20px;">
                     AKTUELLES LIVE WEBINAR
                      <span class="styleArrow">&nbsp;</span>
@@ -457,12 +457,11 @@
                     
                     [If no broadcast available show the text below]
                     <div style="font-size:25px;font-family:verdana;margin-top:15px;">Momentan gibt es keine Übertragung eines Live Webinars. Schau bald wieder vorbei.</div>
-        </div><!-- #main-schebulebox -->
-        <div id="upcoming_schedbox">
+        </div--><!-- #main-schebulebox -->
+        <!--div id="upcoming_schedbox">
         
           <div style="font-size:25px;font-family:verdana;margin-top:15px;">Live Webinare in diesem Monat</div>
           <?php //echo $this->getLayout()->createBlock('events/events')->setTemplate('events/expertupcomingevents.phtml')->toHtml(); ?>
-          <!-- Just list upcoming events for the current month. Same format as sessions but without the toggle function: *Note: this is just a copy of the session styling any content listed is just a copy on the existing session from a product. I just wanted to use the styling (classes) same format should be done when calling the upcoming live events -->
           <div style="float:right;width:660px;">
             <div>
                 <ul style="" class="ulcontent" id="ul-1">
@@ -488,8 +487,7 @@
                
           [If no upcoming event show the text below]
           <?php  echo $this->getLayout()->createBlock('cms/block')->setBlockId('expert-upcoming-event')->toHtml(); ?>
-          <!-- end of upcoming live events --> 
-        </div>
+        </div-->
     
 </div>
 </div>
