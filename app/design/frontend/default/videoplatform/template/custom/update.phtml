@@ -206,7 +206,7 @@ endforeach;
                       <div class="field name">
                              <label class="required" for="firstname"><em> </em>Produkt Name</label>
                                  <div class="input-box">
-                                     <input type="text" class="input-text required-entry" title="Product Name" value="<?php echo $productdata->getName() ?>" name="productname" id="productname"/>
+                                     <input type="text" class="input-text required-entry" title="Produkt Name" value="<?php echo $productdata->getName() ?>" name="productname" id="productname"/>
                                  </div>
                         </div>
                  </li>
@@ -297,7 +297,7 @@ endforeach;
                  
                  <li class="fields">
                       <div class="field name">
-                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Spezial Produkt</label>
+                             <label style="width:500px;" class="required" for="specialproduct"><em> </em>Produkt mit Rabatt erstellen</label>
                                   <div class="category-choose">
                                      <select id="specialproduct" class="validate-select" name="specialproduct" onchange="showdeal(this.value)">
                                            <option value="" selected="selected">Bitte wähle eine Option aus.</option>
@@ -343,7 +343,7 @@ endforeach;
                  </li>
                  <li class="fields">
                   <div class="field name">
-                        <label class="required" for="dealqty"><em> </em>Deal Qty</label>
+                        <label class="required" for="dealqty"><em> </em>Anzahl (Menge eingeben, wenn diese für die Rabattaktion limitiert werden soll)</label>
                         <input type="text" class="input-text required-entry"  name="dealqty" value="<?php if($deal['product_id'] == $productId){  echo $dealqty; } ?>"/>
                     </div>
                  </li>
@@ -361,7 +361,7 @@ endforeach;
                     
                  <li class="fields">
                      <div class="field name" style="width:335px">
-                        <label class="required" for="Active From"><em> </em>Active From</label>
+                        <label class="required" for="Active From"><em> </em>Rabatt aktiv von</label>
                          <span><input type="text" class="input-text" id="date_from_live" name="activefrom" value="<?php if($deal['product_id'] == $productId){ echo $startdate;  } ?>"/></span>
                            <span><img title="Select date" id="date_from_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
                     </div>
@@ -370,7 +370,7 @@ endforeach;
                
                  <li class="fields">
                      <div class="field name" style="width:330px">
-                        <label class="required" for="Active To"><em> </em>Active To</label>
+                        <label class="required" for="Active To"><em> </em>Rabatt aktiv bis</label>
                        <span> <input type="text" class="input-text" id="date_to_live" name="activeto" value="<?php if($deal['product_id'] == $productId){  echo $enddate; } ?>" /></span>
                          <span><img title="Select date" id="date_to_trig_live" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'/js/calendar/img.gif' ?>" class="v-middle"/></span>
                     </div>
@@ -582,7 +582,7 @@ endforeach;
                          $i = 1;
                          ?>
                          <table width="750">
-                             <tr><th class="myproductth">#</th><th class="myproductth">Product Name</th><th class="myproductth">Type</th><th class="myproductth">Price</th></tr>
+                             <tr><th class="myproductth">#</th><th class="myproductth">Produktname</th><th class="myproductth">Produktart</th><th class="myproductth">Preis</th></tr>
                              <?php foreach ($_products as $_product) { ?>
                                  <?php
                                  if ($_product->getTypeId() == 'grouped') {
