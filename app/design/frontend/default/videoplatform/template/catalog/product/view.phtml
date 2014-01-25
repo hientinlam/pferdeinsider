@@ -329,7 +329,7 @@ foreach($adminmodel as $admininfo)
                        <div class="product-shop" style="height:auto !important;">
                              <div class="identify">
                                     <div class="product-name">
-                                       <a href="<?php ?>" title="<?php ?>" class="product-image"><img src="<?php echo $ava_src;?>" width="285" height="190" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                                       <a href="<?php echo Mage::getBaseUrl().'member/'.$username ; ?>" title="<?php echo ucwords($customer->getFirstname()." ".$customer->getLastname()); ?>" class="product-image"><img src="<?php echo $ava_src;?>" width="285" height="190" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                                     </div>
                                     <span> 
                                         <span style="font-size:14px;margin-top:7px;color:#333333;"><a style="text-decoration:none;" href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>"> <?php echo ucwords($customer->getFirstname()." ".$customer->getLastname()); ?></a></span>
