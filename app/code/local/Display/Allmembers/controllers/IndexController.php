@@ -37,6 +37,28 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
         }
     }
 
+    public function new_earningsAction()
+    {
+        if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $this->loadLayout();
+            $this->getLayout()->getBlock('head')->setTitle('Earnings-Via Website');
+            $this->renderLayout();
+        } else {
+            $this->_redirect('customer/account/login');
+        }
+    }
+
+    public function new_viaaffiliateAction()
+    {
+        if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $this->loadLayout();
+            $this->getLayout()->getBlock('head')->setTitle('Earnings-Via Affiliate');
+            $this->renderLayout();
+        } else {
+            $this->_redirect('customer/account/login');
+        }
+    }
+
     public function expertcalculationAction()
     {
         if (Mage::getSingleton('customer/session')->isLoggedIn()) {
