@@ -6,7 +6,8 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
         parent::__construct();
 
         // Set some defaults for our grid
-        $this->setDefaultSort('id');
+        //$this->setDefaultSort('id');
+        $this->setDefaultSort('order_id');
         $this->setId('brst_experts_amount_grid');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
