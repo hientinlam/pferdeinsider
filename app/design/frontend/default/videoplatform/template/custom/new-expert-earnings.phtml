@@ -397,20 +397,13 @@ if ($collection->getSize() > 0):
         $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
         echo '<tr class=' . $myproducttr . '><td style="padding:5px;">' . $record['order_id'] . '</td>';
 
-        echo '<td style="padding:5px;">'.$record->getCreatedAt().'</td></tr>';
+        echo '<td style="padding:5px;">'.$record->getCreatedAt().'</td>';
+        echo '<td style="padding:5px;">'.$record->getExpertName().'</td>';
+        echo '<td style="padding:5px;">'.$record->getProductId().'</td>';
+        echo '<td style="padding:5px;">'.$record->getRowPrice().'</td>';
+        echo '<td style="padding:5px;">'.$record->getGrossPrice().'</td>';
+        echo '<td style="padding:5px;">' . $record['getyoupaid'] . '</td></tr>';
 
-        echo '<td style="padding:5px;">'.$record->getExpertName().'</td></tr>';
-
-        echo '<td style="padding:5px;">'.$record->getProductId().'</td></tr>';
-
-        echo '<td style="padding:5px;">'.$record->getRowPrice().'</td></tr>';
-
-        echo '<td style="padding:5px;">'.$record->getGrossPrice().'</td></tr>';
-
-        echo '<td style="padding:5px;">' . $curencySymbol . number_format($record['gross_price'], 2) . '</td>';
-
-
-        echo '<td style="padding:5px;">' . $record['getyoupaid'] . '</td>';
         $count++;
     endforeach;
 else:
