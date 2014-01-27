@@ -107,14 +107,14 @@ if ($fromdate != '01/01/1970') {
         ->addFieldToFilter('ordertimestamp', array("lteq" => $enddate))
         ->addFieldToFilter('affiliate_name', array('like' => ''))
         //->addFieldToFilter('expert_name', array('like' => $expertname))
-        ->addFieldToFilter('customer_id', $customer->getId())
+        ->addFieldToFilter('customer_id', $customer->getId()) // PhuongLan fixed problem in order display
         ->setPageSize($pageSize)
         ->setCurPage($currentPage);
 } else {
     $aff = 0;
     $collection = Mage::getModel('brst_experts/amount')->getCollection()
         //->addFieldToFilter('expert_name', array('like' => $expertname))
-        ->addFieldToFilter('customer_id', $customer->getId())
+        ->addFieldToFilter('customer_id', $customer->getId()) // PhuongLan fixed problem in order display
         ->addFieldToFilter('affiliate_name', array('like' => ''))
         ->setPageSize($pageSize)
         ->setCurPage($currentPage);
@@ -162,11 +162,11 @@ $_helper = $this->helper('catalog/output');
     <form action="<?php echo Mage::getBaseUrl() . 'allmembers/index/earnings/value/1' ?>" method="post">
 
         <div style="width:740px;padding-bottom:15px;">
-            <label style="float:left;padding-top:7px;padding-right:0px;">Filter nach Datum:</label>
+            <label style="float:left;padding-top:7px;padding-right:0px;"><?php echo $this->__("Filter nach Datum") ?>:</label>
             <input type="hidden" value="<?php echo $expertname; ?>" name="expertdata"/>
 
             <div class="field name" style="" id="filteration">
-                <label class="required" for="startdate"><em> </em>Startdatum</label>
+                <label class="required" for="startdate"><em> </em><?php echo $this->__("Startdatum") ?></label>
                 <span> <input type="text" class="input-text" id="startdate" title="startdate"
                               value="<?php if ($fromdate != '01/01/1970') {
                                   echo $_GET['start'];
@@ -178,7 +178,7 @@ $_helper = $this->helper('catalog/output');
             </div>
 
             <div class="field name" style="">
-                <label class="required" for="enddate"><em> </em>Enddatum</label>
+                <label class="required" for="enddate"><em> </em><?php echo $this->__("Enddatum") ?></label>
                 <span> <input type="text" class="input-text" id="enddate" title="enddate"
                               value="<?php if ($fromdate != '01/01/1970') {
                                   echo $_GET['end'];
@@ -192,7 +192,7 @@ $_helper = $this->helper('catalog/output');
                     id="filter" title="Export" type="button" onclick="filterdate()" class="scalable task" style="">
                     <span><span><span>Filter</span></span></span></button>
                 <button id="reset" style="" id="filter" title="Export" type="button" onclick="Resetfilter()"
-                        class="scalable task" style=""><span><span><span> Filter zurücksetzen</span></span></span>
+                        class="scalable task" style=""><span><span><span><?php echo $this->__("Filter zurücksetzen") ?></span></span></span>
                 </button>
 
 
@@ -228,7 +228,7 @@ $_helper = $this->helper('catalog/output');
             <input type="hidden" name="to" id="to" value="<?php echo $to; ?>"/>
             <input type="hidden" name="collectionsize" id="collectionsize" value="<?php echo count($collection); ?>"/>
             <img src="http://54.228.195.42/magento/skin/adminhtml/default/default/images/icon_export.gif" alt=""
-                 class="v-middle">&nbsp; Exportieren nach:
+                 class="v-middle">&nbsp; <?php echo $this->__("Exportieren nach") ?>:
             <select name="earning_export" id="earning_export" style="width:8em;">
                 <option value="csv">CSV</option>
                 <option value="excelxml">Excel XML</option>
@@ -236,7 +236,7 @@ $_helper = $this->helper('catalog/output');
             <button
                 style="padding:3px 5px 3px 5px;color:#FFFFFF;cursor:pointer;background:#333333;width:80px;border:none;"
                 id="button" title="Export" type="submit" class="scalable task" style="">
-                <span><span><span>Exportieren</span></span></span></button>
+                <span><span><span><?php echo $this->__("Exportieren") ?></span></span></span></button>
         </div>
     </form>
 </div>
@@ -255,8 +255,8 @@ $_helper = $this->helper('catalog/output');
             </p>
 
             <div class="limiter">
-                <label>Zeige</label>
-                <span style="margin-top: 5px; float: right;">pro Seite</span>
+                <label><?php echo $this->__("Zeige") ?></label>
+                <span style="margin-top: 5px; float: right;"><?php echo $this->__("pro Seite") ?></span>
 
                 <div class="toolbarimg">
                     <select onchange="setcookie('expertpagelength',this.value);setLocation(this.value);">
@@ -372,12 +372,21 @@ $_helper = $this->helper('catalog/output');
     </div>
 </div>
 
+<table  width="750">
+    <th class="myproductth"><?php echo $this->__("Bestellnummer") ?></th>
+    <th class="myproductth"><?php echo $this->__("Datum") ?></th>
+    <th class="myproductth"><?php echo $this->__("Kunde") ?></th>
+    <th class="myproductth"><?php echo $this->__("Artikelname") ?></th>
+    <th class="myproductth"><?php echo $this->__("Brutto") ?></th>
+    <th class="myproductth"><?php echo $this->__("Netto") ?></th>
+    <th class="myproductth"><?php echo $this->__("Affiliate Name") ?></th>
+    <th class="myproductth"><?php echo $this->__("Earning Type") ?></th>
+    <th class="myproductth"><?php echo $this->__("Affiliate Ratio") ?></th>
+    <th class="myproductth"><?php echo $this->__("Kosten Affiliate") ?></th>
+    <th class="myproductth"><?php echo $this->__("abgeschlossen/bezahlt") ?></th>
 <?php
-
-echo '<table  width="750">';
-echo '<th class="myproductth">BestellNr.</th><th class="myproductth">Aktuelle Kosten Produkt</th><th class="myproductth">Einnahmen Experte </th><th class="myproductth">erstellt am:</th>';
 $count = 1;
-if ($collection->getSize() > 0) {
+if ($collection->getSize() > 0):
     foreach ($collection as $record):
 
         if ($count % 2 == 0) {
@@ -385,21 +394,29 @@ if ($collection->getSize() > 0) {
         } else {
             $myproducttr = 'myproductotr';
         }
+        $orderDate = trim(date("d/m/Y", strtotime($record['created_at'])));
         $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
         echo '<tr class=' . $myproducttr . '><td style="padding:5px;">' . $record['order_id'] . '</td>';
+
+        echo '<td style="padding:5px;">'.$orderDate.'</td></tr>';
+
+        echo '<td style="padding:5px;">'.$record->getExpertName().'</td></tr>';
+
+        echo '<td style="padding:5px;">'.$record->getProductId().'</td></tr>';
+
+        echo '<td style="padding:5px;">'.$record->getRowPrice().'</td></tr>';
+
+        echo '<td style="padding:5px;">'.$record->getGrossPrice().'</td></tr>';
 
         echo '<td style="padding:5px;">' . $curencySymbol . number_format($record['gross_price'], 2) . '</td>';
 
 
         echo '<td style="padding:5px;">' . $record['getyoupaid'] . '</td>';
-        echo '<td style="padding:5px;">' . $record['created_at'] . '</td></tr>';
-
         $count++;
-
     endforeach;
-} else {
+else:
     echo '<tr class=' . $myproducttr . '><td colspan="7" style="padding:5px;text-align:center">' . $this->__("No Result Found") . '</td>';
-}
+endif;
 echo '</table>';
 
 ?>
@@ -535,4 +552,3 @@ echo '</table>';
         </div>
     </div>
 </div>
-
