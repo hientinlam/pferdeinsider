@@ -394,11 +394,10 @@ if ($collection->getSize() > 0):
         } else {
             $myproducttr = 'myproductotr';
         }
-        $orderDate = trim(date("d/m/Y", strtotime($record['created_at'])));
         $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
         echo '<tr class=' . $myproducttr . '><td style="padding:5px;">' . $record['order_id'] . '</td>';
 
-        echo '<td style="padding:5px;">'.$orderDate.'</td></tr>';
+        echo '<td style="padding:5px;">'.$record->getCreatedAt().'</td></tr>';
 
         echo '<td style="padding:5px;">'.$record->getExpertName().'</td></tr>';
 
