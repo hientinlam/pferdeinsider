@@ -38,25 +38,25 @@
     function filteraffiliate(val) {
         if (val != "--SELECT--") {
             var url = document.getElementById('urldata').value;
-            document.location.href = url + "allmembers/index/earnings/name/" + val;
+            document.location.href = url + "allmembers/index/new_earnings/name/" + val;
         }
         else {
             var url = document.getElementById('urldata').value;
-            document.location.href = url + "allmembers/index/earnings/";
+            document.location.href = url + "allmembers/index/new_earnings/";
         }
     }
     function filterdate() {
         var startdate = document.getElementById('startdate').value;
         var enddate = document.getElementById('enddate').value;
         var url = document.getElementById('urldata').value;
-        document.location.href = url + "allmembers/index/earnings?start=" + startdate + "&end=" + enddate;
+        document.location.href = url + "allmembers/index/new_earnings?start=" + startdate + "&end=" + enddate;
 
     }
     function Resetfilter() {
         var url = document.getElementById('urldata').value;
         document.getElementById('startdate').value = '';
         document.getElementById('enddate').value = '';
-        document.location.href = url + "allmembers/index/earnings/";
+        document.location.href = url + "allmembers/index/new_earnings/";
 
     }
 </script>
@@ -71,7 +71,7 @@ $cookiedata = explode('=', $_COOKIE["expertpagelength"]);
 
 
 
-if (Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl() . 'allmembers/index/earnings/' || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl() . 'allmembers/index/earnings') {
+if (Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl() . 'allmembers/index/new_earnings/' || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl() . 'allmembers/index/earnings') {
     setcookie('expertpagelength', '', -3600);
     unset($_COOKIE["expertpagelength"]);
 
@@ -143,15 +143,15 @@ if (($this->getRequest()->getParam('p') > 1)) {
     $to = $pageSize;
 }
 
-$droplink = Mage::getBaseUrl() . 'allmembers/index/earnings?s';
+$droplink = Mage::getBaseUrl() . 'allmembers/index/new_earnings?s';
 
 
 if ($fromdate != '01/01/1970') {
-    $pagelink = Mage::getBaseUrl() . 'allmembers/index/earnings?start=' . $_GET['start'] . '&end=' . $_GET['end'] . '&p';
+    $pagelink = Mage::getBaseUrl() . 'allmembers/index/new_earnings?start=' . $_GET['start'] . '&end=' . $_GET['end'] . '&p';
     //   $droplink=Mage::getBaseUrl().'allmembers/index/earnings?start='.$_GET['start'].'&end='.$_GET['end'].'&p='.$currentPage.'&s';
 
 } else {
-    $pagelink = Mage::getBaseUrl() . 'allmembers/index/earnings/?p';
+    $pagelink = Mage::getBaseUrl() . 'allmembers/index/new_earnings/?p';
 
 }
 
