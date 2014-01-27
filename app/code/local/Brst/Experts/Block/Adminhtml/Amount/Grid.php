@@ -121,12 +121,12 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
         );
         $this->addColumn('affiliate_pay',
             array(
-                'header' => $this->__('Paid to Affiliate'),
+                'header' => $this->__('Kosten Affiliate'),
                 'index' => 'affiliate_pay'
             )
         );
 
-        $this->addColumn('share_ratio',
+        /* $this->addColumn('share_ratio',
             array(
                 'header' => $this->__('Pferde Ratio'),
                 'index' => 'share_ratio',
@@ -137,7 +137,7 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
                 'header' => $this->__('Paid to Pferde'),
                 'index' => 'admin_pay'
             )
-        );
+        ); */
 
 //        $this->addColumn('tax',
 //            array(
