@@ -11,7 +11,7 @@ $memberIds = array();
                       
 foreach($membercollection as $membervalues)
 {
-    $memberIds['member_id'][$membervalues['member_id']]     = $membervalues['member_id'];
+    $memberIds['member_id'][$membervalues['member_id']] = $membervalues['member_id'];
     $memberIds['createddate'][$membervalues['member_id']] = $membervalues['createddate'];
 }
 
@@ -173,7 +173,7 @@ foreach ($collection as $_product){
                         <div class="<?php echo $clas;?>">
                     <h2 class="product-name">
                          <a href="<?php echo $_product->getProductUrl() ?>" title=""><?php echo  substr($_product->getName(), 0, 22); ?></a>
-                      <div class="size">1 session: <?php echo $end_date ?></div>
+                      <div class="size"><?php echo $this->__('1 Session');?>: <?php echo $end_date ?></div>
                         <div class=""> <?php echo $expertname ?></div>
                     </h2>
                     <div class="price-box">
