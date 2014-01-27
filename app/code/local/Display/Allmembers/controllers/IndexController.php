@@ -37,7 +37,7 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
         }
     }
 
-    public function new_earningsAction()
+    public function newEarningsAction()
     {
         if (Mage::getSingleton('customer/session')->isLoggedIn()) {
             $this->loadLayout();
@@ -48,7 +48,7 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
         }
     }
 
-    public function new_viaaffiliateAction()
+    public function newViaaffiliateAction()
     {
         if (Mage::getSingleton('customer/session')->isLoggedIn()) {
             $this->loadLayout();
