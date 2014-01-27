@@ -1,139 +1,198 @@
 <layout version="0.1.0">
-        <allmembers_index_index>
-		<reference name="root">
-			<action method="setTemplate"><template>page/1column.phtml</template></action>
-       	 	</reference>
-                
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
-                </reference>
-	</allmembers_index_index> 
-        <allmembers_index_products>
-		<reference name="root">
-			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
-       	 	</reference>
-                
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/specialoffer.phtml"/>
-                </reference>
-	</allmembers_index_products> 
-        
-        <allmembers_index_event>
-		<reference name="root">
-			<action method="setTemplate"><template>page/1column.phtml</template></action>
-       	 	</reference>
-		<reference name="content">
-                    <block type="allmembers/viewevent" name="viewevent" template="custom/viewevents.phtml"/>
-                </reference>
-	</allmembers_index_event>
-        
-        <allmembers_index_subscribe>
-		<reference name="root">
-			<action method="setTemplate"><template>page/3columns.phtml</template></action>
-       	 	</reference>
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
-                </reference>
-	</allmembers_index_subscribe> 
-        
-        <allmembers_index_unsubscribe>
-		<reference name="root">
-			<action method="setTemplate"><template>page/3columns.phtml</template></action>
-       	 	</reference>
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
-                </reference>
-	</allmembers_index_unsubscribe> 
-        
-        <allmembers_index_videos>
-		<reference name="root">
-			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
-       	 	</reference>
-                
-               <reference name="left">
-            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
-             </block>
-         
-           
+    <allmembers_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
+        </reference>
+    </allmembers_index_index>
+    <allmembers_index_products>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/specialoffer.phtml"/>
+        </reference>
+    </allmembers_index_products>
+
+    <allmembers_index_event>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="allmembers/viewevent" name="viewevent" template="custom/viewevents.phtml"/>
+        </reference>
+    </allmembers_index_event>
+
+    <allmembers_index_subscribe>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/3columns.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
+        </reference>
+    </allmembers_index_subscribe>
+
+    <allmembers_index_unsubscribe>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/3columns.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/members.phtml"/>
+        </reference>
+    </allmembers_index_unsubscribe>
+
+    <allmembers_index_videos>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-"
+                   template="customer/account/navigation.phtml">
+            </block>
+
+
             <remove name="tags_popular"/>
         </reference>
-		<reference name="content">
-                    <block type="allmembers/membervideos" name="membervideos" template="custom/membervideos.phtml"/>
-                </reference>
-                
-	</allmembers_index_videos> 
-        
-         <allmembers_index_earnings>
-		<reference name="root">
-			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
-       	 	</reference>
-                
-               <reference name="left">
-            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
-            <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
--->
-          </block>
-         
-           
+        <reference name="content">
+            <block type="allmembers/membervideos" name="membervideos" template="custom/membervideos.phtml"/>
+        </reference>
+
+    </allmembers_index_videos>
+
+    <allmembers_index_earnings>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-"
+                   template="customer/account/navigation.phtml">
+                <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+    -->
+            </block>
             <remove name="tags_popular"/>
         </reference>
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/expert-earnings.phtml"/>
-                </reference>
-                
-	</allmembers_index_earnings> 
-        
-        
-         
-         <allmembers_index_viaaffiliate>
-		<reference name="root">
-			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
-       	 	</reference>
-                
-               <reference name="left">
-            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
-            <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>-->
-          </block>
-         
-           
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-earnings.phtml"/>
+        </reference>
+
+    </allmembers_index_earnings>
+
+
+    <allmembers_index_viaaffiliate>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-"
+                   template="customer/account/navigation.phtml">
+                <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>-->
+            </block>
+
+
             <remove name="tags_popular"/>
         </reference>
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/expert-affiliate-earning.phtml"/>
-                </reference>
-                
-	</allmembers_index_viaaffiliate> 
-        
-        <allmembers_index_message>
-         <reference name="root">
-			<action method="setTemplate"><template>page/empty.phtml</template></action>
-       	 </reference>
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-affiliate-earning.phtml"/>
+        </reference>
+
+    </allmembers_index_viaaffiliate>
+
+    <allmembers_index_new_earnings>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-"
+                   template="customer/account/navigation.phtml">
+                <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>
+    -->
+            </block>
+            <remove name="tags_popular"/>
+        </reference>
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-earnings.phtml"/>
+        </reference>
+
+    </allmembers_index_new_earnings>
+
+    <allmembers_index_new_viaaffiliate>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-"
+                   template="customer/account/navigation.phtml">
+                <!--    <action method="addLink" translate="label" module="customer"><name>promote_products</name><path>affiliate/customer_affiliate/view/status/1</path><label>Promote Products</label></action>-->
+            </block>
+
+
+            <remove name="tags_popular"/>
+        </reference>
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-affiliate-earning.phtml"/>
+        </reference>
+
+    </allmembers_index_new_viaaffiliate>
+
+    <allmembers_index_message>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/empty.phtml</template>
+            </action>
+        </reference>
         <reference name="content">
             <block type="allmembers/allmembers" name="allmembers" template="custom/expertnew.phtml"/>
         </reference>
-     </allmembers_index_message>
-     
-     
-         
-         
-         
-         
-         
-         <allmembers_index_expertcalculation>
-		<reference name="root">
-			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
-       	 	</reference>
-                
-               <reference name="left">
-            <block type="customer/account_navigation" name="customer_account_navigation" before="-" template="customer/account/navigation.phtml">
-          </block>
-         
-           
+    </allmembers_index_message>
+
+
+    <allmembers_index_expertcalculation>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="left">
+            <block type="customer/account_navigation" name="customer_account_navigation" before="-"
+                   template="customer/account/navigation.phtml">
+            </block>
+
+
             <remove name="tags_popular"/>
         </reference>
-		<reference name="content">
-                    <block type="allmembers/allmembers" name="allmembers" template="custom/expert-calculator.phtml"/>
-                </reference>
-                
-	</allmembers_index_expertcalculation> 
+        <reference name="content">
+            <block type="allmembers/allmembers" name="allmembers" template="custom/expert-calculator.phtml"/>
+        </reference>
+
+    </allmembers_index_expertcalculation>
 </layout>
