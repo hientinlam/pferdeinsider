@@ -154,7 +154,7 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
 
         $this->addColumn('getyoupaid',
             array(
-                'header' => $this->__('Paid to Expert'),
+                'header' => $this->__('Abgeschlossen/Bezahlt'),
                 'index' => 'getyoupaid'
             )
         );
