@@ -36,23 +36,41 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             $expert[$name['expert_name']] = $name['expert_name'];
             $affiliate[$name['affiliate_name']] = $name['affiliate_name'];
         }
-        $this->addColumn('id',
+        /* $this->addColumn('id',
             array(
                 'header' => $this->__('ID'),
                 'align' => 'right',
                 'width' => '50px',
                 'index' => 'id'
             )
-        );
+        ); */
         $this->addColumn('order_id',
             array(
-                'header' => $this->__('Order ID'),
+                'header' => $this->__('Bestellnumber'),
                 'index' => 'order_id',
             )
         );
+
+        $this->addColumn('created_at',
+            array(
+                'header' => $this->__('Datum'),
+                'index' => 'created_at',
+                'type' => 'datetime'
+            )
+        );
+
+        $this->addColumn('affiliate_name',
+            array(
+                'header' => $this->__('Kunde'),
+                'index' => 'affiliate_name',
+                'type' => 'options',
+                'options' => $affiliate,
+            )
+        );
+
         $this->addColumn('product_id',
             array(
-                'header' => $this->__('Product Name'),
+                'header' => $this->__('Artikelname'),
                 'index' => 'product_id',
             )
         );
@@ -79,14 +97,15 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
-        $this->addColumn('affiliate_name',
+        /* $this->addColumn('affiliate_name',
             array(
                 'header' => $this->__('Affiliate Name'),
                 'index' => 'affiliate_name',
                 'type' => 'options',
                 'options' => $affiliate,
             )
-        );
+        ); */
+
         $this->addColumn('share_type',
             array(
                 'header' => $this->__('Earning Type'),
@@ -139,13 +158,13 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
-        $this->addColumn('created_at',
+        /* $this->addColumn('created_at',
             array(
                 'header' => $this->__('Purchased On'),
                 'index' => 'created_at',
                 'type' => 'datetime'
             )
-        );
+        ); */
 
         $this->addExportType('*/*/exportCsv', $this->__('CSV'));
         $this->addExportType('*/*/exportExcel', $this->__('Excel XML'));
