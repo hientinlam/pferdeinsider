@@ -60,12 +60,12 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
-        $this->addColumn('affiliate_name',
+        $this->addColumn('expert_name',
             array(
                 'header' => $this->__('Kunde'),
-                'index' => 'affiliate_name',
+                'index' => 'expert_name',
                 'type' => 'options',
-                'options' => $affiliate,
+                'options' => $expert,
             )
         );
 
@@ -76,36 +76,36 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
-        $this->addColumn('expert_name',
+        /* $this->addColumn('expert_name',
             array(
                 'header' => $this->__('Expert Name'),
                 'index' => 'expert_name',
                 'type' => 'options',
                 'options' => $expert,
             )
-        );
+        ); */
 
         $this->addColumn('raw_price',
             array(
-                'header' => $this->__('Raw Sales'),
+                'header' => $this->__('Brutto'),
                 'index' => 'raw_price',
             )
         );
         $this->addColumn('gross_price',
             array(
-                'header' => $this->__('Gross Sales'),
+                'header' => $this->__('Netto'),
                 'index' => 'gross_price',
             )
         );
 
-        /* $this->addColumn('affiliate_name',
+        $this->addColumn('affiliate_name',
             array(
                 'header' => $this->__('Affiliate Name'),
                 'index' => 'affiliate_name',
                 'type' => 'options',
                 'options' => $affiliate,
             )
-        ); */
+        );
 
         $this->addColumn('share_type',
             array(
