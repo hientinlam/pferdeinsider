@@ -76,15 +76,6 @@ class Brst_Experts_Block_Adminhtml_Amount_Grid extends Mage_Adminhtml_Block_Widg
             )
         );
 
-        /* $this->addColumn('expert_name',
-            array(
-                'header' => $this->__('Expert Name'),
-                'index' => 'expert_name',
-                'type' => 'options',
-                'options' => $expert,
-            )
-        ); */
-
         $this->addColumn('raw_price',
             array(
                 'header' => $this->__('Brutto'),
