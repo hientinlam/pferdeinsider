@@ -642,7 +642,7 @@ tr.summary-details-excluded { font-style:italic; }
 .watch2{width: 186px;float:left;color:#000000;font-family: Arial;font-size: 24px;font-weight: bold;font-style:italic;padding-left: 25px;}
 .watch2 span{float:right;cursor: pointer;}
 #filteration{float:left;padding-right:3px;padding-right:2px \9;}
-#reset{padding:3px 5px 3px 5px;color:#FFFFFF;background:#333333;width:80px;cursor:pointer;border:none;}
+#reset{padding:3px 5px 3px 5px;color:#FFFFFF;background:#333333;cursor:pointer;border:none;}
 @media screen and (-webkit-min-device-pixel-ratio:0) { 
     .listpagetoolbar .toolbar .pager .amount {
 	float: right;
