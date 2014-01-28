@@ -414,11 +414,11 @@ if ($collection->getSize() > 0):
     endforeach;
 
     echo '<tr>';
-    echo '<td style="padding:5px;">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;text-align:right;" colspan="4">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;" colspan="4">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;">'.$this->__("Summe").'</td>';
+    echo '<td style="padding:5px;font-weight:bold;">'.$this->__("Summe").'</td>';
+    echo '<td style="padding:5px;text-align:right;font-weight:bold;" colspan="4">'.$this->__("Summe").'</td>';
+    echo '<td style="padding:5px;font-weight:bold;" colspan="4">'.$this->__("Summe").'</td>';
+    echo '<td style="padding:5px;font-weight:bold;">'.$this->__("Summe").'</td>';
+    echo '<td style="padding:5px;font-weight:bold;">'.$this->__("Summe").'</td>';
     echo '</tr>';
 else:
     echo '<tr class=' . $myproducttr . '><td colspan="7" style="padding:5px;text-align:center">' . $this->__("No Result Found") . '</td>';
