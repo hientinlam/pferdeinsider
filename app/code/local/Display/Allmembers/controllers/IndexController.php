@@ -121,8 +121,8 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
             } else {
                 $collection = Mage::getModel('brst_experts/amount')->getCollection()
                     //->addFieldToFilter('expert_name', array('like' => $expertname))
-                    ->addFieldToFilter('customer_id', $customer->getId()) // PhuongLan fixed collection
-                    ->addFieldToFilter('affiliate_name', array('neq' => ''));
+                    ->addFieldToFilter('customer_id', $customer->getId()); // PhuongLan fixed collection
+                    //->addFieldToFilter('affiliate_name', array('neq' => ''));
             }
             $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
 
