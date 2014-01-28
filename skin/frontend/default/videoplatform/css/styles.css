@@ -694,7 +694,7 @@ tr.summary-details-excluded { font-style:italic; }
     .typecolon{float:left;margin-top: -10px;}
 }
 .myproducttd{padding:5px;background:#f0f0f0;}
-.myproductth{padding:5px;background:#f0f0f0;font-weight:bold;color:#333333;}
+.myproductth{padding:7px;background:#f0f0f0;font-weight:bold;color:#333333;vertical-align:middle;}
 /****search form on result page **/
 .header .headersearch .form-search #searchlink{display:none !important;}
 .header .headersearch .form-search {background: none !important;width:auto !important;float:right;height: 55px;padding-top:65px;margin-right:-5px;margin-bottom:20px;}
