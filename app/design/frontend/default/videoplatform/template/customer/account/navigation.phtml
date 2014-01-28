@@ -25,6 +25,11 @@
  */
 ?>
 <div class="block block-account">
+    <?php if ($this->getRequest()->getParam('new_earnings')): ?>
+    <div class="block-title">
+        <a href="<?php $this->getUrl('customer/account') ?>"><strong><span><?php echo $this->__('Mein Account'); ?></span></strong></a>
+    </div>
+    <?php else: ?>
     <div class="block-title">
         <strong><span><?php echo $this->__('Mein Account'); ?></span></strong>
     </div>
@@ -196,4 +201,5 @@
             <?php endif ?>
         </ul>
     </div>
+    <?php endif ?>
 </div>
