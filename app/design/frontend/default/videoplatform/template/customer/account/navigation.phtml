@@ -27,7 +27,7 @@
 <div class="block block-account">
     <?php if (strpos(Mage::helper('core/url')->getCurrentUrl(), "new_earnings") !== false): ?>
     <div class="block-title">
-        <a href="<?php echo $this->getUrl('customer/account') ?>"><strong><span><?php echo $this->__('Mein Account'); ?></span></strong></a>
+        <a href="<?php echo Mage::getUrl('customer/account') ?>"><strong><span><?php echo $this->__('Mein Account'); ?></span></strong></a>
     </div>
     <?php else: ?>
     <div class="block-title">
