@@ -265,7 +265,7 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
                     foreach ($collection as $record) {
                         $orignalprice = number_format($record['gross_price'], 0);
                         $percent = ($record['affiliate_pay'] / $orignalprice) * 100;
-                        $lost[] = $record['order_id'] . ":::->" . $curencySymbol . number_format($record['gross_price'], 2) . ":::->" . $record['getyoupaid'];
+                        $lost[] = $record['order_id'] . ":::->" . number_format($record['gross_price'], 2) . ":::->" . $record['getyoupaid'];
                     }
                     $file = fopen("Earnings.csv", "a+");
                     foreach ($lost as $line) {
