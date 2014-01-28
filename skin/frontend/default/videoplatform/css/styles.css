@@ -2716,7 +2716,7 @@ width:50px !important;
 }
 .campaings .pager{width:720px;}
 .my-account .pager {width:750px !important; }
-.cattoolbar  .toolbar .pager {width:750px !important; }
+.cattoolbar  .toolbar .pager {/* width:750px !important; */}
 .toolbarevents .toolbar .pager .pages{margin:0 !important;}
 .toolbarevents .toolbar .pager .pages ol {float: right;
 
