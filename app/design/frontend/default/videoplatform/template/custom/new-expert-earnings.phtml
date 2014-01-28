@@ -387,6 +387,9 @@ $_helper = $this->helper('catalog/output');
 <?php
 $count = 1;
 if ($collection->getSize() > 0):
+    $totalRawSales = 0;
+    $totalGrossSales = 0;
+    $totalGetPaid = 0;
     foreach ($collection as $record):
 
         if ($count % 2 == 0) {
@@ -410,15 +413,18 @@ if ($collection->getSize() > 0):
         echo '<td style="padding:5px;">'.$record->getGetyoupaid().'</td>';
         echo '<td style="padding:5px;">'.$paidOut.'</td></tr>';
 
+        $totalRawSales = $totalRawSales + $record->getRowPrice();
+        $totalGrossSales = $totalGrossSales + $record->getGrossPrice();
+        $totalGetPaid = $totalGetPaid + $record->getGetyoupaid();
+
         $count++;
     endforeach;
 
     echo '<tr>';
     echo '<td style="padding:5px;font-weight:bold;">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;text-align:right;font-weight:bold;" colspan="4">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;font-weight:bold;" colspan="4">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;font-weight:bold;">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;font-weight:bold;">'.$this->__("Summe").'</td>';
+    echo '<td style="padding:5px;text-align:right;font-weight:bold;" colspan="4">'.$totalRawSales.'</td>';
+    echo '<td style="padding:5px;font-weight:bold;" colspan="4">'.$totalGrossSales.'</td>';
+    echo '<td style="padding:5px;font-weight:bold;" colspan="2">'.$totalGetPaid.'</td>';
     echo '</tr>';
 else:
     echo '<tr class=' . $myproducttr . '><td colspan="7" style="padding:5px;text-align:center">' . $this->__("No Result Found") . '</td>';
