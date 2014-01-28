@@ -42,12 +42,12 @@ function filteraffiliate(val)
     if(val!= "--SELECT--")
         {
             var url= document.getElementById('urldata').value;
-            document.location.href = url+"allmembers/index/viaaffiliate/name/"+val;
+            document.location.href = url+"allmembers/index/new_viaaffiliate/name/"+val;
         }
         else
             {
                 var url= document.getElementById('urldata').value;
-                document.location.href = url+"allmembers/index/viaaffiliate/";
+                document.location.href = url+"allmembers/index/new_viaaffiliate/";
             }
 }
 function filterdate()
@@ -55,7 +55,7 @@ function filterdate()
       var startdate= document.getElementById('startdate').value;
                 var enddate  = document.getElementById('enddate').value;
                 var url= document.getElementById('urldata').value;
-                document.location.href = url+"allmembers/index/earnings?start="+startdate+ "&end="+ enddate;
+                document.location.href = url+"allmembers/index/new_viaaffiliate?start="+startdate+ "&end="+ enddate;
        
 
 }
@@ -64,7 +64,7 @@ function Resetfilter()
       var url= document.getElementById('urldata').value;
       document.getElementById('startdate').value='';
       document.getElementById('enddate').value='';
-      document.location.href = url+"allmembers/index/viaaffiliate/";
+      document.location.href = url+"allmembers/index/new_viaaffiliate/";
       
 }
 </script>
@@ -75,7 +75,7 @@ $currentPage = (int) $this->getRequest()->getParam('p', 1);
  $cookiedata=explode('=',$_COOKIE["earninglength"]);
 
 
-if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'allmembers/index/viaaffiliate/' || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'allmembers/index/earnings' )
+if( Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'allmembers/index/new_viaaffiliate/' || Mage::helper('core/url')->getCurrentUrl() == Mage::getBaseUrl().'allmembers/index/earnings' )
 {
    setcookie('earninglength', '', -3600);
    unset($_COOKIE["earninglength"]);
@@ -113,9 +113,11 @@ $value=$this->getRequest()->getParam('value');
 if($affiliatename!=NULL)
 {
     $collection = Mage::getModel('brst_experts/amount')->getCollection()
-    ->addFieldToFilter('affiliate_name', array('like'=>$affiliatename))
-    ->addFieldToFilter('expert_name', array('like'=>$expertname))->setPageSize($pageSize)
-            ->setCurPage($currentPage);
+        ->addFieldToFilter('affiliate_name', array('like'=>$affiliatename))
+        //->addFieldToFilter('expert_name', array('like'=>$expertname))
+        ->addFieldToFilter('customer_id', $customer->getId())
+        ->setPageSize($pageSize)
+        ->setCurPage($currentPage);
 }
 
 else if($fromdate != '01/01/1970')
@@ -127,17 +129,20 @@ else if($fromdate != '01/01/1970')
    $enddate= mktime(0, 0, 0, $end[1], $end[0], $end[2]);
 
    $collection      = Mage::getModel('brst_experts/amount')->getCollection()
-                     -> addFieldToFilter('ordertimestamp' , array("gteq" => $startdate))
-                     -> addFieldToFilter('ordertimestamp' , array("lteq" =>$enddate))
-                     ->addFieldToFilter('affiliate_name', array('neq'=>''))
-                     ->addFieldToFilter('expert_name', array('like'=>$expertname))->setPageSize($pageSize)
-                     ->setCurPage($currentPage);
+                        -> addFieldToFilter('ordertimestamp' , array("gteq" => $startdate))
+                        -> addFieldToFilter('ordertimestamp' , array("lteq" =>$enddate))
+                        ->addFieldToFilter('affiliate_name', array('neq'=>''))
+                        //->addFieldToFilter('expert_name', array('like'=>$expertname))
+                        ->addFieldToFilter('customer_id', $customer->getId())
+                        ->setPageSize($pageSize)
+                        ->setCurPage($currentPage);
   
 
 }
 else{
     $collection = Mage::getModel('brst_experts/amount')->getCollection()
-            ->addFieldToFilter('expert_name', array('like'=>$expertname))
+            //->addFieldToFilter('expert_name', array('like'=>$expertname))
+            ->addFieldToFilter('customer_id', $customer->getId())
             ->addFieldToFilter('affiliate_name', array('neq'=>''))
             ->setPageSize($pageSize)
             ->setCurPage($currentPage);
@@ -146,7 +151,10 @@ else{
 }
 
 //echo "<pre>";print_r($collection->getData());die('dhd');
-$collection1 = Mage::getModel('brst_experts/amount')->getCollection()->addFieldToFilter('expert_name', array('like'=>$expertname))->setPageSize($pageSize)
+$collection1 = Mage::getModel('brst_experts/amount')->getCollection()
+            //->addFieldToFilter('expert_name', array('like'=>$expertname))
+            ->addFieldToFilter('customer_id', $customer->getId())
+            ->setPageSize($pageSize)
             ->setCurPage($currentPage);
            
 $totCat = $collection->getSize();
@@ -177,17 +185,17 @@ if(($this->getRequest()->getParam('p') > 1 ))
 
 if($fromdate != '01/01/1970')
 {
-    $pagelink=Mage::getBaseUrl().'allmembers/index/viaaffiliate?start='.$_GET['start'].'&end='.$_GET['end'].'&p';
+    $pagelink=Mage::getBaseUrl().'allmembers/index/new_viaaffiliate?start='.$_GET['start'].'&end='.$_GET['end'].'&p';
   
 }
 else
 {
-     $pagelink=Mage::getBaseUrl().'allmembers/index/viaaffiliate?p';
+     $pagelink=Mage::getBaseUrl().'allmembers/index/new_viaaffiliate?p';
 }
 
 ?>
  <div style="background:#F0F0F0;padding:10px;float:left;width:731px;">
-    <form action="<?php echo Mage::getBaseUrl().'allmembers/index/viaaffiliate/value/1'?>" method="post">
+    <form action="<?php echo Mage::getBaseUrl().'allmembers/index/new_viaaffiliate/value/1'?>" method="post">
     
   <div style="width:740px;padding-bottom:15px;">
             <label style="float:left;padding-top:7px;padding-right:0px;">Filter nach Datum:</label>
@@ -214,7 +222,7 @@ else
                   <script type="text/javascript">// <![CDATA[
                         Calendar.setup({
                             inputField : 'startdate',
-                            ifFormat : '%m/%e/%y',
+                            ifFormat : '%e.%m.%y',
                             button : 'start_to_trig_live',
                             align : 'Bl',
                             singleClick : true
@@ -222,7 +230,7 @@ else
 
                         Calendar.setup({
                             inputField : 'enddate',
-                            ifFormat : '%m/%e/%y',
+                            ifFormat : '%e.%m.%y',
                             button : 'end_to_trig_live',
                             align : 'Bl',
                             singleClick : true
@@ -282,7 +290,7 @@ else
             <div class="toolbarimg">
                 <select onchange="setcookie('earninglength',this.value);setLocation(this.value);">
                         <?php foreach($pageSize1 as $key=>$limit) { ?>  
-                             <option <?php if($_COOKIE["earninglength"]== Mage::getBaseUrl().'allmembers/index/viaaffiliate?s='.$limit) { echo 'selected=selected'; }?> value="<?php echo Mage::getBaseUrl().'allmembers/index/viaaffiliate?s='.$limit  ?>" > <?php echo $limit;?> </option>
+                             <option <?php if($_COOKIE["earninglength"]== Mage::getBaseUrl().'allmembers/index/new_viaaffiliate?s='.$limit) { echo 'selected=selected'; }?> value="<?php echo Mage::getBaseUrl().'allmembers/index/viaaffiliate?s='.$limit  ?>" > <?php echo $limit;?> </option>
                     <?php } ?>
                </select>
             </div>
@@ -526,4 +534,3 @@ echo '</table>';
     </div>
 </div>
 </div>
-
