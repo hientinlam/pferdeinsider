@@ -396,6 +396,7 @@ if ($collection->getSize() > 0):
         }
         $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
         $paidOut = ($record->getGetyoupaid()) ? "Ja" : "Nein";
+        $affName = ($record->getAffiliateName() != "") ? $record->getAffiliateName() : "NA";
         echo '<tr class=' . $myproducttr . '><td style="padding:5px;">' . $record['order_id'] . '</td>';
 
         echo '<td style="padding:5px;">'.$record->getCreatedAt().'</td>';
@@ -403,7 +404,7 @@ if ($collection->getSize() > 0):
         echo '<td style="padding:5px;">'.$record->getProductId().'</td>';
         echo '<td style="padding:5px;">'.number_format($record->getRowPrice(), 2).'</td>';
         echo '<td style="padding:5px;">'.number_format($record->getGrossPrice(), 2).'</td>';
-        echo '<td style="padding:5px;">'.$record->getAffiliateName().'</td>';
+        echo '<td style="padding:5px;">'.$affName.'</td>';
         echo '<td style="padding:5px;">'.$record->getShareType().'</td>';
         echo '<td style="padding:5px;">'.$record->getAffiliateRatio().'</td>';
         echo '<td style="padding:5px;">'.$record->getAffiliatePay().'</td>';
