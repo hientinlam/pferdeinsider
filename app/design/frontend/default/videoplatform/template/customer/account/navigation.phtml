@@ -25,7 +25,7 @@
  */
 ?>
 <div class="block block-account">
-    <?php echo '<pre>'; print_r($_GET); echo '</pre>'; ?>
+    <?php echo '<pre>'; print_r(Mage::app()->getRequest()->getParams()); echo '</pre>'; ?>
     <?php if (isset($_GET['new_earnings'])): ?>
     <div class="block-title">
         <a href="<?php $this->getUrl('customer/account') ?>"><strong><span><?php echo $this->__('Mein Account'); ?></span></strong></a>
