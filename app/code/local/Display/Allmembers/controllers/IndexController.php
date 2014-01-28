@@ -112,22 +112,18 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
                     ->addFieldToFilter('affiliate_name', array('like' => $_POST['affiliatename']))
                     //->addFieldToFilter('expert_name', array('like' => $expertname));
                     ->addFieldToFilter('customer_id', $customer->getId()); // PhuongLan fixed collection
-                echo 1;
             } elseif ($data['datevalue'] == '1') {
                 $collection = Mage::getModel('brst_experts/amount')->getCollection()
                     ->addFieldToFilter('created_at', array("from" => $from, "to" => $to, "datetime" => false))
                     ->addFieldToFilter('affiliate_name', array('neq' => ''))
                     //->addFieldToFilter('expert_name', array('like' => $expertname));
                     ->addFieldToFilter('customer_id', $customer->getId()); // PhuongLan fixed collection
-                echo 2;
             } else {
                 $collection = Mage::getModel('brst_experts/amount')->getCollection()
                     //->addFieldToFilter('expert_name', array('like' => $expertname))
-                    ->addFieldToFilter('customer_id', $customer->getId()); // PhuongLan fixed collection
-                    //->addFieldToFilter('affiliate_name', array('neq' => ''));
-                echo 3;
+                    ->addFieldToFilter('customer_id', $customer->getId()) // PhuongLan fixed collection
+                    ->addFieldToFilter('affiliate_name', array('neq' => ''));
             }
-            exit;
             $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
 
             if ($data['earning_export'] == 'csv') {
@@ -247,10 +243,12 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
                 $collection = Mage::getModel('brst_experts/amount')->getCollection()
                     ->addFieldToFilter('created_at', array("from" => $from, "to" => $to, "datetime" => false))
                     ->addFieldToFilter('affiliate_name', array('like' => ''))
-                    ->addFieldToFilter('expert_name', array('like' => $expertname));
+                    //->addFieldToFilter('expert_name', array('like' => $expertname));
+                    ->addFieldToFilter('customer_id', $customer->getId());
             } else {
                 $collection = Mage::getModel('brst_experts/amount')->getCollection()
-                    ->addFieldToFilter('expert_name', array('like' => $expertname))
+                    //->addFieldToFilter('expert_name', array('like' => $expertname))
+                    ->addFieldToFilter('customer_id', $customer->getId())
                     ->addFieldToFilter('affiliate_name', array('like' => ''));
             }
             $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
