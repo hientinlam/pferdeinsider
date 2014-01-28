@@ -304,7 +304,7 @@ class Display_Allmembers_IndexController extends Mage_Core_Controller_Front_Acti
 
                         $root_item3 = $DOMObject->createElement("actualproductcost");
                         $root_element1->appendChild($root_item3);
-                        $root_item_text3 = $DOMObject->createTextNode($curencySymbol . number_format($record['gross_price'], 2));
+                        $root_item_text3 = $DOMObject->createTextNode(number_format($record['gross_price'], 2));
                         $root_item3->appendChild($root_item_text3);
 
 
