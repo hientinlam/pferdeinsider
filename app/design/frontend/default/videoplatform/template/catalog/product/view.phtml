@@ -213,15 +213,20 @@ foreach($adminmodel as $admininfo)
         <div class="product-img-box">
             <?php echo $this->getChildHtml('media');
             $current_url = Mage::helper('core/url')->getCurrentUrl();?>
-            <div style="float: left;">
-                <div style="float: left;margin-left: -40px;margin-top: 20px;width:180px;"><iframe id="tweet-button" class="twitter-share-button" allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?url=<?php echo $current_url ?>"  data-via="your_screen_name" data-lang="en" data-related="anywhereTheJavascriptAPI" data-count="horizontal" style="width:110px; height:20px;padding-right:20px;float:right;"></iframe> </div>
+            <div style="float: left; width:100%; margin: 10px 5px;">
+                <div style="float: left;  width:100px;">
+                    <iframe id="tweet-button" class="twitter-share-button" allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?url=<?php echo $current_url ?>"  data-via="your_screen_name" data-lang="en" data-related="anywhereTheJavascriptAPI" data-count="horizontal" style="width:110px; height:20px;padding-right:20px;float:right;"></iframe>
+                </div>
              <!--   <div style="float: right; width: 300px;"><iframe id='ifrm' src="http://www.facebook.com/plugins/like.php?href=<?php echo $current_url ?>" layout="button_count" show_faces="false" scrolling="no" frameborder="0" style="border:none; width:450px; height:80px"></iframe></div>-->
-                  <div style="float: left; width: 100px;padding-top:20px;"> <iframe id="ifrm" src="//www.facebook.com/plugins/like.php?href=<?php echo $current_url ?>'&send=false&layout=button_count&colorscheme=light&action=like&height=21&appId=428249980602262" scrolling="no" frameborder="0"  style="border:none; width:450px; height:80px" allowTransparency="true"></iframe> </div>
+                <div style="float: left; width:120px;">
+                    <iframe id="ifrm" src="//www.facebook.com/plugins/like.php?href=<?php echo $current_url ?>'&locale=en_US&send=false&layout=button_count&colorscheme=light&action=like&height=21&appId=428249980602262" scrolling="no" frameborder="0"  style="border:none; width:450px; height:80px" allowTransparency="true"></iframe>
+                </div>
 
                 <?php if(Mage::helper('awaffiliate/affiliate')->getAffiliateLogged()): ?>
-                <div style="float: right; width: 380px;">
-                    <span style="font-size: 12px;">Affiliate link: </span>
-                    <textarea style="width: 297px; height: 45px; padding: 0; position: relative; top: -5px;" onclick="this.focus();this.select()" readonly="readonly"><?php echo Mage::helper('awaffiliate/affiliate')->generateAffiliateLinkForDefaultCampaign($current_url)?></textarea>
+                <div class="aff-link">
+                    <span><img style="margin-top: 1px;" src="<?php echo $this->getSkinUrl();?>images/anchor.png">Affiliate link: </span>
+                    <input type="text" readonly="readonly" onclick="this.focus();this.select()" value="<?php echo Mage::helper('awaffiliate/affiliate')->generateAffiliateLinkForDefaultCampaign($current_url)?>">
+                    <a class="green"><img src="<?php echo $this->getSkinUrl();?>images/copy_btn.png">Copy</a>
                 </div>
                 <?php endif; ?>
             </div>
