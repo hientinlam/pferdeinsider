@@ -1216,7 +1216,7 @@ $custdata = $result->fetch($select);
                                                 $options = $attribute->getSource()->getAllOptions(false);
                                             endif;
                                             foreach($options as $optiondata): 
-                                                if($optiondata['label']!= 'Both' && $optiondata['label']!= 'Streaming' ):
+                                                if($optiondata['label']!= 'Both' && $optiondata['label']!= 'Streaming' &&  $optiondata['label']!= 'Beides'  &&  $optiondata['label']!= 'und Streaming'):
                                                 ?>
                                          
                                                 <option value="<?php echo $optiondata['value']; ?>"><?php echo $optiondata['label']; ?></option>
