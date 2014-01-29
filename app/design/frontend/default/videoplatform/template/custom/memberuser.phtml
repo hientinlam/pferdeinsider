@@ -440,18 +440,42 @@ echo "</pre>";
                          </div>
                     </li>
                  </div>
-                <li class="control">
-                     
-                    <div class="input-box">
-                        <input type="checkbox" name="is_affialiate" title="<?php echo $this->__('Affilate werden - Anfrage') ?>" value="1" id="is_affialiate" class="checkbox" />
+                <li class="fields">
+                    <div>
+                        <div class="field" style="width:312px !important;">&nbsp;</div>
+                        <div class="field" style="width:312px !important;">
+                            <label>Ich habe mich mit dem folgenden bereits einverstanden erklärt:</label>
+                        </div>
                     </div>
-                    <label style="margin-left:-5px;" for="is_Affialiate"><?php echo $this->__('Affilate werden - Anfrage') ?></label>
                 </li>
-                  <li class="control">
-                    <div class="input-box" style="padding-top:10px;color:#666666;">
-                        <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('zum Newsletter eintragen') ?>" value="1" id="is_subscribed"  class="checkbox" /><?php echo $this->__('zum Newsletter eintragen') ?>
+                <li class="fields">
+                    <div>
+                        <div class="field" style="width:312px !important;">
+                            <div class="input-box" style="width: 14px; float: left;">
+                                <input type="checkbox" name="is_affialiate" title="<?php echo $this->__('Affilate werden - Anfrage') ?>" value="1" id="is_affialiate" class="checkbox" />
+                            </div>
+                            <label for="is_affialiate"><?php echo $this->__('Affilate werden - Anfrage') ?></label>
+                        </div>
+                        <div class="field" style="width:312px !important;">
+                            <input style="float: left; margin-top: 4px;" type="checkbox" class="checkbox required-entry validate-checkbox" name="is_agb" title="AGB" value="1" id="is_agb"/>
+                            <label for="is_agb" class="required"><em>*</em><a href="<?php echo Mage::getBaseUrl().'agb/' ?>" target="_blank">AGB</a></label>
+                        </div>
                     </div>
-      </li>
+                </li>
+                <li class="fields">
+                    <div>
+                        <div class="field" style="width:312px !important;">
+                            <div class="input-box" style="width: 14px; float: left;">
+                                <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('zum Newsletter eintragen') ?>" value="1" id="is_subscribed"  class="checkbox" />
+                            </div>
+                            <label for="is_subscribed"><?php echo $this->__('zum Newsletter eintragen') ?></label>
+                        </div>
+                        <div class="field" style="width:312px !important;">
+                            <input style="float: left; margin-top: 4px;" type="checkbox" class="checkbox required-entry validate-checkbox" name="is_pp" title="Datenschutzrichtlinien" value="1" id="is_pp"/>
+                            <label for="is_pp" class="required"><em>*</em><a href="<?php echo Mage::getBaseUrl().'privacy-policy/' ?>">Datenschutzrichtlinien</a></label>
+                        </div>
+                    </div>
+                </li>
       <div class="buttons-set" style="width:580px;">
         <button style="background:#333333;font-size:14px;color:#FFFFFF;padding:5px;width:100px;" class="button" title="Senden" type="submit" ><span><span>Senden</span></span></button>
           <div style="clear: both"></div>
