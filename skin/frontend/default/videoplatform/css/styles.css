@@ -401,12 +401,11 @@ text-align:left;}
 .title-buttons h6 { }
 
 .subtitle,
-.sub-title { clear:b
-                oth; padding:15px 0 0; font-size:15px; font-weight:bold; margin:0 0 6px; color:#9E0B0F; }
+.sub-title { clear:both; padding:15px 0 0; font-size:15px; font-weight:bold; margin:0 0 6px; color:#9E0B0F; }
 
 /* Pager */
 
-.pager { font-size:11px; /*background:#fff url(../images/bkg_toolbar.gif) 0 100% repeat-x; padding:4px 8px; border-top:1px solid #e2e2e2*/; text-align:center; width:1000px; }
+.pager { font-size:11px; /*background:#fff url(../images/bkg_toolbar.gif) 0 100% repeat-x; padding:4px 8px; border-top:1px solid #e2e2e2*/; text-align:center; width:750px; }
 .pager .amount { float:left; margin:9px 0; display:inline-block; }
 .pager .limiter { float:right; }
 .pager .limiter label {
