@@ -86,19 +86,11 @@ foreach($adminmodel as $admininfo)
                             if ($attr1->usesSource()): $name = $attr1->getSource()->getOptionText($_product->getVideoCategory()); endif; $countvalue=count($name) ?>
                        <span style="display:inline-block; width:90px;">Stichwort</span> <span style="">:</span><span style="display: inline-block; width: 185px; vertical-align: top; margin-left: 5px;">
                             <?php
-                            if($countvalue==1)
-                                {
-                                echo '<a  style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$name.'">'.$name.',</a> ';
-                                }else
-                                    {
-                                    foreach($name as $value)
-                                        {
-                                        echo '<a style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$value.'">'.$value.',</a> ';
-
-                                        } ;
-
-                                        }
-                         ?>
+                                $links = array();
+                                foreach($name as $value)
+                                    $links[] = '<a style="text-decoration:none;" href="http://54.228.195.42/magento/index.php/catalogsearch/result/?q='.$value.'">'.$value.'</a>';
+                                echo implode(', ',$links);
+                            ?>
                        </span>
                     </div>
                      <div class="instructor_length">

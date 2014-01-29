@@ -654,7 +654,9 @@ $custdata = $result->fetch($select);
                   <li id="tab2" onclick="tabdata(this);">AUDIO</li>
                   <li id="tab3"  onclick="tabdata(this);">EBOOKS</li>
                   <li id="tab4"  onclick="tabdata(this);"><?php echo $this->__("PRODUKTPAKETE") ?></li>
+                  <?php if($email === 'marydale05@gmail.com'):?>
                   <li id="tab5"  onclick="tabdata(this);">LIVE WEBINARE</li>
+                  <?php endif;?>
                 </ul>
             </div>
       </div>
@@ -1605,7 +1607,7 @@ $custdata = $result->fetch($select);
         var dataaudio = new VarienForm('photo-form-validate', true)
  </script> 
 </div>
-
+<?php if($email === 'marydale05@gmail.com'):?>
 <div id="tab5Content" style="display:none;margin-top: 50px;">
        <div class="page-title">
         <h1>LIVE WEBINAR ERSTELLEN</h1>
@@ -1858,6 +1860,6 @@ $custdata = $result->fetch($select);
         var dataaudio = new VarienForm('event-form-validate', true)
  </script> 
 </div>
-
+<?php endif;?>
 
 <?php endif; ?>
