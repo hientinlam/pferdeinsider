@@ -2913,3 +2913,6 @@ body.catalog-product-view .product-shop .identify{width:305px;}
 .aff-link input[type=text] {border: 1px solid gray; border-radius: 4px; width: 200px; padding: 2px;}
 .aff-link a.green{background: none repeat scroll 0 0 #8FD400; color: #fff; text-decoration: none; padding: 2px 5px 4px 5px; cursor: pointer;}
 .aff-link a.green img{margin: 3px 2px 0 0;}
+
+.my-account .order-items{height: auto; padding-left: 7px;}
+.my-account .order-items .data-table .border{float: none !important;}
