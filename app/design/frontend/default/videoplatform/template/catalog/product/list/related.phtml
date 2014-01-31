@@ -51,7 +51,7 @@
                 <?php// endif; ?>
                 <div class="product">
                     <div>
-                        <?php echo $product->getData('thumbnail');?>
+                        <?php //echo $product->getData('thumbnail');?>
                     <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($product->getName()) ?>" class="" style="width:120px;"><img src="<?php echo $this->helper('catalog/image')->init($product, 'image')->resize(120); ?>" width="139" height="120" alt="<?php echo $product->getName() ?>" /></a>
                     </div>
                     <div class="">
