@@ -104,7 +104,7 @@ class Deal_Register_AccountController extends Mage_Customer_AccountController
                       $date=$dateofbirth;
                       //$affialiate1=$arrData['is_affialiate'];
                 
-                      if(in_array($arrData['user_role'],array('Professionals','Affialiates'))){
+                      if(in_array($arrData['user_role'],array('Professionals','Affialiate'))){
                           $data1['customer_id'] =$cid ;
                           $data1['email'] = $arrData['email'];
                           $data1['status'] = 'pending';
