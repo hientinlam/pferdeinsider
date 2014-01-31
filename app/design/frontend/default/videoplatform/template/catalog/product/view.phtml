@@ -76,15 +76,15 @@ foreach($adminmodel as $admininfo)
                   </span>
 
                     <div class="instructor" style="">
-                         <span style="clear:both !important;float:none !important; color:#333333; display:inline-block; width:90px;">Ausbilder</span> <span style="clear:both !important;float:none !important;width:225px"> <a style="text-decoration:none;" href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>"> <?php echo ': '. ucwords($customer->getFirstname()." ".$customer->getLastname()); ?></a></span>
+                         <span style="clear:both !important;float:none !important; color:#333333; display:inline-block; width:110px;">Ausbilder</span> <span style="clear:both !important;float:none !important;width:225px"> <a style="text-decoration:none;" href="<?php echo Mage::getBaseUrl().'member/'.$username ;?>"> <?php echo ': '. ucwords($customer->getFirstname()." ".$customer->getLastname()); ?></a></span>
                     </div>
                     <div class="instructor_length">
-                         <span style="display:inline-block; width:90px;">L?nge</span> <span style="width:225px"> : 2 Day Workshop</span>
+                         <span style="display:inline-block; width:110px;">Länge</span> <span style="width:225px"> : 2 Day Workshop</span>
                     </div>
                    <div class="instructor_length">
                      <?php $attr1 = $_product->getResource()->getAttribute("video_category");
                             if ($attr1->usesSource()): $name = $attr1->getSource()->getOptionText($_product->getVideoCategory()); endif; $countvalue=count($name) ?>
-                       <span style="display:inline-block; width:90px;">Stichwort</span> <span style="">:</span><span style="display: inline-block; width: 185px; vertical-align: top; margin-left: 5px;">
+                       <span style="display:inline-block; width:110px;">Stichwort</span> <span style="">:</span><span style="display: inline-block; width: 180px; vertical-align: top; margin-left: 5px;">
                             <?php
                                 $links = array();
                                 foreach($name as $value)
@@ -94,7 +94,7 @@ foreach($adminmodel as $admininfo)
                        </span>
                     </div>
                      <div class="instructor_length">
-                        <span style="width:200px">Erstelungsdatum</span> <span style="width:225px"> <?php $newDate = date("M d , Y", strtotime($_product->getCreatedAt() )); echo ': '.$newDate; ?></span>
+                        <span style="width:110px; display: inline-block;">Erstelungsdatum</span> <span style="width:225px"> <?php $newDate = date("M d , Y", strtotime($_product->getCreatedAt() )); echo ': '.$newDate; ?></span>
                     </div>
                 </div>
              <div class="buy_now_portion" style="width:335px;">
