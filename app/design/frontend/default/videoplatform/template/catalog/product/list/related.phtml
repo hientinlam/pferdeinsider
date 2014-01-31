@@ -32,17 +32,15 @@
     <div class="block-content">
         <!--<p class="block-subtitle"><?php echo $this->__('Check items to add to the cart or') ?>&nbsp;<a href="#" onclick="selectAllRelated(this); return false;"><?php echo $this->__('select all') ?></a></p> -->
         <ol class="mini-products-list" id="block-related" style="width:400px;">
-           <?php foreach($this->getItems() as $_itemdata): 
-           $itemss[]=$_itemdata->getId(); 
-            
+        <?php foreach($this->getItems() as $_itemdata):
+           $itemss[]=$_itemdata->getId();  
         endforeach; 
         shuffle($itemss);
-        
         ?>
            
         <?php foreach($itemss as $_item): ?>
-            <?php if($count<=4) { ?>
-          <?php $product=Mage::getModel('catalog/product')->load($_item); 
+            <?php if($count<=4 || true) { ?>
+          <?php $product=Mage::getModel('catalog/product')->load($_item);
                 $attr = $product->getResource()->getAttribute("member_list");
                 if ($attr->usesSource()): $expertname = $attr->getSource()->getOptionText($product['member_list']); endif; ?>
             <li class="item" >
@@ -53,7 +51,8 @@
                 <?php// endif; ?>
                 <div class="product">
                     <div>
-                    <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($product->getName()) ?>" class="" style="width:120px;"><img src="<?php echo $this->helper('catalog/image')->init($product, 'thumbnail')->resize(120) ?>" width="139" height="120" alt="<?php echo $product->getName() ?>" /></a>
+                        <?php echo $product->getData('thumbnail');?>
+                    <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($product->getName()) ?>" class="" style="width:120px;"><img src="<?php echo $this->helper('catalog/image')->init($product, 'image')->resize(120); ?>" width="139" height="120" alt="<?php echo $product->getName() ?>" /></a>
                     </div>
                     <div class="">
                         <p class="product-name"><a style="font-size: 14px;" href="<?php echo $product->getProductUrl() ?>"><?php $countchar=strlen($product->getName()); echo  substr($product->getName(), 0, 40); if($countchar>40){ echo '...'; }  ?></a></p>
