@@ -39,7 +39,7 @@
         ?>
            
         <?php foreach($itemss as $_item): ?>
-            <?php if($count<=4 || true) { ?>
+            <?php if($count<=4) { ?>
           <?php $product=Mage::getModel('catalog/product')->load($_item);
                 $attr = $product->getResource()->getAttribute("member_list");
                 if ($attr->usesSource()): $expertname = $attr->getSource()->getOptionText($product['member_list']); endif; ?>
