@@ -2916,3 +2916,8 @@ body.catalog-product-view .product-shop .identify{width:305px;}
 
 .my-account .order-items{height: auto; padding-left: 7px;}
 .my-account .order-items .data-table .border{float: none !important;}
+
+.roles-container{clear: both;}
+.roles-container label{display: block; padding: 10px; float: none; cursor: pointer;}
+.roles-container label:hover{text-decoration: underline;}
+.roles-container label.selected{font-weight: bold;}

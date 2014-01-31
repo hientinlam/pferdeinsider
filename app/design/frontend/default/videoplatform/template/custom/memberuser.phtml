@@ -34,7 +34,14 @@
 <script type="text/javascript">
 jQuery(document).ready(function() {
    
- 
+  jQuery("#rc label").live("click",function(){
+      jQuery("#rc label").removeClass("selected");
+      jQuery(this).addClass("selected");
+      jQuery("#user_role").val(jQuery(this).attr("data-value"));
+      jQuery("#aboutme_outer").toggle(jQuery(this).attr("data-value") == "Professionals");
+      jQuery("#fc").hide().slideDown('slow');
+  });
+
   jQuery("#member-form-validate").submit(function(){
 	var day = jQuery("#day").val();
 	var month = jQuery("#month").val();
@@ -196,7 +203,13 @@ echo "</pre>";
             <input type="hidden" value="" name="success_url"/>
             <input type="hidden" value="" name="error_url"/>
             <input type="hidden" value="is_member" name="is_member"/>
-            <div>
+            <input type="hidden" value="" name="user_role" id="user_role">
+            <div id="rc" class="form-list roles-container">
+                <label data-value="Amateur">Als Reiter registrieren</label>
+                <label data-value="Affialiate">Registrieren für das Partnerprogramm</label>
+                <label data-value="Professionals">Als Pferdeexperte registrieren</label>
+            </div>
+            <div id="fc" style="display: none;">
             <ul class="form-list">
                 <li class="fields">
                     <div class="customer-name">
@@ -328,8 +341,7 @@ echo "</pre>";
                         
                     </div>
                     <div class="field" style="width:312px !important;">
-                        <label class="required" for="confirmation">Ich bin</label>                       
-                          <input style="margin-left: 10px" type="radio" class="amateur" name="radio2" onclick="showaboutme(this.value)" value="Amateur"/>Amateur <input type="radio" class="professionals" name="radio2" onclick="showaboutme(this.value)" value="Professionals"/>Pferdeexperte von Beruf                        
+                        &nbsp;
                     </div>
                 </div>
                 </li>
@@ -452,9 +464,9 @@ echo "</pre>";
                     <div>
                         <div class="field" style="width:312px !important;">
                             <div class="input-box" style="width: 14px; float: left;">
-                                <input type="checkbox" name="is_affialiate" title="<?php echo $this->__('Affilate werden - Anfrage') ?>" value="1" id="is_affialiate" class="checkbox" />
+                                <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('zum Newsletter eintragen') ?>" value="1" id="is_subscribed"  class="checkbox" />
                             </div>
-                            <label for="is_affialiate"><?php echo $this->__('Affilate werden - Anfrage') ?></label>
+                            <label for="is_subscribed"><?php echo $this->__('zum Newsletter eintragen') ?></label>
                         </div>
                         <div class="field" style="width:312px !important;">
                             <input style="float: left; margin-top: 4px;" type="checkbox" class="checkbox required-entry validate-checkbox" name="is_agb" title="AGB" value="1" id="is_agb"/>
@@ -466,9 +478,9 @@ echo "</pre>";
                     <div>
                         <div class="field" style="width:312px !important;">
                             <div class="input-box" style="width: 14px; float: left;">
-                                <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('zum Newsletter eintragen') ?>" value="1" id="is_subscribed"  class="checkbox" />
+                                &nbsp;
                             </div>
-                            <label for="is_subscribed"><?php echo $this->__('zum Newsletter eintragen') ?></label>
+                            <label for="is_subscribed">&nbsp;</label>
                         </div>
                         <div class="field" style="width:312px !important;">
                             <input style="float: left; margin-top: 4px;" type="checkbox" class="checkbox required-entry validate-checkbox" name="is_pp" title="Datenschutzrichtlinien" value="1" id="is_pp"/>

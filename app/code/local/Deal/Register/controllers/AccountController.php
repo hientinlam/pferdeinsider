@@ -75,29 +75,11 @@ class Deal_Register_AccountController extends Mage_Customer_AccountController
               * Initialize customer group id
               */
             
-              if ($radiovalue['radio2']=='Professionals') {
-		$customer->setGroupId('4');
-             } 
-             else{
-                    $customer->getGroupId();
-             }
- 
-        /*     if ($this->getRequest()->getPost('create_address')) {
-                 $address = Mage::getModel('customer/address')
-                     ->setData($this->getRequest()->getPost())
-                     ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-                     ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false))
-                     ->setId(null);
-                 $customer->addAddress($address);
- 
-                 $errors = $address->validate();
-                 if (!is_array($errors)) {
-                     $errors = array();
-                 }
-             }*/
-          
-             
-                 
+             if ($radiovalue['user_role']=='Professionals')
+		        $customer->setGroupId('4');
+             else
+                $customer->getGroupId();
+
              try {
                  $validationCustomer = $customer->validate();
                  if (is_array($validationCustomer)) {
@@ -113,17 +95,16 @@ class Deal_Register_AccountController extends Mage_Customer_AccountController
                       $cid=$customer->getId();
                       $nickname=$arrData['nickname'];
                       $owner=$arrData['radio1'];
-                      $type=$arrData['radio2'];
+                      $type=$arrData['user_role'];
                       $aboutme=$arrData['about-me'];
                       $status=$arrData['status'];
                       $vision=$arrData['vision'];
                       $gender=$arrData['gender'];
                       $dateofbirth=$arrData['year']."/".$arrData['month']."/".$arrData['day'];
                       $date=$dateofbirth;
-                      $affialiate1=$arrData['is_affialiate'];
+                      //$affialiate1=$arrData['is_affialiate'];
                 
-                      if($arrData['is_affialiate'])
-                      {
+                      if(in_array($arrData['user_role'],array('Professionals','Affialiates'))){
                           $data1['customer_id'] =$cid ;
                           $data1['email'] = $arrData['email'];
                           $data1['status'] = 'pending';
@@ -182,7 +163,6 @@ class Deal_Register_AccountController extends Mage_Customer_AccountController
                           $headers .= "To: $adminid" . "\r\n";
                           $headers .= 'From:'.$sender_name1.'<'.$sender_email1 .'>' . "\r\n";
                           mail($to1, $subject, $mail_text2, $headers);
-
                       }
                       
                       $affdata['customer_id']=$customer->getId();
@@ -225,56 +205,52 @@ class Deal_Register_AccountController extends Mage_Customer_AccountController
                       $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
                       $query1="update tbl_brstcustomer set birthdate='$dateofbirth' where id=".$register_model->getId();            
                       $result1=$connection->query($query1);
-      
-                  
-                 if($group_id=='4')
-                 {
-                     
-                    $arg_attribute = 'member_list';
-                    $arg_value=  $arrData['firstname'];
-                    $manufacturers = array($arg_value);
 
-                    $attr_model = Mage::getModel('catalog/resource_eav_attribute');
-                    $attr = $attr_model->loadByCode('catalog_product', $arg_attribute);
-                    $attr_id = $attr->getAttributeId();
+                     if($group_id=='4'){
+                        $arg_attribute = 'member_list';
+                        $arg_value=  $arrData['firstname'];
+                        $manufacturers = array($arg_value);
 
-                    $option['attribute_id'] = $attr_id;
-                    foreach ($manufacturers as $key=>$manufacturer) {
-                        $option['value'][$manufacturer.'_'.$manufacturer][0] = $manufacturer;
-                    }
+                        $attr_model = Mage::getModel('catalog/resource_eav_attribute');
+                        $attr = $attr_model->loadByCode('catalog_product', $arg_attribute);
+                        $attr_id = $attr->getAttributeId();
 
-                $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
-                    $setup->addAttributeOption($option);
-              try {
-                  $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-                  $passwrd = substr( str_shuffle( $chars ), 0, 6 );
-                  $randcode = substr( str_shuffle( $chars ), 0, 5 );
-                            $user = Mage::getModel('admin/user')
-                                ->setData(array(
-                                    'username'  => $arrData['firstname'].'-'.$randcode,
-                                    'firstname' => $arrData['firstname'],
-                                    'lastname'    => $arrData['lastname'],
-                                    'email'     => $arrData['email'],
-                                    'password'  => $passwrd,
-                                    'is_active' => 1
-                                ))->save();
-                         
-                  } catch (Exception $e) {
-                            echo $e->getMessage();
-                            exit;
+                        $option['attribute_id'] = $attr_id;
+                        foreach ($manufacturers as $key=>$manufacturer) {
+                            $option['value'][$manufacturer.'_'.$manufacturer][0] = $manufacturer;
                         }
-                        $UserId=$user->getUserId();
-                  
+
+                        $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
+                        $setup->addAttributeOption($option);
                         try {
-                            $user->setRoleIds(array(3))
-                                ->setRoleUserId($user->getUserId())
-                                ->saveRelations();
+                              $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+                              $passwrd = substr( str_shuffle( $chars ), 0, 6 );
+                              $randcode = substr( str_shuffle( $chars ), 0, 5 );
+                              $user = Mage::getModel('admin/user')
+                                            ->setData(array(
+                                                'username'  => $arrData['firstname'].'-'.$randcode,
+                                                'firstname' => $arrData['firstname'],
+                                                'lastname'    => $arrData['lastname'],
+                                                'email'     => $arrData['email'],
+                                                'password'  => $passwrd,
+                                                'is_active' => 1
+                                            ))->save();
 
                         } catch (Exception $e) {
-                            echo $e->getMessage();
-                            exit;
+                                echo $e->getMessage();
+                                exit;
                         }
-                 }
+                        $UserId=$user->getUserId();
+                        try {
+                                $user->setRoleIds(array(3))
+                                    ->setRoleUserId($user->getUserId())
+                                    ->saveRelations();
+
+                        } catch (Exception $e) {
+                                echo $e->getMessage();
+                                exit;
+                        }
+                     }
                      if ($customer->isConfirmationRequired()) {
                          $customer->sendNewAccountEmail('confirmation', $this->_getSession()->getBeforeAuthUrl());
                          $this->_getSession()->addSuccess($this->__('Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%s">click here</a>.',
@@ -282,15 +258,16 @@ class Deal_Register_AccountController extends Mage_Customer_AccountController
                          ));
                          $this->_redirectSuccess(Mage::getUrl('*/*/index', array('_secure'=>true)));
                          return;
-                     }
-                     else {
+                     }else {
                          $this->_getSession()->setCustomerAsLoggedIn($customer);
                          $url = $this->_welcomeCustomer($customer);
                          $this->_redirectSuccess($url);
                          return;
                      }
                  } else {
+
                      $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
+
                      if (is_array($errors)) {
                          foreach ($errors as $errorMessage) {
                              $this->_getSession()->addError($errorMessage);
