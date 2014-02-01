@@ -24,9 +24,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php $_item = $this->getItem() ?>
+<?php $_item = $this->getItem();  ?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
-    <td><h3 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h3>
+    <td><a href="<?php echo $_item->getProduct()->getProductUrl();?>" style="text-decoration: none;"><h3 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h3></a>
         <?php if($_options = $this->getItemOptions()): ?>
         <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
