@@ -31,17 +31,22 @@
  * @var $this Mage_Customer_Block_Form_Register
  */
 ?>
+<?php
+    $requestType = $this->getRequest()->getParam('name','');
+?>
 <script type="text/javascript">
 jQuery(document).ready(function() {
-   
-  jQuery("#rc label").live("click",function(){
+
+  jQuery("#rc label").on("click",function(){
       jQuery("#rc label").removeClass("selected");
       jQuery(this).addClass("selected");
       jQuery("#user_role").val(jQuery(this).attr("data-value"));
       jQuery("#aboutme_outer").toggle(jQuery(this).attr("data-value") == "Professionals");
       jQuery("#fc").hide().slideDown('slow');
   });
-
+  <?php if(!empty($requestType) && in_array($requestType,array('affialiate','professional'))):?>
+    jQuery("#mt_"+"<?php echo $requestType;?>").trigger("click");
+  <?php endif;?>
   jQuery("#member-form-validate").submit(function(){
 	var day = jQuery("#day").val();
 	var month = jQuery("#month").val();
@@ -162,9 +167,8 @@ jQuery(document).ready(function(){
 
 <?php
 if ($this->helper('customer')->isLoggedIn()) {
-   
+   $this->_redirectUrl(Mage::getBaseUrl());
 } else {
-
 /*if(isset($_POST))
 {
 echo "<pre>";
@@ -205,9 +209,9 @@ echo "</pre>";
             <input type="hidden" value="is_member" name="is_member"/>
             <input type="hidden" value="" name="user_role" id="user_role">
             <div id="rc" class="form-list roles-container">
-                <label data-value="Amateur">Als Reiter registrieren</label>
-                <label data-value="Affialiate">Registrieren für das Partnerprogramm</label>
-                <label data-value="Professionals">Als Pferdeexperte registrieren</label>
+                <label id="mt_amateur" data-value="Amateur">Als Reiter registrieren</label>
+                <label id="mt_affialiate" data-value="Affialiate">Registrieren für das Partnerprogramm</label>
+                <label id="mt_professional" data-value="Professionals">Als Pferdeexperte registrieren</label>
             </div>
             <div id="fc" style="display: none;">
             <ul class="form-list">

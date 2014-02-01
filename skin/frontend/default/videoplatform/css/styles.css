@@ -2360,7 +2360,7 @@ color: #666666;cursor: pointer;float: left;font-family: verdana;font-size: 14px;
 .menu{display: table;margin: 0 auto; float: right; width:56%;}
 .menu ul{height: 25px;}
 .menu ul li{float:left;list-style: none;border-right:1px solid #666666; }
-.menu ul li a{color: #666666;font-family: Verdana;font-size: 14px;padding-left: 20px;padding-right: 20px;text-decoration: none;}
+.menu ul li a{color: #666666;font-family: Verdana;font-size: 14px;padding: 0 3px;text-decoration: none;}
 .menu ul li a:hover{color:#9e0b0f;}
 .border_no{border: none !important;}
 .copyright{margin: 0 auto;color:#666666;font-family: Verdana;font-size: 14px; display: table; width: auto !important; }
