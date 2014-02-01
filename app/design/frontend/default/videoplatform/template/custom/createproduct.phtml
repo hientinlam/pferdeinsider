@@ -31,7 +31,6 @@
  * @var $this Mage_Customer_Block_Form_Register
  */
 ?>
-
 <?php echo $this->getChildHtml('html_calendar') ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl().'css/tcal.css' ?>" />
 <script type="text/javascript" src="<?php echo $this->getSkinUrl().'js/tcal.js'?>"></script>
@@ -610,7 +609,8 @@ jQuery('#price').keypress(function(event) {
 
 <?php 
 $login=Mage::getModel('customer/session')->isLoggedIn();
-if($login):
+$groupid=Mage::getSingleton('customer/session')->getCustomer()->getGroupId();
+if($login && $groupid == 4):
     
 $customersession=Mage::getModel('customer/session')->getCustomer();
 $email=$customersession->getEmail();
@@ -1861,5 +1861,6 @@ $custdata = $result->fetch($select);
  </script> 
 </div>
 <?php endif;?>
-
+<?php else:?>
+    <?php $this->_redirectUrl(Mage::getBaseUrl());?>
 <?php endif; ?>

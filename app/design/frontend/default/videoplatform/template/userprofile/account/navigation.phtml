@@ -154,15 +154,7 @@
                 <?php endforeach; ?>
             <?php else: ?>
                 <?php foreach ($_links as $_link): ?>
-                      <?php if ($_link->getName() == "expertcalculation"): ?>
-                          <div class="block-title">
-                              <strong><span><?php echo $this->__("Meine Einnahmen") ?></span></strong>
-                          </div>
-                      <?php elseif ($_link->getName() == "createproduct"): ?>
-                          <div class="block-title">
-                              <strong><span><?php echo $this->__("Produkte erstellen / verwalten") ?></span></strong>
-                          </div>
-                      <?php elseif ($_link->getName() == "account"): ?>
+                      <?php if ($_link->getName() == "account"): ?>
                           <div class="block-title">
                               <strong><span><?php echo $this->__("Persönliche Informationen") ?></span></strong>
                           </div>
@@ -179,8 +171,7 @@
                         $_link->getLabel()
                     );
                     ?>
-
-                    <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
+                    <?php if($_link->getLabel()!='Create Product' && $_link->getLabel()!='Produkt erstellen' && $_link->getLabel()!='Bank Information'&& $_link->getLabel()!='Meine Produkte' && $_link->getLabel()!='Promote Products'){?>
                         <?php $_last = ($_index++ >= $_count); ?>
                         <?php if ($this->isActive($_link)): ?>
                             <li class="current<?php echo ($_last ? ' last' : '') ?>"><strong><?php echo $label ?></strong></li>
