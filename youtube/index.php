@@ -47,7 +47,7 @@
       
               
                 <div style="float:left;width:715px;">
-                    <h1 style=' background: none repeat scroll 0 0 #666666;color: #FFFFFF;font-size: 18px;font-weight: normal;padding-bottom: 5px;padding-right: 5px;padding-top: 5px;padding-left: 15px;'>Upload
+                    <h1 style=' background: none repeat scroll 0 0 #666666;color: #FFFFFF;font-size: 18px;font-weight: normal;padding-bottom: 5px;padding-right: 5px;padding-top: 5px;padding-left: 15px;'>Vorschau Video für Youtube hochladen
                         
                     </h1>
                 </div>  
@@ -56,7 +56,7 @@
      
                 <li class="field" style="color: #666666;width: 275px;">
                       <div class="field">
-                             <label style=" color: #666666;padding-bottom: 5px;position: relative;z-index: 0;" class="required" for="title">Title</label>
+                             <label style=" color: #666666;padding-bottom: 5px;position: relative;z-index: 0;" class="required" for="title">Produkt Name</label>
                                  <div class="input-box">
                                      <input style="width:260px;background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #B6B6B6;padding:5px;" type="text" id="title" name="title" value="<?php echo $_POST['title'];?>" class="input-text"/>
                                  </div>
@@ -64,7 +64,7 @@
                  </li>
                  <li class="field"  style="color: #666666;width: 275px;">
                       <div class="field">
-                             <label style=" color: #666666;padding-bottom: 5px;position: relative;z-index: 0;"  class="required" for="Description"><em> </em>Description</label>
+                             <label style=" color: #666666;padding-bottom: 5px;position: relative;z-index: 0;"  class="required" for="Description"><em> </em>Beschreibung</label>
                                  <div class="input-box">
                                      <input style="width:260px;background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #B6B6B6;padding:5px;" type="text" id="description" name="description" value="<?php echo $_POST['description'];?>" class="input-text"/>
                                  </div>
@@ -73,7 +73,7 @@
                  
                  <li class="field"  style="color: #666666;width: 550px;padding-bottom:10px;">
                       <div style="float:left;width:750px;">
-                             <label style=" color: #666666;padding-bottom: 5px;position: relative;z-index: 0;width:500px"  class="required" for="category"><em> </em>Category</label>
+                             <label style=" color: #666666;padding-bottom: 5px;position: relative;z-index: 0;width:500px"  class="required" for="category"><em> </em>Kategorie in Youtube</label>
                                   <div class="category-choose" style=" background: url('../html/images/drop.png') no-repeat scroll 0 0 transparent;border: 2px solid #999999;height: 35px;overflow: hidden;width: 194px;"/>
                                      
                                          <select class="choose"  name="mvideo_category" id="mvideo_category" style="background: none repeat scroll 0 0 transparent;border: medium none;color: #ABABAB;float: left;font-family: Arial;font-size: 14px;height: 30px;overflow: hidden;padding-top: 8px;width: 214px !important;" name="productcategory"><option>--SELECT--</option>
@@ -94,7 +94,7 @@
                    
                       <div class="button" style="width:100px;float:right;padding:35px 35px 0px 0px;">
                           <div class="button-set">
-                           <button  style="padding:5px;cursor:pointer;color:#FFFFFF;background:#333333;width:100px;border:0 none;" class="scalable save" type="submit"><span style="background:#333333;color:#FFFFFF;width:100px;padding:5px;">Next</span></button>
+                           <button  style="padding:5px;cursor:pointer;color:#FFFFFF;background:#333333;width:100px;border:0 none;" class="scalable save" type="submit"><span style="background:#333333;color:#FFFFFF;width:100px;padding:5px;">Weiter</span></button>
                           </div>
                          </div>
                          

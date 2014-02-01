@@ -248,7 +248,7 @@ $attributeCode = 'ustream_video';
                         <div class="<?php echo $clas;?>">
                                 <h2 class="product-name">
                                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php  echo  substr($_helper->productAttribute($_product, $_product->getName(), 'name'), 0, 25) ?></a>
-                                <div class="size">1 session: <?php echo $end_date ?></div>
+                                <div class="size"><?php echo $this->__('1 Session');?> <?php echo $end_date ?></div>
                                 </h2>
                                 <?php echo $this->getPriceHtml($_product, true) ?>
                             </div>

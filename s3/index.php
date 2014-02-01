@@ -83,7 +83,7 @@
  
           
                 <div style="float:left;width:635px;">
-                    <h1 style=' background: none repeat scroll 0 0 #666666;color: #FFFFFF;font-size:15px;font-family:verdana;font-weight: normal;padding-bottom: 5px;padding-right: 5px;padding-top: 5px;padding-left: 15px;'>Upload
+                    <h1 style=' background: none repeat scroll 0 0 #666666;color: #FFFFFF;font-size:15px;font-family:verdana;font-weight: normal;padding-bottom: 5px;padding-right: 5px;padding-top: 5px;padding-left: 15px;'>neues Produkt hochladen
                         
                     </h1>
                 </div>  
