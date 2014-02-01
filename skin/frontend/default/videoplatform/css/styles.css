@@ -1200,7 +1200,7 @@ span.loreal{color:#333333 !important;font-size: 14px;padding-left:0px !important
 .homepage .products-grid .product-image { display:block; margin:15px;}
 .homepage .products-grid .productname_audio{ width:308px;background-image: url("../images/productname_bg.png");color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px;position: relative;top:-116px;top:-99px;top:-113px;float:left;}
 .homepage .products-grid .productname_audio a { text-decoration:none !important; color:#000000;font-family: Verdana;font-size: 14px;height: 20px;padding-left:25px;width: auto; }
-.homepage .products-grid .productname_video{ background-image: url("../images/productname_bg.png") ;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px;position: relative;top:-117px;float:left;width:310px;}
+.homepage .products-grid .productname_video{ background-image: url("../images/productname_bg.png") ;color: #203548;font-size: 13px; height: 50px;margin: 0 0 5px;position: relative;top:-117px;float:left;}
 .homepage .products-grid .productname_video a { text-decoration:none !important; color: #000000;font-family: Verdana;font-size: 14px;height: 20px;padding-left: 25px !important;width: auto; }
 .videotag{float: right; position: relative;right:20px;top:-208px;}
 .audiotag{float: right; position: relative;right:20px \9;top:-207px \9;right:25px;top:-205px ;}
