@@ -30,7 +30,7 @@
         <h2><?php echo $this->__('Meine letzten Bewertungen') ?></h2>
         <a href="<?php echo $this->getAllReviewsUrl() ?>"><?php echo $this->__('Alle Bewertungen ansehen') ?></a>
     </div>
-    <ol id="my_recent_reviews">
+    <ol id="my_recent_reviews" style="padding-bottom: 20px;">
     <?php $iterator = 0 ?>
     <?php foreach ($this->getCollection() as $_review): ?>
         <li class="item">
