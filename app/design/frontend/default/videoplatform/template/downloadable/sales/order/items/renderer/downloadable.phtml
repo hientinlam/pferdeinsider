@@ -26,7 +26,7 @@
 ?>
 <?php $_item = $this->getItem();  ?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
-    <td><a href="<?php echo $_item->getProduct()->getProductUrl();?>" style="text-decoration: none;"><h3 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h3></a>
+    <td><a href="<?php echo $_item->getProduct()->getProductUrl();?>"><?php echo $this->htmlEscape($_item->getName()) ?></a>
         <?php if($_options = $this->getItemOptions()): ?>
         <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
@@ -53,10 +53,19 @@
 
         <!-- downloadable -->
         <?php if ($links = $this->getLinks()): ?>
+            <?php $attr = $_item->getProduct()->getDownloadableOption();?>
             <dl class="item-options">
                 <dt><?php echo $this->getLinksTitle() ?></dt>
                 <?php foreach ($links->getPurchasedItems() as $link): ?>
-                    <dd><?php echo $this->escapeHtml($link->getLinkTitle()); ?></dd>
+                    <?php $showstatus=Mage::helper('downloadable')->__(ucfirst($link->getStatus()));?>
+                    <dd>
+                        <?php if(in_array($attr,array(3,4))):?>
+                            <a style="display: block;" href="<?php echo $this->getUrl('downloadable/download/link', array('id' => $link->getLinkHash(), '_secure' => true));?>"><?php echo $this->__('Download'); ?></a>
+                        <?php endif;?>
+                        <?php if($showstatus=='Available' && in_array($attr,array(3,5))):?>
+                            <a href="<?php echo Mage::getBaseUrl().'register/index/playvideo/prodid/'.$_item->getProduct()->getId();?>" title=""><?php echo $this->__('Stream');?></a>
+                        <?php endif;?>
+                    </dd>
                 <?php endforeach; ?>
             </dl>
         <?php endif; ?>
