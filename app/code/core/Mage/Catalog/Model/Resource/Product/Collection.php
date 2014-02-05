@@ -2155,9 +2155,9 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
 
     public function sortByOrdersQty($dir){
         $store_id = Mage::app()->getStore()->getStoreId();
-        $cond = $this->getConnection()->quoteInto('t2.product_id = e.entity_id and ','').
-            $this->getConnection()->quoteInto('t2.store_id = ? ',$store_id);
-        $this->getSelect()->joinLeft(array('t2'=>'sales_flat_order_item'), $cond,array('orderedQty' => new Zend_Db_Expr('IFNULL(SUM(`qty_ordered`),0)-IFNULL(SUM(`qty_canceled`),0)')))
+        $cond = $this->getConnection()->quoteInto('t3.product_id = e.entity_id and ','').
+            $this->getConnection()->quoteInto('t3.store_id = ? ',$store_id);
+        $this->getSelect()->joinLeft(array('t3'=>'sales_flat_order_item'), $cond,array('orderedQty' => new Zend_Db_Expr('IFNULL(SUM(t3.`qty_ordered`),0)-IFNULL(SUM(t3.`qty_canceled`),0)')))
             ->group('e.entity_id')->order("orderedQty $dir");
         return $this;
     }
