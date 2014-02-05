@@ -1110,7 +1110,7 @@ span.loreal{color:#333333 !important;font-size: 14px;padding-left:0px !important
 .product-options-bottom{display:none !important;}
 /* View Type: Grid */
 .productname_video{float:left !important;float:left \9; margin-top:-50px \9;}
-.audiovideoclass{float:left !important;margin-top:-50px!important; float:left \9; margin-top:-50px \9;}
+.audiovideoclass{float:left !important; float:left \9; margin-top:-50px \9;}
 .listgrid  .products-grid .product-name .size{color: #666666;font-size: 10px !important;}
 .listgrid .products-grid {float: left;height: 310px;width: 100%;}
 .listgrid .products-grid.last { border-bottom:0; }

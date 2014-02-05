@@ -272,7 +272,7 @@ $_helper = $this->helper('catalog/output');
                 
                
               
-                if($vdata['1']!=NULL && $type=='downloadable'&& $productmaterial=='7'):
+                if($vdata['1']!=NULL && $type=='downloadable'&& $productmaterial=='7' && false):
                     ?>
            <div class="videosclick3" onclick="thevid=document.getElementById('thevideo<?php echo $countdata ?>'); thevid.style.display='block';document.getElementById('viewplayer2<?php echo $countdata ?>').src = document.getElementById('viewplayer2<?php echo $countdata ?>').src.replace('autoplay=0','autoplay=1'); this.style.display='none';">
  
@@ -298,7 +298,7 @@ $_helper = $this->helper('catalog/output');
                              </div> 
                 
                 
-             <?php   elseif($productmaterial==8 && $video1!=NULL ): ?>
+             <?php   elseif($productmaterial==8 && $video1!=NULL  && false): ?>
               <?php 
                       if($products['image'] !='no_selection')
                       {
