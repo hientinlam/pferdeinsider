@@ -101,11 +101,11 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
 					$productFilter->addAttributeToFilter('price', array('lteq' => (int)$ltprice));
 				}
 				if (!empty($datevalue))
-					$productFilter = $productFilter->addAttributeToSort('price', ($datevalue == 'recent')?'ASC':'DESC');
-                /*
+					$productFilter = $productFilter->addAttributeToSort('created_at', ($datevalue == 'recent')?'DESC':'ASC');
+
                 if(!empty($popularvalue))
-                    $productFilter = $productFilter->addAttributeToSort('price', ($datevalue == 'recent')?'ASC':'DESC');
-*/
+                    $productFilter = $productFilter->sortByOrdersQty(($popularvalue == 'less')?'ASC':'DESC');
+
                 if(!empty($ratevalue))
                     $productFilter = $productFilter->sortByReview($ratevalue == 'top'?'DESC':'ASC');
 
@@ -118,6 +118,7 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
                     $layer->setCurrentCategory($origCategory);
                 }
             }
+            print_r((string)$this->_productCollection->getSelect());
             return $this->_productCollection;
         } else if ($search != Null || $search != '') {
             $layer = $this->getLayer();
