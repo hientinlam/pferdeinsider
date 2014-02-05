@@ -33,32 +33,14 @@
 $attributeCode = 'ustream_video';
 // build and filter the product collection
 ?>
-<script type="text/javascript">
-    function searching()
-    {
-        var type=document.getElementById('typevalue').value;
-        var price=document.getElementById('pricevalue').value;
-        var post=document.getElementById('postvalue').value;
-        if(document.getElementById('typevalue').value.length > 0 && document.getElementById('pricevalue').value.length==0)
-            {
-                    document.getElementById('sortform').action='http://54.228.195.42/magento/index.php/products.html?type='+type;
-            }
-        else if(document.getElementById('typevalue').value.length > 0 && document.getElementById('pricevalue').value.length >0){
-            document.getElementById('sortform').action='http://54.228.195.42/magento/index.php/products.html?type='+type+'&price='+price;
-        }
-         else if(document.getElementById('postvalue').value.length > 0 && document.getElementById('postvalue').value.length >0)
-            { document.getElementById('sortform').action='http://54.228.195.42/magento/index.php/products.html?post='+post;
-                }
-        document.getElementById('sortform').submit();
-    }
-    </script>
-
 <?php
-    $_productCollection=$this->getLoadedProductCollection();
+    $_productCollection = $this->getLoadedProductCollection();
     $_helper = $this->helper('catalog/output');
-    $typevalue=$this->getRequest()->getParam('type');
-     $pricevalue=$this->getRequest()->getParam('price');
-     $postvalue=$this->getRequest()->getParam('post');
+    $typevalue = $this->getRequest()->getParam('type');
+    $pricevalue = $this->getRequest()->getParam('price');
+    $postvalue = $this->getRequest()->getParam('post');
+    $popularvalue = $this->getRequest()->getParam('popular');
+    $ratevalue = $this->getRequest()->getParam('rate');
 ?>
 <?php if(!$_productCollection->count()): ?>
 <p class="note-msg"><?php echo $this->__('ZU dieser Auswahl gibt es keine Produkte') ?></p>
@@ -68,9 +50,9 @@ $attributeCode = 'ustream_video';
     
     <!-- Use this layout for filtering remove the one below -->
     <div id="sortNav">
-      <form method="post" action="" id="sortform">
-        <label style="padding-right:10px;">Sort By:</label>
-        <select style="width:150px;" id="typevalue">
+      <form method="get" action="" id="sortform">
+        <label style="padding-right:10px;">Sortieren/Filtern nach:</label>
+        <select style="width:150px;" id="typevalue" name="type">
           <option value="">Alle Produktarten</option>
           <option <?php if($typevalue==8){ echo 'selected=selected'; } ?> value="8">Audio</option>
           <option <?php if($typevalue==60){ echo 'selected=selected'; } ?> value="60">Deals</option>
@@ -78,19 +60,29 @@ $attributeCode = 'ustream_video';
           <option <?php if($typevalue==9){ echo 'selected=selected'; } ?> value="9">Photo</option>
           <option <?php if($typevalue==7){ echo 'selected=selected'; } ?> value="7">Video</option>
         </select>
-        <select style="width:145px;" id="pricevalue">
+        <select style="width:145px;" id="pricevalue" name="price">
           <option value="">Beliebiger Preis</option>
           <option <?php if($pricevalue=='1-50'){ echo 'selected=selected'; } ?> value="1-50">€1 - €50</option>
           <option <?php if($pricevalue=='51-100'){ echo 'selected=selected'; } ?> value="51-100">€51 - €100</option>
           <option <?php if($pricevalue=='101-200'){ echo 'selected=selected'; } ?> value="100-200">€101 - €200</option>
           <option <?php if($pricevalue=='201'){ echo 'selected=selected'; } ?> value="200">€201 und mehr</option>
         </select>
-        <select style="width:130px;" id="postvalue">
-          <option>Beliebiges Datum</option>
+        <select style="width:130px;" id="postvalue"  name="post">
+          <option value="">Beliebiges Datum</option>
           <option <?php if($postvalue=='recent'){ echo 'selected=selected'; } ?> value="recent">Letzte Posts</option>
           <option <?php if($postvalue=='old'){ echo 'selected=selected'; } ?> value="old">Alte Posts</option>
         </select>
-        <input type="submit" class="goBtn" value="Los" onclick="searching()"/>
+        <select style="width:130px;" id="popularvalue"  name="popular">
+            <option value="">Beliebteste Kurse</option>
+            <option <?php if($popularvalue=='most'){ echo 'selected=selected'; } ?> value="most">Am Beliebtesten</option>
+            <option <?php if($popularvalue=='less'){ echo 'selected=selected'; } ?> value="less">Weniger Beliebt</option>
+        </select>
+        <select style="width:130px;" id="ratevalue"  name="rate">
+            <option value="">Bewertet</option>
+            <option <?php if($ratevalue=='top'){ echo 'selected=selected'; } ?> value="top">Am Besten Bewertet</option>
+            <option <?php if($ratevalue=='low'){ echo 'selected=selected'; } ?> value="low">Niedrige Nenn</option>
+        </select>
+        <input type="submit" class="goBtn" value="Los"/>
         
      <!-- <div style="float:right">
         <label style="padding-right:10px;">Show</label>
@@ -142,6 +134,7 @@ $attributeCode = 'ustream_video';
                         $enddate= explode(' ',$products[end_date]);
                         $end_date=$enddate[0];
                         $productmaterial=$products['product_material'];
+                        $rating = $this->getReviewsSummaryHtml($_product, 'short');
                         // echo "<pre>";print_r($products->getData());die('ahjsa');
                            foreach ($_myprodsamples as $_sample):
                                  $video= $_sample['sample_url'];
@@ -245,10 +238,12 @@ $attributeCode = 'ustream_video';
                             </div>
                     <?php endif; ?>
 
-                        <div class="<?php echo $clas;?>">
+                            <div class="<?php echo $clas;?>">
                                 <h2 class="product-name">
                                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php  echo  substr($_helper->productAttribute($_product, $_product->getName(), 'name'), 0, 25) ?></a>
                                 <div class="size"><?php echo $this->__('1 Session');?> <?php echo $end_date ?></div>
+                                <?php echo $rating;?>
+                                <?php echo $_product->getReview();?>
                                 </h2>
                                 <?php echo $this->getPriceHtml($_product, true) ?>
                             </div>

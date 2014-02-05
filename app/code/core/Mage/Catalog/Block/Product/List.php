@@ -60,6 +60,8 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
         $pricevalues = explode('-', $origprice);
         $gtprice = $pricevalues[0];
         $ltprice = $pricevalues[1];
+        $popularvalue = $this->getRequest()->getParam('popular');
+        $ratevalue = $this->getRequest()->getParam('rate');
 
 
         if ($search == NULL) {
@@ -93,19 +95,20 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
                 }
 				$productFilter = $layer->getProductCollection()->addStoreFilter()
                     ->addAttributeToSelect('*');
-				if ($origprice != NULL || $origprice != '') {
+				if (!empty($origprice)) {
 					
 					$productFilter->addAttributeToFilter('price', array('gteq' => (int)$gtprice));
 					$productFilter->addAttributeToFilter('price', array('lteq' => (int)$ltprice));
 				}
-				if ($datevalue != NULL || $datevalue != ''){
-					if ($datevalue == 'recent') {
-						$productFilter = $productFilter->addAttributeToSort('price', 'ASC');
-					} else {
-						$productFilter = $productFilter->addAttributeToSort('price','DESC');
-					}
-					
-				}
+				if (!empty($datevalue))
+					$productFilter = $productFilter->addAttributeToSort('price', ($datevalue == 'recent')?'ASC':'DESC');
+                /*
+                if(!empty($popularvalue))
+                    $productFilter = $productFilter->addAttributeToSort('price', ($datevalue == 'recent')?'ASC':'DESC');
+*/
+                if(!empty($ratevalue))
+                    $productFilter = $productFilter->sortByReview($ratevalue == 'top'?'DESC':'ASC');
+
 				$this->_productCollection = $productFilter;
                 //$this->_productCollection = $layer->getProductCollection();
 
@@ -208,6 +211,7 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
         $collection = $this->_getProductCollection();
 
         // use sortable parameters
+
         if ($orders = $this->getAvailableOrders()) {
             $toolbar->setAvailableOrders($orders);
         }

@@ -2143,4 +2143,14 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
 
         return $this->_pricesCount;
     }
+
+    public function sortByReview($dir){
+        //$table = $this->getTable('review/review_summary');
+        $entity_code_id = Mage::getModel('review/review_summary')->getEntityIdByCode(Mage_Rating_Model_Rating::ENTITY_PRODUCT_CODE);
+        $cond = $this->getConnection()->quoteInto('t2.entity_pk_value = e.entity_id and ','').
+        $this->getConnection()->quoteInto('t2.store_id = 1 ','');
+        $select = $this->getSelect()->joinLeft(array('t2'=>'review_entity_summary'), $cond,array('review' => new Zend_Db_Expr('IFNULL(t2.rating_summary,0)')))
+            ->group('e.entity_id')->order("review $dir");
+        return $this;
+    }
 }
