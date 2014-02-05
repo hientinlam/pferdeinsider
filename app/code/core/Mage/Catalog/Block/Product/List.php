@@ -118,7 +118,7 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
                     $layer->setCurrentCategory($origCategory);
                 }
             }
-            print_r((string)$this->_productCollection->getSelect());
+            //print_r((string)$this->_productCollection->getSelect());
             return $this->_productCollection;
         } else if ($search != Null || $search != '') {
             $layer = $this->getLayer();
