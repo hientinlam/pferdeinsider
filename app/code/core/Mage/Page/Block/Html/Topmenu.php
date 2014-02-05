@@ -109,7 +109,9 @@ class Mage_Page_Block_Html_Topmenu extends Mage_Core_Block_Template
                 $outermostClassCode = ' class="' . $outermostClass . '" ';
                 $child->setClass($outermostClass);
             }
-
+            //var_dump($child->getName());
+            if((!Mage::getSingleton('customer/session')->isLoggedIn() || !Mage::getSingleton('customer/session')->getCustomer()->getEmail() == 'marydale05@gmail.com') && $child->getName() == 'Spezial Angebote!')
+                continue;
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
             $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>'
                 . $this->escapeHtml($child->getName()) . '</span></a>';
