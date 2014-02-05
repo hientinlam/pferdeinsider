@@ -64,13 +64,8 @@
                 <th><?php echo Mage::helper('downloadable')->__('Title') ?></th>
                 <th><?php echo Mage::helper('downloadable')->__('Status') ?></th>
                 <!--th><span class="nobr"><?php echo Mage::helper('downloadable')->__('Verbleibende Downloads') ?></span></th-->
-          
                 <th><?php echo Mage::helper('downloadable')->__('Actions') ?></th>
-                
                 <th colspan="2"></th>
-                 
-                
-                
             </tr>
         </thead>
         <tbody>
@@ -87,7 +82,7 @@
                 ?>
             
                 <?php //echo "<pre>";print_r($p);die('fdfds');
-             
+
                 echo '<script type="text/javascript">submitcode_order("'.$p->getProductUrl().'","'.$affid.'","2","'.Mage::getBaseUrl().'","'.$count.'");</script>';?>
                 <tr>
                     <td><a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo Mage::helper('downloadable')->__('Bestellung ansehen') ?>"><?php echo $_item->getPurchased()->getOrderIncrementId() ?></a></td>

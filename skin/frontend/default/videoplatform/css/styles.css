@@ -801,10 +801,7 @@ tr.summary-details-excluded { font-style:italic; }
 .block .block-title a { text-decoration:none !important; }
 .block .block-subtitle { margin:0; padding:5px 9px; font-size:1em; font-weight:bold; color:#0a263c; }
 .block .block-content { /*background:#f8f7f5;*/ }
-.block .block-content li.item { float: left !important;
-    height: 170px;
-    padding: 7px 9px;
-    width: 140px; }
+.block .block-content li.item {padding: 7px 9px; width: 285px; clear: both; margin: 5px 0; }
 .identify .block .block-content li.item { padding:7px 9px;float:left!important;width:125x !important; }
 .block .block-content .product-name { color:#1e7ec8; }
 .block .btn-remove,

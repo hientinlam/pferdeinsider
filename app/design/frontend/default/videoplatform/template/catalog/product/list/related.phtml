@@ -52,11 +52,11 @@
                 <div class="product">
                     <div>
                         <?php //echo $product->getData('thumbnail');?>
-                    <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($product->getName()) ?>" class="" style="width:120px;"><img src="<?php echo $this->helper('catalog/image')->init($product, 'image')->resize(120); ?>" width="139" height="120" alt="<?php echo $product->getName() ?>" /></a>
+                    <a href="<?php echo $product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($product->getName()) ?>" class=""><img src="<?php echo $this->helper('catalog/image')->init($product, 'image')->keepFrame(false)->keepAspectRatio(false)->resize(285,190); ?>" width="285" height="190" alt="<?php echo $product->getName() ?>" /></a>
                     </div>
-                    <div class="">
+                    <div class="" style="position: absolute; margin: -40px 0 0 10px;">
                         <p class="product-name"><a style="font-size: 14px;" href="<?php echo $product->getProductUrl() ?>"><?php $countchar=strlen($product->getName()); echo  substr($product->getName(), 0, 40); if($countchar>40){ echo '...'; }  ?></a></p>
-                        <div style="float:left;margin-top:2px;">with <?php echo $expertname; ?></div>
+                        <div style="float:left;margin-top:2px;">mit <?php echo $expertname; ?></div>
                         <?php //echo $this->getPriceHtml($_item, true, '-related') ?>
                         <?php //if ($this->helper('wishlist')->isAllow()) : ?>
                            <!-- <a href="<?php echo $this->getAddToWishlistUrl($_item) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>-->

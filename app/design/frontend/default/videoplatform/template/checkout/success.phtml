@@ -39,7 +39,7 @@
     <p><?php echo $this->__('Du erhältst eine Bestellbestätigung per Email mit den Details Deiner Bestellung und einem Link mit dem Du den Status Deiner Bestellung verfolgen kannst.') ?></p>
 <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
     <p>
-        <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+        <?php echo $this->__('Klicke <a href="%s" onclick="this.target=\'_blank\'">hier um Deine Bestelldetails</a> anzusehen oder.', $this->getPrintUrl()) ?>
         <?php echo $this->getChildHtml() ?>
     </p>
 <?php endif;?>
