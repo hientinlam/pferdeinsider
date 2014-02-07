@@ -399,12 +399,13 @@ if ($collection->getSize() > 0):
         }
         $paidOut = ($record->getGetyoupaid()) ? "Ja" : "Nein";
         $affName = ($record->getAffiliateName() != "") ? $record->getAffiliateName() : "NA";
+        $rowPrice = $record->getGrossPrice()*1.19;
         echo '<tr class=' . $myproducttr . '><td style="padding:5px;">' . $record['order_id'] . '</td>';
 
         echo '<td style="padding:5px;">'.$record->getCreatedAt().'</td>';
         echo '<td style="padding:5px;">'.$record->getExpertName().'</td>';
         echo '<td style="padding:5px;">'.$record->getProductId().'</td>';
-        echo '<td style="padding:5px;">'.number_format($record->getRowPrice(), 2).'</td>';
+        echo '<td style="padding:5px;">'.number_format($rowPrice, 2).'</td>';
         echo '<td style="padding:5px;">'.number_format($record->getGrossPrice(), 2).'</td>';
         echo '<td style="padding:5px;">'.$affName.'</td>';
         echo '<td style="padding:5px;">'.$record->getShareType().'</td>';
@@ -412,7 +413,7 @@ if ($collection->getSize() > 0):
         echo '<td style="padding:5px;">'.$record->getGetyoupaid().'</td>';
         echo '<td style="padding:5px;">'.$paidOut.'</td></tr>';
 
-        $totalRawSales = $totalRawSales + $record->getRowPrice();
+        $totalRawSales = $totalRawSales + $rowPrice;
         $totalGrossSales = $totalGrossSales + $record->getGrossPrice();
         $totalGetPaid = $totalGetPaid + $record->getGetyoupaid();
 
@@ -422,9 +423,9 @@ if ($collection->getSize() > 0):
     $curencySymbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
     echo '<tr>';
     echo '<td style="padding:5px;font-weight:bold;" colspan="4">'.$this->__("Summe").'</td>';
-    echo '<td style="padding:5px;font-weight:bold;">'.$curencySymbol.$totalRawSales.'</td>';
-    echo '<td style="padding:5px;font-weight:bold;" colspan="4">'.$curencySymbol.$totalGrossSales.'</td>';
-    echo '<td style="padding:5px;font-weight:bold;" colspan="2">'.$curencySymbol.$totalGetPaid.'</td>';
+    echo '<td style="padding:5px;font-weight:bold;">'.$curencySymbol.number_format($totalRawSales, 2).'</td>';
+    echo '<td style="padding:5px;font-weight:bold;" colspan="4">'.$curencySymbol.number_format($totalGrossSales, 2).'</td>';
+    echo '<td style="padding:5px;font-weight:bold;" colspan="2">'.$curencySymbol.number_format($totalGetPaid, 2).'</td>';
     echo '</tr>';
 else:
     echo '<tr class=' . $myproducttr . '><td colspan="7" style="padding:5px;text-align:center">' . $this->__("No Result Found") . '</td>';
